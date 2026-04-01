@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+enum Role {
+  USER
+  EDITOR
+  ADMIN
+}
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  password    String
+  role        Role         @default(USER)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  articles    Article[]
+  submissions Submission[]
+  @@index([email])
+}
+model Article {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  excerpt   String?
+  content   String
+  category  String
+  readTime  Int?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  @@index([slug])
+  @@index([published])
+  @@index([category])
+}
+model Award {
+  id          String       @id @default(cuid())
+  title       String
+  category    String
+  recipient   String
+  year        Int
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  submissions Submission[]
+  @@index([year])
+  @@index([category])
+}
+model Submission {
+  id             String           @id @default(cuid())
+  awardId        String
+  userId         String
+  companyName    String
+  companyWebsite String?
+  contactName    String
+  contactEmail   String
+  details        String
+  additionalInfo String?
+  status         SubmissionStatus @default(PENDING)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  award          Award            @relation(fields: [awardId], references: [id], onDelete: Cascade)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([awardId, userId])
+  @@index([userId])
+  @@index([status])
+}
+model NewsletterSubscriber {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  createdAt      DateTime  @default(now())
+  unsubscribedAt DateTime?
+  resubscribedAt DateTime?
+  @@index([email])
+}
