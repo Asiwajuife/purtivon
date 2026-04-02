@@ -1,21 +1,25 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
 enum Role {
   USER
   EDITOR
   ADMIN
 }
+
 enum SubmissionStatus {
   PENDING
   APPROVED
   REJECTED
 }
+
 model User {
   id          String       @id @default(cuid())
   name        String
@@ -26,25 +30,27 @@ model User {
   updatedAt   DateTime     @updatedAt
   articles    Article[]
   submissions Submission[]
-  @@index([email])
+  @@index([role]) // optional index for querying by role
 }
+
 model Article {
   id        String   @id @default(cuid())
-  slug      String   @unique
   title     String
-  excerpt   String?
+  slug      String   @unique
   content   String
-  category  String
-  readTime  Int?
-  published Boolean  @default(false)
+  excerpt   String?
+  imageUrl  String?      // new optional field for article image
+  category  String?      // optional category
+  readTime  Int?         // estimated reading time in minutes
+  published Boolean  @default(true)
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  @@index([slug])
   @@index([published])
   @@index([category])
 }
+
 model Award {
   id          String       @id @default(cuid())
   title       String
@@ -58,6 +64,7 @@ model Award {
   @@index([year])
   @@index([category])
 }
+
 model Submission {
   id             String           @id @default(cuid())
   awardId        String
@@ -76,7 +83,9 @@ model Submission {
   @@unique([awardId, userId])
   @@index([userId])
   @@index([status])
+  @@index([companyName]) // optional index for searching submissions by company
 }
+
 model NewsletterSubscriber {
   id             String    @id @default(cuid())
   email          String    @unique
@@ -84,5 +93,4 @@ model NewsletterSubscriber {
   createdAt      DateTime  @default(now())
   unsubscribedAt DateTime?
   resubscribedAt DateTime?
-  @@index([email])
 }
