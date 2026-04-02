@@ -34,3 +34,9 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(201, 168, 76, 0.3);
 }
+
+/* Reset link styles */
+a {
+  color: inherit;
+  text-decoration: none;
+}

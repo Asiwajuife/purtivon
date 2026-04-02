@@ -148,7 +148,6 @@ export default function LoginPage() {
                   <svg
                     className="w-3.5 h-3.5 animate-spin"
                     fill="none"
-FILE: src/app/(auth)/register/page.tsx
                     viewBox="0 0 24 24"
                   >
                     <circle

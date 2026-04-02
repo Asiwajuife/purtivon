@@ -1,5 +1,5 @@
-import type { NextConfig } from "next";
-const nextConfig: NextConfig = {
+// next.config.mjs
+const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
@@ -11,8 +11,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client", "bcryptjs"],
-  },
+  serverExternalPackages: ["@prisma/client", "bcryptjs"],
 };
+
 export default nextConfig;
