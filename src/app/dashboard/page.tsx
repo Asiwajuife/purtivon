@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -58,7 +57,6 @@ async function getDashboardData(userId: string, isAdmin: boolean) {
     approvedSubmissions,
     totalArticles,
     recentSubmissions,
-    stripeBalance,
   ] = await Promise.all([
     prisma.submission.count({ where: submissionWhere }),
     prisma.submission.count({ where: { ...submissionWhere, status: "PENDING" } }),
@@ -74,18 +72,9 @@ async function getDashboardData(userId: string, isAdmin: boolean) {
         ...(isAdmin ? { user: { select: { name: true, email: true } } } : {}),
       },
     }),
-    isAdmin ? stripe.balance.retrieve().catch(() => null) : null,
   ]);
 
-  const totalRevenue = stripeBalance
-    ? stripeBalance.available.reduce((s, b) => s + b.amount, 0) / 100
-    : null;
-
-  return { totalSubmissions, pendingSubmissions, approvedSubmissions, totalArticles, recentSubmissions, totalRevenue };
-}
-
-function fmt(n: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+  return { totalSubmissions, pendingSubmissions, approvedSubmissions, totalArticles, recentSubmissions };
 }
 
 const QUICK_ACTIONS = [
@@ -179,21 +168,12 @@ export default async function DashboardPage() {
           accent
           icon={<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>}
         />
-        {isAdmin ? (
-          <StatCard
-            label="Stripe Balance"
-            value={data.totalRevenue !== null ? fmt(data.totalRevenue) : "—"}
-            sub="Available balance"
-            icon={<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>}
-          />
-        ) : (
-          <StatCard
-            label="Published Articles"
-            value={String(data.totalArticles)}
-            sub="Platform insights"
-            icon={<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" /></svg>}
-          />
-        )}
+        <StatCard
+          label="Published Articles"
+          value={String(data.totalArticles)}
+          sub="Platform insights"
+          icon={<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" /></svg>}
+        />
       </div>
 
       {/* Quick Actions */}
