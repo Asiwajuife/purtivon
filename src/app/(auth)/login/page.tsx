@@ -21,18 +21,28 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const result = await signIn("credentials", {
-      email: form.email.trim().toLowerCase(),
-      password: form.password,
-      redirect: false,
-    });
-    if (result?.error) {
-      setError("Invalid email or password. Please try again.");
+    try {
+      const result = await signIn("credentials", {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+        redirect: false,
+      });
+      if (!result) {
+        setError("No response from server. Please try again.");
+        setLoading(false);
+        return;
+      }
+      if (result.error) {
+        setError(`Sign-in failed: ${result.error}`);
+        setLoading(false);
+        return;
+      }
+      router.push(callbackUrl);
+      router.refresh();
+    } catch (err) {
+      setError(`Unexpected error: ${err instanceof Error ? err.message : String(err)}`);
       setLoading(false);
-      return;
     }
-    router.push(callbackUrl);
-    router.refresh();
   }
 
   return (
