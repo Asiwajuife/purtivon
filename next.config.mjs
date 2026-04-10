@@ -9,6 +9,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "**.purtivon.com",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
   serverExternalPackages: ["@prisma/client", "bcryptjs"],

@@ -1,247 +1,437 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-const NAV_LINKS = [
-  { label: "Insights", href: "/insights" },
-  { label: "Reports", href: "/reports" },
-  { label: "Awards", href: "/awards" },
-  { label: "Services", href: "/services" },
+
+const AWARDS_ITEMS = [
+  { label: "Winners",     href: "/winners" },
+  { label: "Nominations", href: "/awards" },
 ];
+
+const INSIGHTS_CATEGORIES = [
+  { label: "Featured Insight",               href: "/insights?category=Featured+Insight" },
+  { label: "Awards",                         href: "/insights?category=Awards" },
+  { label: "Report",                         href: "/insights?category=Report" },
+  { label: "Analysis",                       href: "/insights?category=Analysis" },
+  { label: "News",                           href: "/insights?category=News" },
+  { label: "FDI Intelligence",               href: "/insights?category=FDI+Intelligence" },
+  { label: "Financial Services",             href: "/insights?category=Financial+Services+Intelligence" },
+  { label: "Banks",                          href: "/insights?category=Banks" },
+  { label: "Economy",                        href: "/insights?category=Economy" },
+  { label: "Technology",                     href: "/insights?category=Tech" },
+  { label: "ESG",                            href: "/insights?category=ESG" },
+];
+
+const PLAIN_LINKS = [
+  { label: "About",    href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Awards",   href: "/awards" },
+  { label: "Contact",  href: "/contact" },
+];
+
 export default function Navbar() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [insightsOpen, setInsightsOpen] = useState(false);
+  const [awardsOpen, setAwardsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
+  const awardsRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   useEffect(() => {
     setMenuOpen(false);
+    setInsightsOpen(false);
+    setAwardsOpen(false);
   }, [pathname]);
+
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setInsightsOpen(false);
+      }
+      if (awardsRef.current && !awardsRef.current.contains(e.target as Node)) {
+        setAwardsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const isInsightsActive = pathname.startsWith("/insights");
+
   return (
     <>
+      {/* ── Header bar ── */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/5 py-3"
-            : "bg-transparent py-5"
-        }`}
+        style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0,
+          zIndex: 50,
+          transition: "all 0.5s",
+          ...(scrolled
+            ? { background: "rgba(10,10,15,0.95)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.05)", padding: "0.75rem 0" }
+            : { background: "transparent", padding: "1.25rem 0" }),
+        }}
       >
-        <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="group flex items-center gap-2.5 select-none">
-            <span className="relative flex items-center justify-center w-8 h-8">
-              <span className="absolute inset-0 rounded-sm bg-gradient-to-br from-[#c9a84c] to-[#e8c97a] opacity-90" />
-              <span className="relative text-[#0a0a0f] font-black text-sm tracking-tighter leading-none">
-                P
-              </span>
-            </span>
-            <span
-              className="text-white font-light tracking-[0.25em] uppercase text-sm"
-              style={{
-                fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-              }}
-            >
+        <nav style={{ maxWidth: 1280, margin: "0 auto", padding: "0 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+
+          {/* Logo */}
+          <Link
+            href="/"
+            tabIndex={-1}
+            onMouseDown={(e) => e.preventDefault()}
+            onFocus={(e) => e.currentTarget.blur()}
+            style={{ outline: "none", boxShadow: "none", border: "none", display: "block", userSelect: "none", WebkitTapHighlightColor: "transparent", textDecoration: "none" }}
+          >
+            <span style={{
+              display: "block",
+              fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
+              fontSize: "0.875rem",
+              fontWeight: 300,
+              letterSpacing: "0.28em",
+              textTransform: "uppercase",
+              color: "#d4a843",
+              userSelect: "none",
+            }}>
               Purtivon
             </span>
           </Link>
-          <ul className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map(({ label, href }) => {
-              const isActive = pathname.startsWith(href);
+
+          {/* Desktop nav links */}
+          <ul style={{ display: "flex", alignItems: "center", gap: "2rem", listStyle: "none", margin: 0, padding: 0 }} className="navbar-desktop-links">
+
+            {/* Awards dropdown */}
+            <li style={{ position: "relative" }} ref={awardsRef}>
+              <button
+                onClick={() => setAwardsOpen((v) => !v)}
+                style={{
+                  background: "none", border: "none", cursor: "pointer",
+                  display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                  fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.6)",
+                  padding: 0, position: "relative",
+                }}
+                className="navbar-link navbar-awards-btn"
+                aria-expanded={awardsOpen}
+              >
+                Awards
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}
+                  style={{ transition: "transform 0.2s", transform: awardsOpen ? "rotate(180deg)" : "none", flexShrink: 0, marginTop: 1 }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+                <span style={{ position: "absolute", bottom: -4, left: 0, height: 1, width: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "100%" : 0, background: "#c9a84c", transition: "width 0.3s" }} className="navbar-link-underline" />
+              </button>
+
+              {awardsOpen && (
+                <div style={{
+                  position: "absolute", top: "calc(100% + 1rem)", left: "50%",
+                  transform: "translateX(-50%)", minWidth: 200,
+                  background: "rgba(10,10,15,0.98)", border: "1px solid rgba(201,168,76,0.15)",
+                  borderTop: "2px solid #c9a84c", backdropFilter: "blur(16px)",
+                  padding: "0.5rem 0", zIndex: 60, boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+                }}>
+                  {AWARDS_ITEMS.map(({ label, href }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      style={{
+                        display: "block", padding: "0.6rem 1rem",
+                        fontSize: "0.73rem", color: "rgba(255,255,255,0.55)",
+                        textDecoration: "none", letterSpacing: "0.03em",
+                        transition: "color 0.15s, background 0.15s",
+                      }}
+                      className="navbar-dropdown-item"
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </li>
+
+            {/* Insights dropdown */}
+            <li style={{ position: "relative" }} ref={dropdownRef}>
+              <button
+                onClick={() => setInsightsOpen((v) => !v)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.35rem",
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.6)",
+                  padding: 0,
+                  position: "relative",
+                }}
+                className="navbar-link navbar-insights-btn"
+                aria-expanded={insightsOpen}
+              >
+                Insights
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  style={{ transition: "transform 0.2s", transform: insightsOpen ? "rotate(180deg)" : "none", flexShrink: 0, marginTop: 1 }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+                <span style={{ position: "absolute", bottom: -4, left: 0, height: 1, width: isInsightsActive ? "100%" : 0, background: "#c9a84c", transition: "width 0.3s" }} className="navbar-link-underline" />
+              </button>
+
+              {/* Dropdown panel */}
+              {insightsOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 1rem)",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    minWidth: 240,
+                    background: "rgba(10,10,15,0.98)",
+                    border: "1px solid rgba(201,168,76,0.15)",
+                    borderTop: "2px solid #c9a84c",
+                    backdropFilter: "blur(16px)",
+                    padding: "0.5rem 0",
+                    zIndex: 60,
+                    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+                  }}
+                >
+                  <div style={{ padding: "0.5rem 1rem 0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)", marginBottom: "0.25rem" }}>
+                    <Link href="/insights" style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#c9a84c", textDecoration: "none" }}>
+                      All Insights →
+                    </Link>
+                  </div>
+                  {INSIGHTS_CATEGORIES.map(({ label, href }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      style={{
+                        display: "block",
+                        padding: "0.6rem 1rem",
+                        fontSize: "0.73rem",
+                        color: "rgba(255,255,255,0.55)",
+                        textDecoration: "none",
+                        letterSpacing: "0.03em",
+                        transition: "color 0.15s, background 0.15s",
+                      }}
+                      className="navbar-dropdown-item"
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </li>
+
+            {/* About, Services, Contact */}
+            {[{ label: "About", href: "/about" }, { label: "Services", href: "/services" }, { label: "Contact", href: "/contact" }].map(({ label, href }) => {
+              const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
               return (
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`relative text-xs tracking-[0.18em] uppercase font-medium transition-colors duration-200 group ${
-                      isActive
-                        ? "text-[#c9a84c]"
-                        : "text-white/60 hover:text-white"
-                    }`}
+                    style={{ position: "relative", fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500, color: isActive ? "#c9a84c" : "rgba(255,255,255,0.6)", textDecoration: "none", display: "inline-block" }}
+                    className="navbar-link"
                   >
                     {label}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-px bg-[#c9a84c] transition-all duration-300 ${
-                        isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
-                    />
+                    <span style={{ position: "absolute", bottom: -4, left: 0, height: 1, width: isActive ? "100%" : 0, background: "#c9a84c", transition: "width 0.3s" }} className="navbar-link-underline" />
                   </Link>
                 </li>
               );
             })}
           </ul>
-          <div className="hidden md:flex items-center gap-4">
+
+          {/* Desktop action buttons */}
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }} className="navbar-desktop-actions">
             {session ? (
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#c9a84c] to-[#e8c97a] text-[#0a0a0f] text-xs font-semibold tracking-[0.15em] uppercase rounded-sm hover:opacity-90 transition-opacity duration-200"
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.25rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}
               >
                 Dashboard
-                <svg
-                  className="w-3.5 h-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                  />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
             ) : (
               <>
                 <Link
                   href="/login"
-                  className="text-xs tracking-[0.18em] uppercase font-medium text-white/60 hover:text-white transition-colors duration-200"
+                  style={{ fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500, color: "rgba(255,255,255,0.6)", textDecoration: "none" }}
+                  className="navbar-link"
                 >
                   Login
                 </Link>
                 <Link
-                  href="/register"
-                  className="flex items-center gap-2 px-5 py-2 border border-[#c9a84c]/60 text-[#c9a84c] text-xs font-semibold tracking-[0.15em] uppercase rounded-sm hover:bg-[#c9a84c]/10 transition-all duration-200"
+                  href="/awards"
+                  style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.25rem", border: "1px solid rgba(201,168,76,0.6)", color: "#c9a84c", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}
+                  className="navbar-nominate-btn"
                 >
-                  Get Access
+                  Submit Nomination
                 </Link>
               </>
             )}
           </div>
+
+          {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="md:hidden flex flex-col justify-center items-end gap-1.5 w-8 h-8 focus:outline-none"
+            style={{ display: "none", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", gap: 6, width: 32, height: 32, background: "none", border: "none", cursor: "pointer", padding: 0, outline: "none", flexShrink: 0 }}
+            className="navbar-hamburger"
           >
-            <span
-              className={`block h-px bg-white transition-all duration-300 origin-right ${
-                menuOpen ? "w-6 rotate-[-45deg] translate-y-[3px]" : "w-6"
-              }`}
-            />
-            <span
-              className={`block h-px bg-[#c9a84c] transition-all duration-300 ${
-                menuOpen ? "w-0 opacity-0" : "w-4"
-              }`}
-            />
-            <span
-              className={`block h-px bg-white transition-all duration-300 origin-right ${
-                menuOpen ? "w-6 rotate-[45deg] -translate-y-[3px]" : "w-6"
-              }`}
-            />
+            <span style={{ display: "block", width: 24, height: 1, background: "white", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(-45deg) translateY(3px)" : "none" }} />
+            <span style={{ display: "block", width: 16, height: 1, background: "#c9a84c", transition: "opacity 0.3s, width 0.3s", opacity: menuOpen ? 0 : 1 }} />
+            <span style={{ display: "block", width: 24, height: 1, background: "white", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(45deg) translateY(-3px)" : "none" }} />
           </button>
         </nav>
       </header>
+
+      {/* ── Mobile fullscreen menu overlay ── */}
       <div
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-500 ${
-          menuOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
+        aria-hidden={!menuOpen}
+        style={{ position: "fixed", inset: 0, zIndex: 40, display: "none", transition: "opacity 0.5s", opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
+        className="navbar-mobile-overlay"
       >
-        <div
-          className="absolute inset-0 bg-[#0a0a0f]/98 backdrop-blur-lg"
-          onClick={() => setMenuOpen(false)}
-        />
-        <div className="relative flex flex-col justify-center h-full px-8 pt-20">
-          <div className="absolute top-1/4 right-8 w-32 h-32 rounded-full bg-[#c9a84c]/5 blur-3xl pointer-events-none" />
-          <ul className="flex flex-col gap-2 mb-12">
-            {NAV_LINKS.map(({ label, href }, i) => {
-              const isActive = pathname.startsWith(href);
-              return (
-                <li
-                  key={href}
-                  className={`transition-all duration-500 ${
-                    menuOpen
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-4"
-                  }`}
-                  style={{
-                    transitionDelay: menuOpen ? `${i * 60 + 100}ms` : "0ms",
-                  }}
-                >
-                  <Link
-                    href={href}
-                    className={`flex items-center justify-between py-4 border-b group ${
-                      isActive
-                        ? "border-[#c9a84c]/30 text-[#c9a84c]"
-                        : "border-white/5 text-white/50 hover:text-white hover:border-white/20"
-                    } transition-all duration-200`}
-                  >
-                    <span
-                      className="text-2xl font-light tracking-wide"
-                      style={{
-                        fontFamily:
-                          "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-                      }}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(10,10,15,0.98)", backdropFilter: "blur(16px)" }} onClick={() => setMenuOpen(false)} />
+
+        <div style={{ position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "5rem 2rem 2rem", maxWidth: 480, margin: "0 auto", overflowY: "auto" }}>
+          <div style={{ position: "absolute", top: "25%", right: "2rem", width: 128, height: 128, borderRadius: "50%", background: "rgba(201,168,76,0.05)", filter: "blur(40px)", pointerEvents: "none" }} />
+
+          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem 0", display: "flex", flexDirection: "column", gap: 0 }}>
+            {/* Awards — expandable */}
+            <li style={{ transition: `opacity 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
+              <div style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0" }}>
+                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.5)" }}>Awards</span>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
+                  {AWARDS_ITEMS.map(({ label, href }) => (
+                    <Link key={href} href={href}
+                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.08)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                      className="navbar-mobile-cat"
                     >
                       {label}
-                    </span>
-                    <svg
-                      className={`w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 ${
-                        isActive ? "text-[#c9a84c]" : "text-white/20"
-                      }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </li>
+
+            {/* Insights — expandable */}
+            <li style={{ transition: `opacity 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
+              <div style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.5)", textDecoration: "none" }} className="navbar-mobile-link">
+                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>Insights</span>
+                </Link>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
+                  {INSIGHTS_CATEGORIES.map(({ label, href }) => (
+                    <Link key={href} href={href}
+                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.08)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                      className="navbar-mobile-cat"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                      />
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </li>
+
+            {/* About, Services, Contact */}
+            {[{ label: "About", href: "/about" }, { label: "Services", href: "/services" }, { label: "Contact", href: "/contact" }].map(({ label, href }, i) => {
+              const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
+              return (
+                <li key={href} style={{ transition: `opacity 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
+                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: `1px solid ${isActive ? "rgba(201,168,76,0.3)" : "rgba(255,255,255,0.05)"}`, color: isActive ? "#c9a84c" : "rgba(255,255,255,0.5)", textDecoration: "none" }} className="navbar-mobile-link">
+                    <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>{label}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isActive ? "#c9a84c" : "rgba(255,255,255,0.2)"} strokeWidth={1.5} style={{ flexShrink: 0 }}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
                   </Link>
                 </li>
               );
             })}
           </ul>
-          <div
-            className={`flex flex-col gap-3 transition-all duration-500 ${
-              menuOpen
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            }`}
-            style={{ transitionDelay: menuOpen ? "360ms" : "0ms" }}
-          >
+
+          {/* CTA */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", transition: `opacity 0.5s ${menuOpen ? "400ms" : "0ms"}, transform 0.5s ${menuOpen ? "400ms" : "0ms"}`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(16px)" }}>
             {session ? (
-              <Link
-                href="/dashboard"
-                className="flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#c9a84c] to-[#e8c97a] text-[#0a0a0f] text-xs font-bold tracking-[0.2em] uppercase rounded-sm"
-              >
+              <Link href="/dashboard" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
                 Go to Dashboard
               </Link>
             ) : (
               <>
-                <Link
-                  href="/register"
-                  className="flex items-center justify-center py-3.5 bg-gradient-to-r from-[#c9a84c] to-[#e8c97a] text-[#0a0a0f] text-xs font-bold tracking-[0.2em] uppercase rounded-sm"
-                >
-                  Get Access
+                <Link href="/awards" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
+                  Submit Nomination
                 </Link>
-                <Link
-                  href="/login"
-                  className="flex items-center justify-center py-3.5 border border-white/10 text-white/60 text-xs font-medium tracking-[0.2em] uppercase rounded-sm hover:border-white/30 hover:text-white transition-all duration-200"
-                >
+                <Link href="/login" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)", fontSize: "0.75rem", fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }} className="navbar-mobile-login">
                   Login
                 </Link>
               </>
             )}
           </div>
-          <p className="absolute bottom-8 left-8 text-white/20 text-xs tracking-widest uppercase">
+
+          <p style={{ position: "absolute", bottom: "2rem", left: "2rem", color: "rgba(255,255,255,0.2)", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
             Global FDI & Financial Media
           </p>
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 768px) {
+          .navbar-desktop-links { display: flex !important; }
+          .navbar-desktop-actions { display: flex !important; }
+          .navbar-hamburger { display: none !important; }
+          .navbar-mobile-overlay { display: none !important; }
+        }
+        @media (max-width: 767px) {
+          .navbar-desktop-links { display: none !important; }
+          .navbar-desktop-actions { display: none !important; }
+          .navbar-hamburger { display: flex !important; }
+          .navbar-mobile-overlay { display: block !important; }
+        }
+        .navbar-link:hover { color: white !important; }
+        .navbar-link:hover .navbar-link-underline { width: 100% !important; }
+        .navbar-insights-btn:hover { color: white !important; }
+        .navbar-awards-btn:hover { color: white !important; }
+        .navbar-nominate-btn:hover { background: rgba(201,168,76,0.1) !important; }
+        .navbar-mobile-link:hover { color: white !important; }
+        .navbar-mobile-login:hover { border-color: rgba(255,255,255,0.3) !important; color: white !important; }
+        .navbar-mobile-cat:hover { color: rgba(255,255,255,0.8) !important; border-color: rgba(255,255,255,0.2) !important; }
+        .navbar-dropdown-item:hover { color: #f0ede6 !important; background: rgba(201,168,76,0.06) !important; }
+      `}</style>
     </>
   );
 }

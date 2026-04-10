@@ -1,52 +1,55 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-interface Award {
-  id: string;
-  title: string;
-  category: string;
-  year: number;
-}
-interface SubmissionFormProps {
-  awards: Award[];
-  isAuthenticated: boolean;
-}
+
+interface Award { id: string; title: string; category: string; year: number; }
 interface FormState {
-  awardId: string;
-  companyName: string;
-  companyWebsite: string;
-  contactName: string;
-  contactEmail: string;
-  details: string;
-  additionalInfo: string;
+  awardId: string; companyName: string; companyWebsite: string;
+  contactName: string; contactEmail: string; details: string; additionalInfo: string;
 }
-const INITIAL_STATE: FormState = {
-  awardId: "",
-  companyName: "",
-  companyWebsite: "",
-  contactName: "",
-  contactEmail: "",
-  details: "",
-  additionalInfo: "",
+const INITIAL: FormState = {
+  awardId: "", companyName: "", companyWebsite: "",
+  contactName: "", contactEmail: "", details: "", additionalInfo: "",
 };
-export default function SubmissionForm({
-  awards,
-  isAuthenticated,
-}: SubmissionFormProps) {
+
+const field: React.CSSProperties = {
+  width: "100%",
+  background: "rgba(255,255,255,0.03)",
+  border: "1px solid rgba(255,255,255,0.08)",
+  color: "#f0ede6",
+  fontSize: "0.82rem",
+  fontFamily: "'DM Sans', sans-serif",
+  fontWeight: 300,
+  padding: "0.7rem 0.9rem",
+  outline: "none",
+  appearance: "none",
+  borderRadius: 0,
+  transition: "border-color 0.2s, background 0.2s",
+};
+const label: React.CSSProperties = {
+  display: "block",
+  fontSize: "0.68rem",
+  fontWeight: 600,
+  letterSpacing: "0.2em",
+  textTransform: "uppercase",
+  color: "rgba(255,255,255,0.28)",
+  marginBottom: "0.45rem",
+};
+const req = <span style={{ color: "#c9a84c", marginLeft: 2 }}>*</span>;
+
+export default function SubmissionForm({ awards }: { awards: Award[] }) {
   const router = useRouter();
-  const [form, setForm] = useState<FormState>(INITIAL_STATE);
+  const [form, setForm] = useState<FormState>(INITIAL);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  function handleChange(
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const [focused, setFocused] = useState<string | null>(null);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
     setError(null);
   }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -60,7 +63,7 @@ export default function SubmissionForm({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Submission failed.");
       setSuccess(true);
-      setForm(INITIAL_STATE);
+      setForm(INITIAL);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
@@ -68,244 +71,193 @@ export default function SubmissionForm({
       setLoading(false);
     }
   }
-  const inputClass =
-    "w-full bg-white/[0.03] border border-white/[0.08] text-white/80 text-sm placeholder-white/20 px-4 py-3 rounded-sm focus:outline-none focus:border-[#c9a84c]/40 focus:bg-white/[0.05] transition-all duration-200";
-  const labelClass =
-    "block text-[10px] font-semibold tracking-[0.18em] uppercase text-white/30 mb-1.5";
-  if (!isAuthenticated) {
-    return (
-      <div className="flex flex-col gap-4 p-6 border border-white/5 bg-white/[0.02] rounded-sm text-center">
-        <div className="w-10 h-10 rounded-full border border-[#c9a84c]/20 flex items-center justify-center mx-auto">
-          <svg
-            className="w-4 h-4 text-[#c9a84c]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-            />
-          </svg>
-        </div>
-        <p
-          className="text-white/70 font-light text-lg"
-          style={{
-            fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-          }}
-        >
-          Login to Submit
-        </p>
-        <p className="text-white/30 text-xs leading-relaxed">
-          You must be signed in to submit an award entry.
-        </p>
-        <Link
-          href="/login"
-          className="mt-2 flex items-center justify-center py-3 bg-gradient-to-r from-[#c9a84c] to-[#e8c97a] text-[#0a0a0f] text-xs font-bold tracking-[0.2em] uppercase rounded-sm hover:opacity-90 transition-opacity"
-        >
-          Sign In
-        </Link>
-        <Link
-          href="/register"
-          className="flex items-center justify-center py-3 border border-white/10 text-white/40 text-xs font-medium tracking-[0.15em] uppercase rounded-sm hover:border-white/20 hover:text-white/60 transition-all"
-        >
-          Create Account
-        </Link>
-      </div>
-    );
+
+  function fieldStyle(name: string): React.CSSProperties {
+    return {
+      ...field,
+      borderColor: focused === name ? "rgba(201,168,76,0.4)" : "rgba(255,255,255,0.08)",
+      background: focused === name ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.03)",
+    };
   }
+
+  /* ── Success state ── */
   if (success) {
     return (
-      <div className="flex flex-col items-center gap-4 p-8 border border-[#c9a84c]/20 bg-[#c9a84c]/5 rounded-sm text-center">
-        <div className="w-10 h-10 rounded-full border border-[#c9a84c]/30 flex items-center justify-center">
-          <svg
-            className="w-4 h-4 text-[#c9a84c]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m4.5 12.75 6 6 9-13.5"
-            />
+      <div style={{
+        border: "1px solid rgba(201,168,76,0.2)",
+        background: "rgba(201,168,76,0.03)",
+        padding: "2.5rem 1.5rem",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem", textAlign: "center",
+      }}>
+        <div style={{
+          width: 44, height: 44,
+          border: "1px solid rgba(201,168,76,0.3)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
           </svg>
         </div>
-        <p
-          className="text-white/80 font-light text-lg"
-          style={{
-            fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-          }}
-        >
-          Entry Submitted
-        </p>
-        <p className="text-white/30 text-xs leading-relaxed">
-          Thank you. Your submission has been received and is under review.
-        </p>
+        <div>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.25rem", fontWeight: 300, color: "rgba(255,255,255,0.85)", marginBottom: "0.4rem" }}>
+            Entry Submitted
+          </p>
+          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.7 }}>
+            Your submission has been received and is under review by our judging panel.
+          </p>
+        </div>
         <button
           onClick={() => setSuccess(false)}
-          className="mt-2 text-xs tracking-[0.15em] uppercase text-[#c9a84c]/60 hover:text-[#c9a84c] transition-colors"
+          style={{
+            marginTop: "0.25rem",
+            fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase",
+            color: "rgba(201,168,76,0.55)", background: "none", border: "none", cursor: "pointer",
+            fontFamily: "'DM Sans', sans-serif",
+          }}
         >
-          Submit Another
+          Submit another entry
         </button>
       </div>
     );
   }
+
+  /* ── Form ── */
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-5 p-6 border border-white/5 bg-white/[0.02] rounded-sm"
-    >
-      <div>
-        <label htmlFor="awardId" className={labelClass}>
-          Award Category <span className="text-[#c9a84c]">*</span>
-        </label>
-        <select
-          id="awardId"
-          name="awardId"
-          value={form.awardId}
-          onChange={handleChange}
-          required
-          className={`${inputClass} cursor-pointer`}
-        >
-          <option value="" disabled className="bg-[#0a0a0f]">
-            Select an award…
-          </option>
-          {awards.map((award) => (
-            <option key={award.id} value={award.id} className="bg-[#0a0a0f]">
-              {award.title} ({award.year})
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="companyName" className={labelClass}>
-          Company Name <span className="text-[#c9a84c]">*</span>
-        </label>
-        <input
-          id="companyName"
-          name="companyName"
-          type="text"
-          value={form.companyName}
-          onChange={handleChange}
-          required
-          placeholder="Acme Corporation"
-          className={inputClass}
-        />
-      </div>
-      <div>
-        <label htmlFor="companyWebsite" className={labelClass}>
-          Company Website
-        </label>
-        <input
-          id="companyWebsite"
-          name="companyWebsite"
-          type="url"
-          value={form.companyWebsite}
-          onChange={handleChange}
-          placeholder="https://example.com"
-          className={inputClass}
-        />
-      </div>
-      <div>
-        <label htmlFor="contactName" className={labelClass}>
-          Contact Name <span className="text-[#c9a84c]">*</span>
-        </label>
-        <input
-          id="contactName"
-          name="contactName"
-          type="text"
-          value={form.contactName}
-          onChange={handleChange}
-          required
-          placeholder="Jane Smith"
-          className={inputClass}
-        />
-      </div>
-      <div>
-        <label htmlFor="contactEmail" className={labelClass}>
-          Contact Email <span className="text-[#c9a84c]">*</span>
-        </label>
-        <input
-          id="contactEmail"
-          name="contactEmail"
-          type="email"
-          value={form.contactEmail}
-          onChange={handleChange}
-          required
-          placeholder="jane@example.com"
-          className={inputClass}
-        />
-      </div>
-      <div>
-        <label htmlFor="details" className={labelClass}>
-          Submission Details <span className="text-[#c9a84c]">*</span>
-        </label>
-        <textarea
-          id="details"
-          name="details"
-          value={form.details}
-          onChange={handleChange}
-          required
-          rows={4}
-          placeholder="Describe why your organisation deserves this award…"
-          className={`${inputClass} resize-none`}
-        />
-      </div>
-      <div>
-        <label htmlFor="additionalInfo" className={labelClass}>
-          Additional Information
-        </label>
-        <textarea
-          id="additionalInfo"
-          name="additionalInfo"
-          value={form.additionalInfo}
-          onChange={handleChange}
-          rows={2}
-          placeholder="Any supporting evidence or links…"
-          className={`${inputClass} resize-none`}
-        />
-      </div>
-      {error && (
-        <p className="text-red-400/80 text-xs tracking-wide border border-red-400/10 bg-red-400/5 px-4 py-3 rounded-sm">
-          {error}
-        </p>
-      )}
-      <button
-        type="submit"
-        disabled={loading}
-        className="flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#c9a84c] to-[#e8c97a] text-[#0a0a0f] text-xs font-bold tracking-[0.2em] uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed mt-1"
-      >
-        {loading ? (
-          <>
-            <svg
-              className="w-3.5 h-3.5 animate-spin"
-              fill="none"
-              viewBox="0 0 24 24"
+    <form onSubmit={handleSubmit} style={{
+      border: "1px solid rgba(255,255,255,0.06)",
+      background: "rgba(255,255,255,0.015)",
+      display: "flex", flexDirection: "column",
+    }}>
+      {/* Form fields */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0", padding: "1.5rem", paddingBottom: 0 }}>
+
+        {/* Award select */}
+        <div style={{ marginBottom: "1.1rem" }}>
+          <label htmlFor="awardId" style={label}>Award Category {req}</label>
+          <div style={{ position: "relative" }}>
+            <select
+              id="awardId" name="awardId" value={form.awardId}
+              onChange={handleChange} required
+              onFocus={() => setFocused("awardId")}
+              onBlur={() => setFocused(null)}
+              style={{ ...fieldStyle("awardId"), width: "100%", paddingRight: "2rem", cursor: "pointer" }}
             >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              />
+              <option value="" disabled style={{ background: "#0f0f16" }}>Select an award category…</option>
+              {awards.map((a) => (
+                <option key={a.id} value={a.id} style={{ background: "#0f0f16" }}>
+                  {a.title}
+                </option>
+              ))}
+            </select>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={2} style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
-            Submitting…
-          </>
-        ) : (
-          "Submit Entry"
-        )}
-      </button>
+          </div>
+        </div>
+
+        {/* Two-col row: company + website */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "1.1rem" }}>
+          <div>
+            <label htmlFor="companyName" style={label}>Company {req}</label>
+            <input id="companyName" name="companyName" type="text" value={form.companyName}
+              onChange={handleChange} required placeholder="Acme Corp"
+              onFocus={() => setFocused("companyName")} onBlur={() => setFocused(null)}
+              style={fieldStyle("companyName")} />
+          </div>
+          <div>
+            <label htmlFor="companyWebsite" style={label}>Website</label>
+            <input id="companyWebsite" name="companyWebsite" type="url" value={form.companyWebsite}
+              onChange={handleChange} placeholder="https://…"
+              onFocus={() => setFocused("companyWebsite")} onBlur={() => setFocused(null)}
+              style={fieldStyle("companyWebsite")} />
+          </div>
+        </div>
+
+        {/* Two-col row: contact name + email */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "1.1rem" }}>
+          <div>
+            <label htmlFor="contactName" style={label}>Contact Name {req}</label>
+            <input id="contactName" name="contactName" type="text" value={form.contactName}
+              onChange={handleChange} required placeholder="Jane Smith"
+              onFocus={() => setFocused("contactName")} onBlur={() => setFocused(null)}
+              style={fieldStyle("contactName")} />
+          </div>
+          <div>
+            <label htmlFor="contactEmail" style={label}>Contact Email {req}</label>
+            <input id="contactEmail" name="contactEmail" type="email" value={form.contactEmail}
+              onChange={handleChange} required placeholder="jane@acme.com"
+              onFocus={() => setFocused("contactEmail")} onBlur={() => setFocused(null)}
+              style={fieldStyle("contactEmail")} />
+          </div>
+        </div>
+
+        {/* Details */}
+        <div style={{ marginBottom: "1.1rem" }}>
+          <label htmlFor="details" style={label}>Why do you deserve this award? {req}</label>
+          <textarea id="details" name="details" value={form.details}
+            onChange={handleChange} required rows={4}
+            placeholder="Describe the impact, scale, and innovation of your organisation's work…"
+            onFocus={() => setFocused("details")} onBlur={() => setFocused(null)}
+            style={{ ...fieldStyle("details"), resize: "none" }} />
+        </div>
+
+        {/* Additional info */}
+        <div style={{ marginBottom: "1.5rem" }}>
+          <label htmlFor="additionalInfo" style={label}>Supporting Evidence <span style={{ color: "rgba(255,255,255,0.18)", fontWeight: 400, letterSpacing: "0.05em", textTransform: "none" }}>(optional)</span></label>
+          <textarea id="additionalInfo" name="additionalInfo" value={form.additionalInfo}
+            onChange={handleChange} rows={2}
+            placeholder="Links, data, or any additional context…"
+            onFocus={() => setFocused("additionalInfo")} onBlur={() => setFocused(null)}
+            style={{ ...fieldStyle("additionalInfo"), resize: "none" }} />
+        </div>
+      </div>
+
+      {/* Error */}
+      {error && (
+        <div style={{
+          margin: "0 1.5rem 1.25rem",
+          padding: "0.75rem 1rem",
+          border: "1px solid rgba(248,113,113,0.15)",
+          background: "rgba(248,113,113,0.05)",
+          fontSize: "0.72rem", color: "rgba(248,113,113,0.85)", lineHeight: 1.6,
+        }}>
+          {error}
+        </div>
+      )}
+
+      {/* Submit */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "1rem 1.5rem" }}>
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            width: "100%",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+            padding: "0.85rem 1rem",
+            background: loading ? "rgba(201,168,76,0.5)" : "#c9a84c",
+            color: "#0a0a0f",
+            fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
+            border: "none", cursor: loading ? "not-allowed" : "pointer",
+            fontFamily: "'DM Sans', sans-serif",
+            transition: "background 0.2s, opacity 0.2s",
+          }}
+        >
+          {loading ? (
+            <>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}
+                style={{ animation: "spin 0.8s linear infinite" }}>
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+              </svg>
+              Submitting…
+            </>
+          ) : "Submit Entry →"}
+        </button>
+        <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.18)", textAlign: "center", marginTop: "0.75rem", lineHeight: 1.6 }}>
+          All entries are reviewed by an independent judging panel. Submissions close 30 June 2026.
+        </p>
+      </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </form>
   );
 }

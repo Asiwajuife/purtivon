@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import SubmissionTable from "@/components/dashboard/SubmissionTable";
+import SubmissionsClient from "./SubmissionsClient";
 export const metadata: Metadata = { title: "Submissions" };
 async function getSubmissions(userId: string, isAdmin: boolean) {
   const where = isAdmin ? {} : { userId };
@@ -44,10 +44,8 @@ export default async function SubmissionsPage() {
           Award Submissions
         </h1>
       </div>
-      <SubmissionTable
-        submissions={
-          submissions as Parameters<typeof SubmissionTable>[0]["submissions"]
-        }
+      <SubmissionsClient
+        submissions={submissions as unknown as Parameters<typeof SubmissionsClient>[0]["submissions"]}
         isAdmin={isAdmin}
       />
     </div>

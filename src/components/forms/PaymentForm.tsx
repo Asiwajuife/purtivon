@@ -8,8 +8,8 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe, type Stripe as StripeType } from "@stripe/stripe-js";
 if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-}
   throw new Error("Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY");
+}
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 interface InnerFormProps {
   onSuccess?: () => void;
@@ -48,8 +48,8 @@ function InnerPaymentForm({ onSuccess, onError, returnUrl }: InnerFormProps) {
       setError(msg);
       onError?.(msg);
     } else {
-    }
       onSuccess?.();
+    }
     setLoading(false);
   }
   return (
@@ -200,7 +200,6 @@ export default function PaymentForm({
           variables: {
             colorPrimary: "#c9a84c",
             colorBackground: "#0f0f14",
-            colorSurface: "#141419",
             colorText: "#e5e5e5",
             colorTextSecondary: "#6b6b7a",
             colorTextPlaceholder: "#3f3f4e",

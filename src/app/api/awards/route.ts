@@ -24,7 +24,6 @@ export async function GET(req: NextRequest) {
           id: true,
           title: true,
           category: true,
-          recipient: true,
           year: true,
           description: true,
           createdAt: true,
@@ -65,10 +64,10 @@ export async function POST(req: NextRequest) {
       );
     }
     const body = await req.json();
-    const { title, category, recipient, year, description } = body;
-    if (!title || !category || !recipient || !year) {
+    const { title, category, year, description } = body;
+    if (!title || !category || !year) {
       return NextResponse.json(
-        { error: "title, category, recipient, and year are required." },
+        { error: "title, category, and year are required." },
         { status: 400 }
       );
     }
@@ -83,7 +82,6 @@ export async function POST(req: NextRequest) {
       data: {
         title: title.trim(),
         category: category.trim(),
-        recipient: recipient.trim(),
         year: parsedYear,
         description: description?.trim() ?? null,
       },

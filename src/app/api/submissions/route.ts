@@ -4,13 +4,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized. Please log in to submit an entry." },
-        { status: 401 }
-      );
-    }
     const body = await req.json();
     const {
       awardId,
@@ -24,9 +17,9 @@ export async function POST(req: NextRequest) {
     if (!awardId || !companyName || !contactName || !contactEmail || !details) {
       return NextResponse.json(
         {
-        },
           error:
             "awardId, companyName, contactName, contactEmail, and details are required.",
+        },
         { status: 400 }
       );
     }
@@ -44,19 +37,13 @@ export async function POST(req: NextRequest) {
     if (!award) {
       return NextResponse.json({ error: "Award not found." }, { status: 404 });
     }
-    const existing = await prisma.submission.findFirst({
-      where: { awardId, userId: session.user.id },
-    });
-    if (existing) {
-      return NextResponse.json(
-        { error: "You have already submitted an entry for this award." },
-        { status: 409 }
-      );
-    }
+    // Attach userId if the submitter is logged in, otherwise guest submission
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id ?? null;
     const submission = await prisma.submission.create({
       data: {
         awardId,
-        userId: session.user.id,
+        userId,
         companyName: companyName.trim(),
         companyWebsite: companyWebsite?.trim() ?? null,
         contactName: contactName.trim(),

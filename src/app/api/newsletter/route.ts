@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
           data: {
             unsubscribedAt: null,
             name: name?.trim() ?? undefined,
-            resubscribedAt: new Date(),
           },
         });
         return NextResponse.json(

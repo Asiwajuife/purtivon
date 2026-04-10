@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import type Stripe from "stripe";
-export const config = {
-  api: { bodyParser: false },
-};
+// Next.js App Router streams request bodies by default; no bodyParser config needed.
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
   if (!sig) {
     return NextResponse.json(
-    );
       { error: "Missing stripe-signature header." },
       { status: 400 }
+    );
   }
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
     console.error("Missing STRIPE_WEBHOOK_SECRET");

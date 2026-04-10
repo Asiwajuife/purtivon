@@ -1,96 +1,185 @@
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import AwardsList from "@/components/awards/AwardsList";
 import SubmissionForm from "@/components/awards/SubmissionForm";
+import AwardWinners from "@/components/home/AwardWinners";
+import type { Winner } from "@/components/home/AwardWinners";
+import { STATIC_WINNERS } from "@/lib/staticWinners";
+
 export const metadata: Metadata = {
   title: "Awards",
   description:
-    "Recognising excellence in foreign direct investment and global financial services.",
+    "Media recognition across Financial Services, FDI, and Leadership — independently judged, globally distributed.",
 };
-interface Award {
-  id: string;
-  title: string;
-  category: string;
-  recipient: string;
-  year: number;
-  description: string | null;
-  createdAt: string;
+
+function getCurrentQuarterLabel() {
+  const now = new Date()
+  const q = Math.ceil((now.getMonth() + 1) / 3)
+  return `Q${q} ${now.getFullYear()}`
 }
-interface AwardsResponse {
-  awards: Award[];
-  pagination: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
-}
-async function getAwards(): Promise<AwardsResponse> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/awards?limit=24`, {
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) throw new Error("Failed to fetch awards.");
-  return res.json();
-}
+
 export default async function AwardsPage() {
-  const [{ awards, pagination }, session] = await Promise.all([
-    getAwards(),
-    getServerSession(authOptions),
+  const [rawAwards, rawWinners] = await Promise.all([
+    prisma.award.findMany({
+      orderBy: [{ year: "desc" }, { title: "asc" }],
+      select: { id: true, title: true, category: true, year: true, description: true, createdAt: true },
+    }),
+    // Use raw SQL to bypass stale Prisma client — works even if prisma generate hasn't been re-run
+    prisma.$queryRawUnsafe<unknown[]>(
+      `SELECT id, name, slug, category, year, quarter, company, region, featured, link, image, logo, profile
+       FROM award_winners
+       ORDER BY year DESC, name ASC`
+    ).catch(() => [] as unknown[]),
   ]);
+
+  const awards = rawAwards.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() }));
+  const categories = [...new Set(awards.map((a) => a.category))];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fromDbWinners: Winner[] = (rawWinners as any[]).map((w) => ({
+    id:       String(w.id),
+    name:     String(w.name),
+    slug:     w.slug     != null ? String(w.slug)     : null,
+    category: String(w.category),
+    year:     Number(w.year),
+    quarter:  w.quarter  != null ? Number(w.quarter)  : null,
+    company:  w.company  != null ? String(w.company)  : null,
+    region:   w.region   != null ? String(w.region)   : null,
+    featured: Boolean(w.featured),
+    link:     w.link     != null ? String(w.link)     : null,
+    image:    w.image    != null ? String(w.image)    : null,
+    logo:     w.logo     != null ? String(w.logo)     : null,
+    profile:  w.profile  != null ? String(w.profile)  : null,
+  }))
+
+  // Merge static winners — DB winners take precedence by id
+  const dbWinnerIds = new Set(fromDbWinners.map((w) => w.id))
+  const winners: Winner[] = [
+    ...fromDbWinners,
+    ...STATIC_WINNERS.filter((w) => !dbWinnerIds.has(w.id)),
+  ].sort(
+    (a: Winner, b: Winner) =>
+      (b.featured ? 1 : 0) - (a.featured ? 1 : 0) ||
+      b.year - a.year ||
+      a.name.localeCompare(b.name)
+  );
+
   return (
-    <section className="flex-1 max-w-7xl mx-auto w-full px-6 py-20 md:py-28">
-      <div className="mb-14 max-w-2xl">
-        <span className="inline-block text-[10px] font-semibold tracking-[0.25em] uppercase text-[#c9a84c] mb-4">
-          Recognition & Excellence
-        </span>
-        <h1
-          className="text-4xl md:text-5xl font-light text-white leading-tight tracking-wide mb-5"
-          style={{
-            fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-          }}
-        >
-          Global Awards
-        </h1>
-        <p className="text-white/40 text-sm leading-relaxed max-w-lg">
-          Celebrating the institutions, leaders, and initiatives defining
-          excellence across foreign direct investment and international financial
-          services.
-        </p>
-      </div>
-      <div className="flex items-center gap-4 mb-16">
-        <div className="h-px flex-1 bg-white/5" />
-        <span className="text-white/20 text-xs tracking-widest uppercase">
-          {pagination.total} {pagination.total === 1 ? "Award" : "Awards"}
-        </span>
-        <div className="h-px flex-1 bg-white/5" />
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2">
-          <AwardsList awards={awards} />
+    <div className="flex-1">
+      {/* Hero header */}
+      <div style={{
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        padding: "5rem 2.5rem 3.5rem",
+        maxWidth: 1160,
+        margin: "0 auto",
+      }}>
+        <div className="eyebrow" style={{ marginBottom: "1.25rem" }}>Recognition & Excellence · {getCurrentQuarterLabel()}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "flex-end", gap: "3rem" }} className="awards-header-grid">
+          <h1 className="display-lg" style={{ maxWidth: 520 }}>
+            Global <em>Awards</em> {getCurrentQuarterLabel()}
+          </h1>
+          <p className="body-sm" style={{ maxWidth: 320, paddingBottom: "0.35rem" }}>
+            Media recognition across Financial Services, FDI, and Leadership — independently judged and distributed to a global audience of investors and decision-makers.
+          </p>
         </div>
-        <div className="lg:col-span-1">
-          <div className="sticky top-28">
-            <div className="mb-6">
-              <h2
-                className="text-xl font-light text-white mb-2 tracking-wide"
-                style={{
-                  fontFamily:
-                    "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-                }}
-              >
-                Submit an Entry
-              </h2>
-              <p className="text-white/30 text-xs leading-relaxed">
-                Nominate your organisation for recognition across our global
-                award categories.
-              </p>
-            </div>
-            <SubmissionForm awards={awards} isAuthenticated={!!session} />
+
+        {/* Stats row */}
+        <div style={{ display: "flex", alignItems: "center", gap: "3rem", marginTop: "2.5rem", paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.04)", flexWrap: "wrap" }}>
+          <div>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
+              {awards.length}
+            </p>
+            <p className="label">{awards.length === 1 ? "Award Category" : "Award Categories"}</p>
+          </div>
+          <div style={{ width: 1, height: 36, background: "rgba(255,255,255,0.06)" }} />
+          <div>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
+              {categories.length}
+            </p>
+            <p className="label">Disciplines</p>
+          </div>
+          <div style={{ width: 1, height: 36, background: "rgba(255,255,255,0.06)" }} />
+          <div>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
+              {winners.length}
+            </p>
+            <p className="label">Past Winners</p>
+          </div>
+          <div style={{ width: 1, height: 36, background: "rgba(255,255,255,0.06)" }} />
+          <div>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
+              48
+            </p>
+            <p className="label">Countries Eligible</p>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Main content: awards list + submission form */}
+      <div style={{ maxWidth: 1160, margin: "0 auto", padding: "3rem 2.5rem 2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "4rem", alignItems: "start" }} className="awards-layout">
+
+          {/* Awards list */}
+          <AwardsList awards={awards} />
+
+          {/* Sidebar: submission form */}
+          <div style={{ position: "sticky", top: "5rem" }}>
+            {/* Section header */}
+            <div style={{
+              padding: "1.25rem 1.5rem",
+              border: "1px solid rgba(201,168,76,0.15)",
+              background: "rgba(201,168,76,0.03)",
+              marginBottom: "1px",
+            }}>
+              <p style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "#c9a84c", marginBottom: "0.4rem" }}>
+                {getCurrentQuarterLabel()} Nominations Open
+              </p>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.3rem", fontWeight: 300, color: "#f0ede6", marginBottom: "0.5rem" }}>
+                Submit an Entry
+              </h2>
+              <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.7 }}>
+                Nominate your organisation for recognition across our global award categories. All submissions are evaluated by an independent judging panel.
+              </p>
+            </div>
+
+            <SubmissionForm awards={awards} />
+          </div>
+        </div>
+      </div>
+
+      {/* Past Winners section */}
+      {winners.length > 0 && (
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+          <AwardWinners winners={winners} />
+        </div>
+      )}
+
+      {/* Empty winners state */}
+      {winners.length === 0 && (
+        <div style={{ maxWidth: 1160, margin: "0 auto", padding: "0 2.5rem 4rem" }}>
+          <div style={{
+            padding: "3rem 2rem",
+            border: "1px solid rgba(255,255,255,0.04)",
+            background: "rgba(255,255,255,0.01)",
+            textAlign: "center",
+          }}>
+            <p style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.15)", marginBottom: "0.5rem" }}>
+              Past Winners
+            </p>
+            <p className="body-sm" style={{ color: "rgba(255,255,255,0.2)" }}>
+              Award winners will be announced here. Check back after each quarterly cycle.
+            </p>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width: 960px) {
+          .awards-layout { grid-template-columns: 1fr !important; gap: 3rem !important; }
+          .awards-layout > div:last-child { position: static !important; }
+          .awards-header-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import UserInfo from "@/components/dashboard/UserInfo";
 
 export default async function DashboardLayout({
   children,
@@ -16,44 +17,30 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex">
-      {/* DashboardSidebar should be a client component */}
+    <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex' }}>
       <DashboardSidebar user={session.user} />
 
-      <div className="flex-1 flex flex-col min-w-0 md:ml-64">
-        <header className="sticky top-0 z-30 h-14 border-b border-white/5 bg-[#0a0a0f]/95 backdrop-blur-md flex items-center justify-between px-6">
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />
-            <span className="text-white/30 text-xs tracking-widest uppercase">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, marginLeft: 200 }}>
+        <header style={{
+          position: 'sticky', top: 0, zIndex: 30, height: 44,
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
+          background: 'rgba(10,10,15,0.95)', backdropFilter: 'blur(16px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 1.25rem',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#c9a84c' }} />
+            <span style={{ fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
               Dashboard
             </span>
           </div>
-
-          {/* User info - move interactive parts into a client component */}
-          <div className="flex items-center gap-3">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <UserInfo user={session.user} />
           </div>
         </header>
 
-        <main className="flex-1 p-6 md:p-8">{children}</main>
+        <main style={{ flex: 1, padding: '1.25rem' }}>{children}</main>
       </div>
     </div>
-  );
-}
-
-// Create a small client component for interactive user info
-"use client";
-import React from "react";
-
-function UserInfo({ user }: { user: any }) {
-  return (
-    <>
-      <span className="text-white/25 text-xs hidden sm:block">{user.email}</span>
-      <div className="w-7 h-7 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center">
-        <span className="text-[#c9a84c] text-[11px] font-semibold uppercase">
-          {user.name?.charAt(0) ?? "U"}
-        </span>
-      </div>
-    </>
   );
 }

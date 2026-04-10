@@ -1,184 +1,71 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import type { Metadata } from "next";
 
-interface FormState {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-const INITIAL_STATE: FormState = {
-  name: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
-
-function getPasswordStrength(password: string) {
-  if (!password) return { score: 0, label: "", color: "" };
-  let score = 0;
-  if (password.length >= 8) score++;
-  if (password.length >= 12) score++;
-  if (/[A-Z]/.test(password)) score++;
-  if (/[0-9]/.test(password)) score++;
-  if (/[^A-Za-z0-9]/.test(password)) score++;
-
-  if (score <= 1) return { score, label: "Weak", color: "bg-red-400" };
-  if (score <= 3) return { score, label: "Fair", color: "bg-yellow-400" };
-  return { score, label: "Strong", color: "bg-emerald-400" };
-}
+export const metadata: Metadata = { title: "Access Restricted" };
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [form, setForm] = useState<FormState>(INITIAL_STATE);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const strength = getPasswordStrength(form.password);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setError(null);
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-
-    if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    if (form.password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim().toLowerCase(),
-          password: form.password,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Registration failed.");
-
-      router.push("/login?registered=true");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const inputClass =
-    "w-full bg-white/[0.03] border border-white/[0.08] text-white/80 text-sm placeholder-white/20 px-4 py-3.5 rounded-sm focus:outline-none focus:border-[#c9a84c]/40 focus:bg-white/[0.05] transition-all duration-200";
-
-  const labelClass =
-    "block text-[10px] font-semibold tracking-[0.18em] uppercase text-white/30 mb-1.5";
-
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-20 bg-[#0a0a0f]">
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#c9a84c]/[0.03] blur-[120px]" />
-      </div>
+    <div style={{
+      minHeight: "100vh",
+      background: "#0a0a0f",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "2rem 1rem",
+    }}>
+      <div style={{ width: "100%", maxWidth: 380, textAlign: "center" }}>
+        <Link href="/" style={{ display: "inline-block", marginBottom: "2rem", textDecoration: "none" }}>
+          <span style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            letterSpacing: "0.28em",
+            textTransform: "uppercase",
+            fontSize: "0.85rem",
+            fontWeight: 300,
+            color: "#d4a843",
+          }}>
+            Purtivon
+          </span>
+        </Link>
 
-      <div className="relative w-full max-w-md">
-        <div className="flex flex-col items-center mb-10">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 mb-8 select-none group"
-          >
-            <span className="relative flex items-center justify-center w-8 h-8">
-              <span className="absolute inset-0 rounded-sm bg-gradient-to-br from-[#c9a84c] to-[#e8c97a] opacity-90" />
-              <span className="relative text-[#0a0a0f] font-black text-sm leading-none">
-                P
-              </span>
-            </span>
+        <div style={{
+          background: "#141420",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: 4,
+          padding: "2.5rem 2rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "1rem",
+        }}>
+          <div style={{
+            width: 48, height: 48,
+            background: "rgba(201,168,76,0.07)",
+            border: "1px solid rgba(201,168,76,0.15)",
+            borderRadius: "50%",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#c9a84c" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+          </div>
 
-            <span
-              className="text-white/60 group-hover:text-white/80 font-light tracking-[0.25em] uppercase text-sm transition-colors duration-200"
-              style={{
-                fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-              }}
-            >
-              Purtivon
-            </span>
-          </Link>
-
-          <h1
-            className="text-3xl font-light text-white tracking-wide mb-2"
-            style={{
-              fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-            }}
-          >
-            Request Access
-          </h1>
-
-          <p className="text-white/30 text-xs tracking-wide">
-            Create your account to get started
-          </p>
+          <div>
+            <h1 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "1.4rem", fontWeight: 300,
+              color: "#f0ede6", marginBottom: "0.4rem",
+            }}>
+              Access by Invitation
+            </h1>
+            <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.6, maxWidth: 260, margin: "0 auto" }}>
+              Purtivon accounts are created by administrators only. Contact your administrator to request access.
+            </p>
+          </div>
         </div>
 
-        <div className="border border-white/5 bg-white/[0.02] rounded-sm p-8">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* FORM FIELDS (unchanged) */}
-
-            {error && (
-              <div className="flex items-start gap-3 px-4 py-3 border border-red-400/10 bg-red-400/5 rounded-sm">
-                <p className="text-red-400/80 text-xs">{error}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex items-center justify-center gap-2.5 w-full py-4 mt-1 bg-gradient-to-r from-[#c9a84c] to-[#e8c97a] text-[#0a0a0f] text-xs font-bold tracking-[0.2em] uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <>
-                  <svg
-                    className="w-3.5 h-3.5 animate-spin"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v8H4z"
-                    />
-                  </svg>
-                  Creating account…
-                </>
-              ) : (
-                "Create Account"
-              )}
-            </button>
-          </form>
-        </div>
-
-        <p className="text-center text-white/25 text-xs mt-6">
+        <p style={{ marginTop: "1.25rem", fontSize: "0.7rem", color: "rgba(255,255,255,0.2)" }}>
           Already have an account?{" "}
-          <Link href="/login" className="text-[#c9a84c]/70 hover:text-[#c9a84c]">
+          <Link href="/login" style={{ color: "#c9a84c", textDecoration: "none" }}>
             Sign in
           </Link>
         </p>

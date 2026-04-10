@@ -8,10 +8,20 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+//
+// ─── ENUMS ─────────────────────────────────────────────────────────────
+//
+
 enum Role {
   USER
   EDITOR
   ADMIN
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
 }
 
 enum SubmissionStatus {
@@ -20,70 +30,185 @@ enum SubmissionStatus {
   REJECTED
 }
 
-model User {
-  id          String       @id @default(cuid())
-  name        String
-  email       String       @unique
-  password    String
-  role        Role         @default(USER)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  articles    Article[]
-  submissions Submission[]
-  @@index([role]) // optional index for querying by role
+enum ArticleStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
 }
 
-model Article {
+//
+// ─── USER & AUTH ───────────────────────────────────────────────────────
+//
+
+model User {
   id        String   @id @default(cuid())
-  title     String
-  slug      String   @unique
-  content   String
-  excerpt   String?
-  imageUrl  String?      // new optional field for article image
-  category  String?      // optional category
-  readTime  Int?         // estimated reading time in minutes
-  published Boolean  @default(true)
-  authorId  String
+  name      String?
+  email     String   @unique
+  password  String?
+  avatar    String?
+  role      Role     @default(USER)
+  plan      Plan     @default(FREE)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  @@index([published])
-  @@index([category])
+
+  // Relations
+  articles      Article[]
+  comments      Comment[]
+  submissions   Submission[]
+  sessions      Session[]
+  subscriptions Subscription[]
+  projects      Project[]
+
+  @@index([email])
+  @@map("users")
 }
 
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@map("sessions")
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String
+  plan      Plan
+  status    String
+  startDate DateTime
+  endDate   DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+//
+// ─── MEDIA (CORE) ──────────────────────────────────────────────────────
+//
+
+model Article {
+  id         String        @id @default(cuid())
+  title      String
+  slug       String        @unique
+  content    Json
+  excerpt    String?
+  coverImage String?
+  status     ArticleStatus @default(DRAFT)
+  readTime   Int?
+
+  authorId   String
+  categoryId String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
+
+  tags     ArticleTag[]
+  comments Comment[]
+  views    Int @default(0)
+
+  @@index([slug])
+  @@index([status])
+  @@index([authorId])
+  @@map("articles")
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+
+  articles Article[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  articles ArticleTag[]
+
+  @@map("tags")
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag     Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  articleId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+//
+// ─── BUSINESS (MONETIZATION) ───────────────────────────────────────────
+//
+
 model Award {
-  id          String       @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
   category    String
-  recipient   String
   year        Int
+  quarter     Int?
   description String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
   submissions Submission[]
+
   @@index([year])
-  @@index([category])
+  @@map("awards")
 }
 
 model Submission {
   id             String           @id @default(cuid())
   awardId        String
-  userId         String
+  userId         String?
+
   companyName    String
   companyWebsite String?
   contactName    String
   contactEmail   String
+
   details        String
   additionalInfo String?
   status         SubmissionStatus @default(PENDING)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  award          Award            @relation(fields: [awardId], references: [id], onDelete: Cascade)
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([awardId, userId])
-  @@index([userId])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  award Award  @relation(fields: [awardId], references: [id], onDelete: Cascade)
+  user  User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
   @@index([status])
-  @@index([companyName]) // optional index for searching submissions by company
+  @@map("submissions")
 }
 
 model NewsletterSubscriber {
@@ -92,5 +217,76 @@ model NewsletterSubscriber {
   name           String?
   createdAt      DateTime  @default(now())
   unsubscribedAt DateTime?
-  resubscribedAt DateTime?
+}
+
+//
+// ─── SAAS / PLATFORM LAYER ─────────────────────────────────────────────
+//
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  userId      String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
+  @@map("projects")
+}
+
+model AwardWinner {
+  id       String  @id @default(cuid())
+  name     String
+  slug     String? @unique
+  category String
+  year     Int
+  quarter  Int?
+  company  String?
+  region   String?
+  featured Boolean @default(false)
+  link     String?
+  image    String?
+  logo     String?
+  profile  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([year])
+  @@index([featured])
+  @@map("award_winners")
+}
+
+model Podcast {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  youtubeUrl  String
+  videoId     String
+  thumbnail   String?
+  category    String?
+  publishedAt DateTime @default(now())
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([publishedAt])
+  @@map("podcasts")
+}
+
+model ContactMessage {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  organisation String?
+  subject      String
+  message      String
+  createdAt    DateTime @default(now())
+
+  @@map("contact_messages")
 }
