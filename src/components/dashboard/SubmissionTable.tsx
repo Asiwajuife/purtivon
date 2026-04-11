@@ -1,391 +1,296 @@
 "use client";
 import { useState } from "react";
+
 type SubmissionStatus = "PENDING" | "APPROVED" | "REJECTED";
-interface Award {
-  id: string;
-  title: string;
-  category: string;
-  year: number;
-}
+
+interface Award { id: string; title: string; category: string; year: number; }
 interface Submission {
-  id: string;
-  companyName: string;
-  contactName: string;
-  contactEmail: string;
-  status: SubmissionStatus;
-  createdAt: string;
-  award: Award;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  id: string; companyName: string; contactName: string; contactEmail: string;
+  status: SubmissionStatus; createdAt: string; award: Award;
+  user?: { id: string; name: string; email: string };
 }
 interface SubmissionTableProps {
   submissions: Submission[];
   isAdmin?: boolean;
   onStatusChange?: (id: string, status: SubmissionStatus) => Promise<void>;
 }
-const STATUS_CONFIG: Record<
-  SubmissionStatus,
-  { label: string; classes: string; dot: string }
-> = {
-  PENDING: {
-    label: "Pending",
-    classes: "text-yellow-400/80 bg-yellow-400/[0.08] border-yellow-400/15",
-    dot: "bg-yellow-400",
-  },
-  APPROVED: {
-    label: "Approved",
-    classes: "text-emerald-400/80 bg-emerald-400/[0.08] border-emerald-400/15",
-    dot: "bg-emerald-400",
-  },
-  REJECTED: {
-    label: "Rejected",
-    classes: "text-red-400/70 bg-red-400/[0.08] border-red-400/15",
-    dot: "bg-red-400",
-  },
+
+const STATUS: Record<SubmissionStatus, { label: string; bg: string; text: string; dot: string; border: string }> = {
+  PENDING:  { label: "Pending",  bg: "rgba(234,179,8,0.07)",    text: "rgba(234,179,8,0.85)",    dot: "#eab308", border: "rgba(234,179,8,0.18)"   },
+  APPROVED: { label: "Approved", bg: "rgba(52,211,153,0.07)",   text: "rgba(52,211,153,0.85)",   dot: "#34d399", border: "rgba(52,211,153,0.18)"  },
+  REJECTED: { label: "Rejected", bg: "rgba(248,113,113,0.07)",  text: "rgba(248,113,113,0.80)",  dot: "#f87171", border: "rgba(248,113,113,0.18)" },
 };
+
 function StatusBadge({ status }: { status: SubmissionStatus }) {
-  const config = STATUS_CONFIG[status];
+  const s = STATUS[status];
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm border text-[10px] font-semibold tracking-[0.15em] uppercase ${config.classes}`}
-    >
-      <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
-      {config.label}
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 6,
+      padding: "4px 10px", border: `1px solid ${s.border}`,
+      background: s.bg, borderRadius: 2,
+      fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.18em",
+      textTransform: "uppercase", color: s.text, whiteSpace: "nowrap",
+    }}>
+      <span style={{ width: 5, height: 5, borderRadius: "50%", background: s.dot, flexShrink: 0 }} />
+      {s.label}
     </span>
   );
 }
-function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
-export default function SubmissionTable({
-  submissions,
-  isAdmin = false,
-  onStatusChange,
-}: SubmissionTableProps) {
+
+const FILTERS = ["ALL", "PENDING", "APPROVED", "REJECTED"] as const;
+type Filter = typeof FILTERS[number];
+
+export default function SubmissionTable({ submissions, isAdmin = false, onStatusChange }: SubmissionTableProps) {
+  const [filter, setFilter] = useState<Filter>("ALL");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<SubmissionStatus | "ALL">(
-    "ALL"
-  );
-  const filtered =
-    filterStatus === "ALL"
-      ? submissions
-      : submissions.filter((s) => s.status === filterStatus);
+
+  const filtered = filter === "ALL" ? submissions : submissions.filter(s => s.status === filter);
+
   async function handleStatusChange(id: string, status: SubmissionStatus) {
     if (!onStatusChange) return;
     setUpdatingId(id);
-    try {
-      await onStatusChange(id, status);
-    } finally {
-      setUpdatingId(null);
-    }
+    try { await onStatusChange(id, status); } finally { setUpdatingId(null); }
   }
+
   if (submissions.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 border border-white/5 bg-white/[0.02] rounded-sm text-center">
-        <div className="w-12 h-12 rounded-full border border-white/5 flex items-center justify-center mb-5">
-          <svg
-            className="w-5 h-5 text-white/20"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-            />
+      <div style={{
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+        padding: "5rem 2rem", border: "1px solid rgba(255,255,255,0.05)",
+        background: "rgba(255,255,255,0.015)", textAlign: "center",
+      }}>
+        <div style={{
+          width: 44, height: 44, border: "1px solid rgba(255,255,255,0.06)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          marginBottom: "1.25rem",
+        }}>
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.2)" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
           </svg>
         </div>
-        <p
-          className="text-white/30 text-xl font-light mb-1.5"
-          style={{
-            fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-          }}
-        >
+        <p style={{ fontFamily: "var(--font-serif, serif)", fontSize: "1.2rem", fontWeight: 300, color: "rgba(255,255,255,0.3)", marginBottom: "0.4rem" }}>
           No submissions yet
         </p>
-        <p className="text-white/15 text-xs tracking-wide">
+        <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.15)", letterSpacing: "0.08em" }}>
           Submissions will appear here once entries are made.
         </p>
       </div>
     );
   }
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2 flex-wrap">
-        {(["ALL", "PENDING", "APPROVED", "REJECTED"] as const).map(
-          (status) => {
-            const count =
-              status === "ALL"
-                ? submissions.length
-                : submissions.filter((s) => s.status === status).length;
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+
+      {/* Filter tabs */}
+      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+        {FILTERS.map(f => {
+          const count = f === "ALL" ? submissions.length : submissions.filter(s => s.status === f).length;
+          const active = filter === f;
+          return (
+            <button key={f} onClick={() => setFilter(f)} style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "6px 14px",
+              border: active ? "1px solid rgba(201,168,76,0.3)" : "1px solid rgba(255,255,255,0.06)",
+              background: active ? "rgba(201,168,76,0.08)" : "rgba(255,255,255,0.02)",
+              borderRadius: 2, cursor: "pointer",
+              fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
+              color: active ? "#c9a84c" : "rgba(255,255,255,0.28)",
+              transition: "all 0.15s ease",
+            }}>
+              {f === "ALL" ? "All" : STATUS[f as SubmissionStatus].label}
+              <span style={{
+                fontSize: "0.6rem", fontWeight: 700,
+                padding: "1px 6px", borderRadius: 2,
+                background: active ? "rgba(201,168,76,0.15)" : "rgba(255,255,255,0.05)",
+                color: active ? "#c9a84c" : "rgba(255,255,255,0.2)",
+              }}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Table header (desktop) */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: isAdmin && onStatusChange
+          ? "1fr 1.2fr auto auto auto auto"
+          : "1fr 1.2fr auto auto auto",
+        gap: "0 1.5rem", alignItems: "center",
+        padding: "0 1.25rem",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        paddingBottom: "0.6rem",
+      }} className="submission-header">
+        {["Company", "Award", "Category", "Status", "Date", ...(isAdmin && onStatusChange ? ["Actions"] : [])].map(col => (
+          <span key={col} style={{
+            fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.22em",
+            textTransform: "uppercase", color: "rgba(255,255,255,0.2)",
+          }}>
+            {col}
+          </span>
+        ))}
+      </div>
+
+      {/* Rows */}
+      {filtered.length === 0 ? (
+        <div style={{ padding: "3rem 1.25rem", textAlign: "center", color: "rgba(255,255,255,0.18)", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+          No {filter.toLowerCase()} submissions
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {filtered.map(s => {
+            const isExpanded = expandedId === s.id;
+            const isUpdating = updatingId === s.id;
             return (
-              <button
-                key={status}
-                onClick={() => setFilterStatus(status)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-sm border text-[10px] font-semibold tracking-[0.15em] uppercase transition-all duration-200 ${
-                  filterStatus === status
-                    ? "border-[#c9a84c]/25 bg-[#c9a84c]/[0.08] text-[#c9a84c]"
-                    : "border-white/5 bg-white/[0.02] text-white/30 hover:text-white/50 hover:border-white/10"
-                }`}
-              >
-                {status === "ALL" ? "All" : STATUS_CONFIG[status].label}
-                <span
-                  className={`px-1.5 py-0.5 rounded-sm text-[9px] font-bold ${
-                    filterStatus === status
-                      ? "bg-[#c9a84c]/15 text-[#c9a84c]"
-                      : "bg-white/5 text-white/25"
-                  }`}
+              <div key={s.id} style={{
+                border: "1px solid rgba(255,255,255,0.05)",
+                background: isExpanded ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.015)",
+                transition: "background 0.15s ease",
+              }}>
+                {/* Main row */}
+                <div
+                  onClick={() => setExpandedId(isExpanded ? null : s.id)}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: isAdmin && onStatusChange
+                      ? "1fr 1.2fr auto auto auto auto"
+                      : "1fr 1.2fr auto auto auto",
+                    gap: "0 1.5rem", alignItems: "center",
+                    padding: "0.9rem 1.25rem",
+                    cursor: "pointer",
+                  }}
+                  className="submission-row"
                 >
-                  {count}
-                </span>
-              </button>
-            );
-          }
-        )}
-      </div>
-      <div className="hidden md:block border border-white/5 rounded-sm overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-white/5 bg-white/[0.02]">
-              {[
-                "Company",
-                "Award",
-                "Category",
-                "Status",
-                "Submitted",
-                ...(isAdmin ? ["Submitted By"] : []),
-                ...(isAdmin && onStatusChange ? ["Actions"] : []),
-              ].map((col) => (
-                <th
-                  key={col}
-                  className="px-5 py-3.5 text-left text-[9px] font-semibold tracking-[0.2em] uppercase text-white/25"
-                >
-                  {col}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/[0.04]">
-            {filtered.map((submission) => (
-              <tr
-                key={submission.id}
-                className="group hover:bg-white/[0.02] transition-colors duration-150"
-              >
-                <td className="px-5 py-4">
-                  <p className="text-white/80 text-sm font-medium">
-                    {submission.companyName}
-                  </p>
-                  <p className="text-white/25 text-xs mt-0.5">
-                    {submission.contactName}
-                  </p>
-                </td>
-                <td className="px-5 py-4">
-                  <p className="text-white/60 text-sm line-clamp-1">
-                    {submission.award.title}
-                  </p>
-                  <p className="text-white/25 text-xs mt-0.5">
-                    {submission.award.year}
-                  </p>
-                </td>
-                <td className="px-5 py-4">
-                  <span className="inline-block text-[10px] font-semibold tracking-[0.15em] uppercase text-[#c9a84c] bg-[#c9a84c]/10 px-2 py-0.5 rounded-sm">
-                    {submission.award.category}
-                  </span>
-                </td>
-                <td className="px-5 py-4">
-                  <StatusBadge status={submission.status} />
-                </td>
-                <td className="px-5 py-4">
-                  <p className="text-white/30 text-xs">
-                    {formatDate(submission.createdAt)}
-                  </p>
-                </td>
-                {isAdmin && (
-                  <td className="px-5 py-4">
-                    {submission.user ? (
-                      <div>
-                        <p className="text-white/50 text-xs">
-                          {submission.user.name}
-                        </p>
-                        <p className="text-white/20 text-[11px] mt-0.5">
-                          {submission.user.email}
-                        </p>
-                      </div>
-                    ) : (
-                      <span className="text-white/15 text-xs">—</span>
-                    )}
-                  </td>
-                )}
-                {isAdmin && onStatusChange && (
-                  <td className="px-5 py-4">
-                    {submission.status === "PENDING" ? (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() =>
-                            handleStatusChange(submission.id, "APPROVED")
-                          }
-                          disabled={updatingId === submission.id}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] uppercase text-emerald-400/80 border border-emerald-400/15 bg-emerald-400/5 hover:bg-emerald-400/10 rounded-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleStatusChange(submission.id, "REJECTED")
-                          }
-                          disabled={updatingId === submission.id}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] uppercase text-red-400/70 border border-red-400/15 bg-red-400/5 hover:bg-red-400/10 rounded-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="text-white/15 text-xs">—</span>
-                    )}
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {filtered.length === 0 && (
-          <div className="py-12 text-center text-white/20 text-xs tracking-widest uppercase">
-            No {filterStatus.toLowerCase()} submissions
-          </div>
-        )}
-      </div>
-      <div className="md:hidden flex flex-col gap-3">
-        {filtered.length === 0 ? (
-          <p className="text-center py-10 text-white/20 text-xs tracking-widest uppercase">
-            No {filterStatus.toLowerCase()} submissions
-          </p>
-        ) : (
-          filtered.map((submission) => (
-            <div
-              key={submission.id}
-              className="border border-white/5 bg-white/[0.02] rounded-sm overflow-hidden"
-            >
-              <button
-                onClick={() =>
-                  setExpandedId(
-                    expandedId === submission.id ? null : submission.id
-                  )
-                }
-                className="w-full flex items-start justify-between gap-4 p-4 text-left"
-              >
-                <div className="min-w-0">
-                  <p className="text-white/80 text-sm font-medium truncate">
-                    {submission.companyName}
-                  </p>
-                  <p className="text-white/30 text-xs mt-0.5 truncate">
-                    {submission.award.title}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <StatusBadge status={submission.status} />
-                  <svg
-                    className={`w-3.5 h-3.5 text-white/20 transition-transform duration-200 ${
-                      expandedId === submission.id ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
-                </div>
-              </button>
-              {expandedId === submission.id && (
-                <div className="px-4 pb-4 border-t border-white/5 pt-4 flex flex-col gap-3">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <p className="text-[9px] tracking-[0.2em] uppercase text-white/20 mb-1">
-                        Category
-                      </p>
-                      <span className="inline-block text-[10px] font-semibold tracking-[0.15em] uppercase text-[#c9a84c] bg-[#c9a84c]/10 px-2 py-0.5 rounded-sm">
-                        {submission.award.category}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-[9px] tracking-[0.2em] uppercase text-white/20 mb-1">
-                        Year
-                      </p>
-                      <p className="text-white/50 text-xs">
-                        {submission.award.year}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[9px] tracking-[0.2em] uppercase text-white/20 mb-1">
-                        Contact
-                      </p>
-                      <p className="text-white/50 text-xs">
-                        {submission.contactName}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[9px] tracking-[0.2em] uppercase text-white/20 mb-1">
-                        Submitted
-                      </p>
-                      <p className="text-white/50 text-xs">
-                        {formatDate(submission.createdAt)}
-                      </p>
-                    </div>
+                  {/* Company */}
+                  <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: "0.82rem", fontWeight: 500, color: "rgba(255,255,255,0.82)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {s.companyName}
+                    </p>
+                    <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.25)", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {s.contactName} · {s.contactEmail}
+                    </p>
                   </div>
-                  {isAdmin && submission.user && (
-                    <div>
-                      <p className="text-[9px] tracking-[0.2em] uppercase text-white/20 mb-1">
-                        Submitted By
-                      </p>
-                      <p className="text-white/50 text-xs">
-                        {submission.user.name} · {submission.user.email}
-                      </p>
+
+                  {/* Award */}
+                  <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {s.award.title}
+                    </p>
+                    <p style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.2)", marginTop: 2 }}>
+                      {s.award.year}
+                    </p>
+                  </div>
+
+                  {/* Category */}
+                  <span style={{
+                    fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase",
+                    color: "#c9a84c", background: "rgba(201,168,76,0.08)",
+                    padding: "3px 8px", whiteSpace: "nowrap",
+                    border: "1px solid rgba(201,168,76,0.12)",
+                  }}>
+                    {s.award.category}
+                  </span>
+
+                  {/* Status */}
+                  <StatusBadge status={s.status} />
+
+                  {/* Date */}
+                  <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.25)", whiteSpace: "nowrap" }}>
+                    {formatDate(s.createdAt)}
+                  </span>
+
+                  {/* Actions */}
+                  {isAdmin && onStatusChange && (
+                    <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
+                      {s.status === "PENDING" ? (
+                        <>
+                          <button
+                            onClick={e => { e.stopPropagation(); handleStatusChange(s.id, "APPROVED"); }}
+                            disabled={isUpdating}
+                            style={{
+                              padding: "5px 12px", fontSize: "0.62rem", fontWeight: 700,
+                              letterSpacing: "0.14em", textTransform: "uppercase",
+                              color: "rgba(52,211,153,0.85)", border: "1px solid rgba(52,211,153,0.2)",
+                              background: "rgba(52,211,153,0.06)", cursor: isUpdating ? "not-allowed" : "pointer",
+                              opacity: isUpdating ? 0.4 : 1, transition: "all 0.15s", borderRadius: 2,
+                            }}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={e => { e.stopPropagation(); handleStatusChange(s.id, "REJECTED"); }}
+                            disabled={isUpdating}
+                            style={{
+                              padding: "5px 12px", fontSize: "0.62rem", fontWeight: 700,
+                              letterSpacing: "0.14em", textTransform: "uppercase",
+                              color: "rgba(248,113,113,0.8)", border: "1px solid rgba(248,113,113,0.2)",
+                              background: "rgba(248,113,113,0.06)", cursor: isUpdating ? "not-allowed" : "pointer",
+                              opacity: isUpdating ? 0.4 : 1, transition: "all 0.15s", borderRadius: 2,
+                            }}
+                          >
+                            Reject
+                          </button>
+                        </>
+                      ) : (
+                        <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.12)" }}>—</span>
+                      )}
                     </div>
                   )}
-                  {isAdmin &&
-                    onStatusChange &&
-                    submission.status === "PENDING" && (
-                      <div className="flex gap-2 pt-1">
-                        <button
-                          onClick={() =>
-                            handleStatusChange(submission.id, "APPROVED")
-                          }
-                          disabled={updatingId === submission.id}
-                          className="flex-1 py-2.5 text-[10px] font-semibold tracking-[0.12em] uppercase text-emerald-400/80 border border-emerald-400/15 bg-emerald-400/5 hover:bg-emerald-400/10 rounded-sm transition-all duration-200 disabled:opacity-40"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleStatusChange(submission.id, "REJECTED")
-                          }
-                          disabled={updatingId === submission.id}
-                          className="flex-1 py-2.5 text-[10px] font-semibold tracking-[0.12em] uppercase text-red-400/70 border border-red-400/15 bg-red-400/5 hover:bg-red-400/10 rounded-sm transition-all duration-200 disabled:opacity-40"
-                        >
-                          Reject
-                        </button>
+                </div>
+
+                {/* Expanded detail panel */}
+                {isExpanded && (
+                  <div style={{
+                    borderTop: "1px solid rgba(255,255,255,0.04)",
+                    padding: "1rem 1.25rem 1.25rem",
+                    display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "1rem",
+                  }}>
+                    <div>
+                      <p style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.18)", marginBottom: 5 }}>Contact Email</p>
+                      <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.45)" }}>{s.contactEmail}</p>
+                    </div>
+                    {isAdmin && s.user && (
+                      <div>
+                        <p style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.18)", marginBottom: 5 }}>Account</p>
+                        <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.45)" }}>{s.user.name}</p>
+                        <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.22)", marginTop: 2 }}>{s.user.email}</p>
                       </div>
                     )}
-                </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
+                    <div>
+                      <p style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.18)", marginBottom: 5 }}>Submission ID</p>
+                      <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.25)", fontFamily: "monospace" }}>{s.id}</p>
+                    </div>
+                    <div>
+                      <p style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.18)", marginBottom: 5 }}>Submitted</p>
+                      <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.45)" }}>{formatDate(s.createdAt)}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .submission-header { display: none !important; }
+          .submission-row {
+            grid-template-columns: 1fr auto !important;
+            grid-template-rows: auto auto;
+          }
+          .submission-row > *:nth-child(3),
+          .submission-row > *:nth-child(5) { display: none; }
+          .submission-row > *:nth-child(4) { grid-row: 1; }
+          .submission-row > *:nth-child(6) { grid-column: 1 / -1; }
+        }
+      `}</style>
     </div>
   );
 }
