@@ -285,22 +285,13 @@ export default function Navbar() {
                 </svg>
               </Link>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  style={{ fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500, color: "rgba(255,255,255,0.6)", textDecoration: "none" }}
-                  className="navbar-link"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/awards"
-                  style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.25rem", border: "1px solid rgba(201,168,76,0.6)", color: "#c9a84c", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}
-                  className="navbar-nominate-btn"
-                >
-                  Submit Nomination
-                </Link>
-              </>
+              <Link
+                href="/awards"
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.25rem", border: "1px solid rgba(201,168,76,0.6)", color: "#c9a84c", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}
+                className="navbar-nominate-btn"
+              >
+                Submit Nomination
+              </Link>
             )}
           </div>
 
@@ -392,14 +383,9 @@ export default function Navbar() {
                 Go to Dashboard
               </Link>
             ) : (
-              <>
-                <Link href="/awards" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
-                  Submit Nomination
-                </Link>
-                <Link href="/login" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)", fontSize: "0.75rem", fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }} className="navbar-mobile-login">
-                  Login
-                </Link>
-              </>
+              <Link href="/awards" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
+                Submit Nomination
+              </Link>
             )}
           </div>
 

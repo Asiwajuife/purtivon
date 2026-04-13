@@ -13,7 +13,7 @@ export default async function DashboardLayout({
 
   // Redirect if user is not logged in
   if (!session?.user) {
-    redirect("/login");
+    redirect("/admin/login");
   }
 
   return (
