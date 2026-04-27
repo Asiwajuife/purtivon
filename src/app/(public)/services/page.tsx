@@ -204,8 +204,24 @@ export default function ServicesPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="section" style={{ textAlign: 'center' }}>
-        <div className="container">
+      <section
+        className="section"
+        style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', borderTop: '1px solid var(--border)' }}
+      >
+        {/* Background image */}
+        <Image
+          src="/images/hero-home.png"
+          alt=""
+          fill
+          sizes="100vw"
+          style={{ objectFit: 'cover', objectPosition: 'center top' }}
+        />
+        {/* Dark overlay */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.62)', zIndex: 1 }} />
+        {/* Gold radial glow */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 80% at 50% 100%, rgba(201,168,76,0.1) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 2 }} />
+
+        <div className="container" style={{ position: 'relative', zIndex: 3 }}>
           <ScrollReveal>
             <div
               aria-hidden="true"
@@ -216,10 +232,10 @@ export default function ServicesPage() {
                 margin: '0 auto 3rem',
               }}
             />
-            <h2 className="display-lg" style={{ marginBottom: '1.25rem' }}>
+            <h2 className="display-lg" style={{ marginBottom: '1.25rem', color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>
               Ready to get <em>started?</em>
             </h2>
-            <p className="body-lg" style={{ maxWidth: 500, margin: '0 auto 3rem' }}>
+            <p className="body-lg" style={{ maxWidth: 500, margin: '0 auto 3rem', color: 'rgba(240,237,230,0.92)', textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
               Whether you represent a financial institution, an investment promotion agency, or a
               government body seeking to attract capital, our team will identify which services best
               align with your objectives. Most engagements begin with a complimentary consultation.
