@@ -497,6 +497,94 @@ em, i {
 }
 
 /* ─────────────────────────────────────────────
+   ENHANCED CARD INTERACTIONS
+───────────────────────────────────────────── */
+
+/* Lift-on-hover card variant */
+.card-lift {
+  transition: transform 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out),
+              border-color 0.25s var(--ease-out);
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-gold);
+  border-color: var(--border-gold) !important;
+}
+
+/* Image zoom on hover */
+.img-zoom {
+  overflow: hidden;
+}
+
+.img-zoom img {
+  transition: transform 0.45s var(--ease-out);
+}
+
+.img-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* Glowing CTA button */
+.hero-cta-glow {
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.35);
+  transition: all var(--duration) var(--ease-out), box-shadow 0.3s ease;
+}
+
+.hero-cta-glow:hover {
+  box-shadow: 0 0 32px rgba(201, 168, 76, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* White outline button variant for use on dark image backgrounds */
+.btn-outline-white {
+  background: transparent;
+  color: rgba(240, 237, 230, 0.9);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.btn-outline-white:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+/* Mission heading shimmer glow */
+.mission-shimmer-heading {
+  animation: gold-shimmer 4s ease-in-out infinite;
+}
+
+@keyframes gold-shimmer {
+  0%, 100% { text-shadow: 0 2px 8px rgba(0,0,0,0.7), 0 0 0px rgba(201,168,76,0); }
+  50%       { text-shadow: 0 2px 8px rgba(0,0,0,0.7), 0 0 20px rgba(201,168,76,0.25); }
+}
+
+/* Button enhancements */
+.btn {
+  transform: translateY(0);
+}
+
+.btn:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.btn:active {
+  transform: translateY(0) scale(1);
+}
+
+.btn-primary:hover,
+.btn-primary:active {
+  transform: none; /* let individual btn-primary rule handle it */
+}
+
+/* Link hover underline */
+a:not(.btn):not(.nav-logo):hover {
+  color: var(--gold);
+  transition: color var(--duration) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────
    RESPONSIVE
 ───────────────────────────────────────────── */
 @media (max-width: 1024px) {

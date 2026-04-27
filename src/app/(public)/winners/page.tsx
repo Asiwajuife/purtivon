@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { STATIC_WINNERS } from '@/lib/staticWinners'
@@ -166,43 +167,66 @@ export default async function WinnersPage() {
 
       {/* ── Hero ── */}
       <div style={{
-        background: '#0a0a0f',
+        position: 'relative',
+        overflow: 'hidden',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
-        padding: '6rem 2.5rem 4rem',
+        padding: '7rem 2.5rem 5rem',
         textAlign: 'center',
       }}>
-        <p style={{
-          fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.28em',
-          textTransform: 'uppercase', color: '#c9a84c', marginBottom: '1rem',
-        }}>
-          Global Recognition · Award Winners
-        </p>
-        <h1 style={{
-          fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-          fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 300,
-          color: '#f0ede6', lineHeight: 1.15, margin: '0 auto 1.25rem',
-          maxWidth: 640,
-        }}>
-          Award <em style={{ fontStyle: 'italic', color: '#c9a84c' }}>Winners</em>
-        </h1>
-        <p style={{
-          fontSize: '0.875rem', color: 'rgba(255,255,255,0.4)',
-          maxWidth: 480, margin: '0 auto 2rem', lineHeight: 1.75,
-        }}>
-          Companies and institutions recognised for excellence across global finance, FDI, and investment.
-        </p>
-        <Link
-          href="/awards"
+        {/* Background image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://www.trophiesplusmedals.co.uk/media/blog/how-to-reward-yourself.jpg"
+          alt=""
+          aria-hidden="true"
           style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.65rem 1.5rem',
-            border: '1px solid rgba(201,168,76,0.5)', color: '#c9a84c',
-            fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.18em',
-            textTransform: 'uppercase', textDecoration: 'none', borderRadius: 2,
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center',
           }}
-        >
-          Submit Nomination →
-        </Link>
+        />
+        {/* Dark overlay */}
+        <div aria-hidden="true" style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.78) 100%)',
+        }} />
+        {/* Content */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <p style={{
+            fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.28em',
+            textTransform: 'uppercase', color: '#c9a84c', marginBottom: '1rem',
+            textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+          }}>
+            Global Recognition · Award Winners
+          </p>
+          <h1 style={{
+            fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 300,
+            color: '#f0ede6', lineHeight: 1.15, margin: '0 auto 1.25rem',
+            maxWidth: 640, textShadow: '0 2px 8px rgba(0,0,0,0.7)',
+          }}>
+            Award <em style={{ fontStyle: 'italic', color: '#c9a84c' }}>Winners</em>
+          </h1>
+          <p style={{
+            fontSize: '0.875rem', color: 'rgba(255,255,255,0.75)',
+            maxWidth: 480, margin: '0 auto 2rem', lineHeight: 1.75,
+            textShadow: '0 1px 4px rgba(0,0,0,0.6)',
+          }}>
+            Companies and institutions recognised for excellence across global finance, FDI, and investment.
+          </p>
+          <Link
+            href="/awards"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.65rem 1.5rem',
+              border: '1px solid rgba(201,168,76,0.5)', color: '#c9a84c',
+              fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.18em',
+              textTransform: 'uppercase', textDecoration: 'none', borderRadius: 2,
+            }}
+          >
+            Submit Nomination →
+          </Link>
+        </div>
       </div>
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4rem 2.5rem 5rem' }}>

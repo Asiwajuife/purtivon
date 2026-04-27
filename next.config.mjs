@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  experimental: {
+    globalNotFound: true,
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

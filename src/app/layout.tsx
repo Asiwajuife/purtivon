@@ -1,7 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import SessionProvider from '@/components/providers/SessionProvider'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import './globals.css'
 
@@ -42,19 +39,16 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession(authOptions)
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
         <GoogleAnalytics />
-        <SessionProvider session={session}>
-          {children}
-        </SessionProvider>
+        {children}
       </body>
     </html>
   )

@@ -1,5 +1,8 @@
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'Services',
@@ -43,53 +46,155 @@ const SERVICES = [
 export default function ServicesPage() {
   return (
     <div className="flex-1 pt-24">
-      {/* Hero */}
-      <section style={{ padding: '5rem 2.5rem 4rem', maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ maxWidth: 680 }}>
-          <div className="eyebrow" style={{ marginBottom: '1.25rem' }}>Our Services</div>
-          <h1 className="display-xl" style={{ marginBottom: '1.75rem' }}>
-            Serving the world&apos;s financial institutions and <em>investment communities</em>
-          </h1>
-          <p className="body-lg" style={{ marginBottom: '2.5rem' }}>
-            Purtivon works with two distinct but interconnected communities — the global financial
-            services sector and the foreign direct investment world. From banks and asset managers
-            to investment promotion agencies and development finance institutions, we deliver
-            intelligence, recognition, and communications that build credibility, attract capital,
-            and open markets.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <Link href="/contact" className="btn btn-primary">Enquire Now</Link>
-            <Link href="/awards" className="btn btn-outline">Browse Awards</Link>
+
+      {/* ── Hero with services-hero.jpg ── */}
+      <section
+        style={{
+          position: 'relative',
+          minHeight: '60vh',
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <Image
+          src="/images/services-hero.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+        />
+        {/* Dark overlay */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.25) 100%)',
+          }}
+        />
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            padding: '5rem 2.5rem 4rem',
+            maxWidth: 1280,
+            margin: '0 auto',
+            width: '100%',
+          }}
+        >
+          <div style={{ maxWidth: 680 }}>
+            <div
+              className="eyebrow"
+              style={{ marginBottom: '1.25rem', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
+            >
+              Our Services
+            </div>
+            <h1
+              className="display-xl"
+              style={{
+                marginBottom: '1.75rem',
+                color: '#fff',
+                textShadow: '0 2px 8px rgba(0,0,0,0.7)',
+              }}
+            >
+              Serving the world&apos;s financial institutions and{' '}
+              <em>investment communities</em>
+            </h1>
+            <p
+              className="body-lg"
+              style={{
+                marginBottom: '2.5rem',
+                color: 'rgba(240,237,230,0.92)',
+                textShadow: '0 1px 4px rgba(0,0,0,0.6)',
+              }}
+            >
+              Purtivon works with two distinct but interconnected communities — the global financial
+              services sector and the foreign direct investment world. From banks and asset managers
+              to investment promotion agencies and development finance institutions, we deliver
+              intelligence, recognition, and communications that build credibility, attract capital,
+              and open markets.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <Link href="/contact" className="btn btn-primary">
+                Enquire Now
+              </Link>
+              <Link href="/awards" className="btn btn-outline-white">
+                Browse Awards
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Services grid */}
+      {/* ── Services grid ── */}
       <section className="section section--alt">
         <div className="container">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1px',
+              background: 'var(--border)',
+              border: '1px solid var(--border)',
+            }}
+          >
             {SERVICES.map(({ icon, title, tagline, desc }, i) => (
-              <div
-                key={title}
-                className="card"
-                style={{
-                  border: 'none', borderRadius: 0,
-                  display: 'grid', gridTemplateColumns: '80px 1fr', gap: '2.5rem', alignItems: 'start',
-                }}
-                data-service-card
-              >
-                <div style={{ paddingTop: '0.25rem' }}>
-                  <div style={{ width: 42, height: 42, border: '1px solid var(--border-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', color: 'var(--gold)', fontSize: '1.1rem' }} aria-hidden="true">
-                    {icon}
+              <ScrollReveal key={title} delay={i * 0.05}>
+                <div
+                  className="card card-lift"
+                  style={{
+                    border: 'none',
+                    borderRadius: 0,
+                    display: 'grid',
+                    gridTemplateColumns: '80px 1fr',
+                    gap: '2.5rem',
+                    alignItems: 'start',
+                  }}
+                  data-service-card
+                >
+                  <div style={{ paddingTop: '0.25rem' }}>
+                    <div
+                      style={{
+                        width: 42,
+                        height: 42,
+                        border: '1px solid var(--border-gold)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '1rem',
+                        color: 'var(--gold)',
+                        fontSize: '1.1rem',
+                      }}
+                      aria-hidden="true"
+                    >
+                      {icon}
+                    </div>
+                    <span className="badge badge--outline" style={{ fontSize: '0.6rem' }}>
+                      0{i + 1}
+                    </span>
                   </div>
-                  <span className="badge badge--outline" style={{ fontSize: '0.6rem' }}>0{i + 1}</span>
+                  <div>
+                    <h2 className="heading" style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+                      {title}
+                    </h2>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontStyle: 'italic',
+                        color: 'var(--gold)',
+                        fontSize: '0.95rem',
+                        marginBottom: '1.25rem',
+                      }}
+                    >
+                      {tagline}
+                    </p>
+                    <p className="body-lg">{desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="heading" style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{title}</h2>
-                  <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--gold)', fontSize: '0.95rem', marginBottom: '1.25rem' }}>{tagline}</p>
-                  <p className="body-lg">{desc}</p>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -98,15 +203,31 @@ export default function ServicesPage() {
         `}</style>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ── */}
       <section className="section" style={{ textAlign: 'center' }}>
         <div className="container">
-          <div aria-hidden="true" style={{ width: 64, height: 1, background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', margin: '0 auto 3rem' }} />
-          <h2 className="display-lg" style={{ marginBottom: '1.25rem' }}>Ready to get <em>started?</em></h2>
-          <p className="body-lg" style={{ maxWidth: 500, margin: '0 auto 3rem' }}>
-            Whether you represent a financial institution, an investment promotion agency, or a government body seeking to attract capital, our team will identify which services best align with your objectives. Most engagements begin with a complimentary consultation.
-          </p>
-          <Link href="/contact" className="btn btn-primary btn-lg">Contact Us Today</Link>
+          <ScrollReveal>
+            <div
+              aria-hidden="true"
+              style={{
+                width: 64,
+                height: 1,
+                background: 'linear-gradient(90deg, transparent, var(--gold), transparent)',
+                margin: '0 auto 3rem',
+              }}
+            />
+            <h2 className="display-lg" style={{ marginBottom: '1.25rem' }}>
+              Ready to get <em>started?</em>
+            </h2>
+            <p className="body-lg" style={{ maxWidth: 500, margin: '0 auto 3rem' }}>
+              Whether you represent a financial institution, an investment promotion agency, or a
+              government body seeking to attract capital, our team will identify which services best
+              align with your objectives. Most engagements begin with a complimentary consultation.
+            </p>
+            <Link href="/contact" className="btn btn-primary btn-lg">
+              Contact Us Today
+            </Link>
+          </ScrollReveal>
         </div>
       </section>
     </div>
