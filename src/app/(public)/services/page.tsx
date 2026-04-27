@@ -210,11 +210,11 @@ export default function ServicesPage() {
       >
         {/* Background image */}
         <Image
-          src="/images/hero-home.png"
+          src="/images/flight-routes.jpg"
           alt=""
           fill
           sizes="100vw"
-          style={{ objectFit: 'cover', objectPosition: 'center top' }}
+          style={{ objectFit: 'cover', objectPosition: 'center center' }}
         />
         {/* Dark overlay */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.62)', zIndex: 1 }} />
