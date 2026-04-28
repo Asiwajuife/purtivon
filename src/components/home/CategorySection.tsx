@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import type React from 'react'
 import type { HomepageArticle } from './FeaturedArticles'
 
@@ -66,7 +66,7 @@ export default function CategorySection({ category, articles }: CategorySectionP
                   </p>
                 )}
                 <div style={{ display: 'flex', gap: '0.9rem', marginTop: 'auto', paddingTop: '0.6rem', borderTop: '1px solid var(--border)' }}>
-                  <span style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.22)' }}>{fmtShort(a.publishedAt)}</span>
+                  <span style={{ fontSize: '0.62rem', color: 'var(--text-4)' }}>{fmtShort(a.publishedAt)}</span>
                   {a.readTime && (
                     <span style={{ fontSize: '0.62rem', color: 'var(--gold-dim)' }}>{a.readTime} min</span>
                   )}

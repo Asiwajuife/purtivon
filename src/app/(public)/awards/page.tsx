@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import AwardsList from "@/components/awards/AwardsList";
@@ -69,7 +69,7 @@ export default async function AwardsPage() {
     <div className="flex-1">
       {/* Hero header */}
       <div style={{
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        borderBottom: "1px solid var(--border-faint)",
         padding: "5rem 2.5rem 3.5rem",
         maxWidth: 1160,
         margin: "0 auto",
@@ -85,28 +85,28 @@ export default async function AwardsPage() {
         </div>
 
         {/* Stats row */}
-        <div style={{ display: "flex", alignItems: "center", gap: "3rem", marginTop: "2.5rem", paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.04)", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "3rem", marginTop: "2.5rem", paddingTop: "2rem", borderTop: "1px solid var(--border-faint)", flexWrap: "wrap" }}>
           <div>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
               {awards.length}
             </p>
             <p className="label">{awards.length === 1 ? "Award Category" : "Award Categories"}</p>
           </div>
-          <div style={{ width: 1, height: 36, background: "rgba(255,255,255,0.06)" }} />
+          <div style={{ width: 1, height: 36, background: "var(--border-faint)" }} />
           <div>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
               {categories.length}
             </p>
             <p className="label">Disciplines</p>
           </div>
-          <div style={{ width: 1, height: 36, background: "rgba(255,255,255,0.06)" }} />
+          <div style={{ width: 1, height: 36, background: "var(--border-faint)" }} />
           <div>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
               {winners.length}
             </p>
             <p className="label">Past Winners</p>
           </div>
-          <div style={{ width: 1, height: 36, background: "rgba(255,255,255,0.06)" }} />
+          <div style={{ width: 1, height: 36, background: "var(--border-faint)" }} />
           <div>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#c9a84c", lineHeight: 1, marginBottom: "0.3rem" }}>
               48
@@ -135,10 +135,10 @@ export default async function AwardsPage() {
               <p style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "#c9a84c", marginBottom: "0.4rem" }}>
                 {getCurrentQuarterLabel()} Nominations Open
               </p>
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.3rem", fontWeight: 300, color: "#f0ede6", marginBottom: "0.5rem" }}>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.3rem", fontWeight: 300, color: "var(--text-hi)", marginBottom: "0.5rem" }}>
                 Submit an Entry
               </h2>
-              <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.7 }}>
+              <p style={{ fontSize: "0.75rem", color: "var(--text-lo)", lineHeight: 1.7 }}>
                 Nominate your organisation for recognition across our global award categories. All submissions are evaluated by an independent judging panel.
               </p>
             </div>
@@ -150,7 +150,7 @@ export default async function AwardsPage() {
 
       {/* Past Winners section */}
       {winners.length > 0 && (
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+        <div style={{ borderTop: "1px solid var(--border-faint)" }}>
           <AwardWinners winners={winners} />
         </div>
       )}
@@ -160,14 +160,14 @@ export default async function AwardsPage() {
         <div style={{ maxWidth: 1160, margin: "0 auto", padding: "0 2.5rem 4rem" }}>
           <div style={{
             padding: "3rem 2rem",
-            border: "1px solid rgba(255,255,255,0.04)",
-            background: "rgba(255,255,255,0.01)",
+            border: "1px solid var(--border-faint)",
+            background: "var(--surface-subtle)",
             textAlign: "center",
           }}>
-            <p style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.15)", marginBottom: "0.5rem" }}>
+            <p style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--text-5)", marginBottom: "0.5rem" }}>
               Past Winners
             </p>
-            <p className="body-sm" style={{ color: "rgba(255,255,255,0.2)" }}>
+            <p className="body-sm" style={{ color: "var(--text-4)" }}>
               Award winners will be announced here. Check back after each quarterly cycle.
             </p>
           </div>

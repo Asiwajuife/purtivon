@@ -1,4 +1,4 @@
-import { type JSONContent } from "@tiptap/react";
+﻿import { type JSONContent } from "@tiptap/react";
 
 // Recursively render TipTap JSON to React elements — no client JS needed
 function renderNode(node: JSONContent, index: number): React.ReactNode {
@@ -27,7 +27,7 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
         fontFamily: "'Cormorant Garamond', serif",
         fontWeight: 300,
         lineHeight: 1.2,
-        color: "#f0ede6",
+        color: "var(--text-hi)",
         marginTop: "2rem",
         marginBottom: "0.75rem",
       };
@@ -57,7 +57,7 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
           );
         } else if (mark.type === "code") {
           el = (
-            <code key={key} style={{ background: "rgba(255,255,255,0.06)", padding: "0.1em 0.35em", borderRadius: 3, fontSize: "0.85em" }}>
+            <code key={key} style={{ background: "var(--border-faint)", padding: "0.1em 0.35em", borderRadius: 3, fontSize: "0.85em" }}>
               {el}
             </code>
           );
@@ -124,15 +124,15 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
       );
 
     case "horizontalRule":
-      return <hr key={key} style={{ border: "none", borderTop: "1px solid rgba(255,255,255,0.07)", margin: "2rem 0" }} />;
+      return <hr key={key} style={{ border: "none", borderTop: "1px solid var(--border-dim)", margin: "2rem 0" }} />;
 
     case "codeBlock":
       return (
         <pre
           key={key}
           style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "var(--border-faint)",
+            border: "1px solid var(--border-dim)",
             borderRadius: 4,
             padding: "1rem 1.25rem",
             overflowX: "auto",

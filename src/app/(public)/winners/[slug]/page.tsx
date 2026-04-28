@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -75,19 +75,19 @@ export default async function WinnerProfilePage(
 
       {/* ── Hero ── */}
       <div style={{
-        background: '#0a0a0f',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        background: 'var(--surface-page)',
+        borderBottom: '1px solid var(--border-faint)',
         padding: '5rem 2.5rem 4rem',
       }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
 
           {/* Breadcrumb */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
-            <Link href="/winners" style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', letterSpacing: '0.1em' }}>
+            <Link href="/winners" style={{ fontSize: '0.65rem', color: 'var(--text-lo)', textDecoration: 'none', letterSpacing: '0.1em' }}>
               Winners
             </Link>
-            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.65rem' }}>›</span>
-            <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em' }}>
+            <span style={{ color: 'var(--text-5)', fontSize: '0.65rem' }}>›</span>
+            <span style={{ fontSize: '0.65rem', color: 'var(--text-mid)', letterSpacing: '0.1em' }}>
               {winner.name}
             </span>
           </div>
@@ -145,23 +145,23 @@ export default async function WinnerProfilePage(
                   {winner.category}
                 </span>
                 <span style={{
-                  fontSize: '0.6rem', color: 'rgba(255,255,255,0.35)',
-                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)',
+                  fontSize: '0.6rem', color: 'var(--text-lo)',
+                  background: 'var(--border-faint)', border: '1px solid var(--border-dim)',
                   padding: '0.25rem 0.65rem',
                 }}>
                   {periodLabel}
                 </span>
                 {winner.region && (
                   <span style={{
-                    fontSize: '0.6rem', color: 'rgba(255,255,255,0.35)',
-                    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)',
+                    fontSize: '0.6rem', color: 'var(--text-lo)',
+                    background: 'var(--border-faint)', border: '1px solid var(--border-dim)',
                     padding: '0.25rem 0.65rem',
                   }}>
                     {winner.region}
                   </span>
                 )}
                 {winner.company && (
-                  <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-lo)' }}>
                     {winner.company}
                   </span>
                 )}

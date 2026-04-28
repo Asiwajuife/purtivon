@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -14,9 +14,9 @@ const INITIAL: FormState = {
 
 const field: React.CSSProperties = {
   width: "100%",
-  background: "rgba(255,255,255,0.03)",
-  border: "1px solid rgba(255,255,255,0.08)",
-  color: "#f0ede6",
+  background: "var(--surface-hover)",
+  border: "1px solid var(--border-dim)",
+  color: "var(--text-hi)",
   fontSize: "0.82rem",
   fontFamily: "'DM Sans', sans-serif",
   fontWeight: 300,
@@ -32,7 +32,7 @@ const label: React.CSSProperties = {
   fontWeight: 600,
   letterSpacing: "0.2em",
   textTransform: "uppercase",
-  color: "rgba(255,255,255,0.28)",
+  color: "var(--text-4)",
   marginBottom: "0.45rem",
 };
 const req = <span style={{ color: "#c9a84c", marginLeft: 2 }}>*</span>;
@@ -75,8 +75,8 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
   function fieldStyle(name: string): React.CSSProperties {
     return {
       ...field,
-      borderColor: focused === name ? "rgba(201,168,76,0.4)" : "rgba(255,255,255,0.08)",
-      background: focused === name ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.03)",
+      borderColor: focused === name ? "rgba(201,168,76,0.4)" : "var(--border-dim)",
+      background: focused === name ? "var(--border-faint)" : "var(--surface-hover)",
     };
   }
 
@@ -99,10 +99,10 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
           </svg>
         </div>
         <div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.25rem", fontWeight: 300, color: "rgba(255,255,255,0.85)", marginBottom: "0.4rem" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.25rem", fontWeight: 300, color: "var(--text-hi)", marginBottom: "0.4rem" }}>
             Entry Submitted
           </p>
-          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.7 }}>
+          <p style={{ fontSize: "0.75rem", color: "var(--text-lo)", lineHeight: 1.7 }}>
             Your submission has been received and is under review by our judging panel.
           </p>
         </div>
@@ -124,8 +124,8 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
   /* ── Form ── */
   return (
     <form onSubmit={handleSubmit} style={{
-      border: "1px solid rgba(255,255,255,0.06)",
-      background: "rgba(255,255,255,0.015)",
+      border: "1px solid var(--border-faint)",
+      background: "var(--surface-subtle)",
       display: "flex", flexDirection: "column",
     }}>
       {/* Form fields */}
@@ -142,14 +142,14 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
               onBlur={() => setFocused(null)}
               style={{ ...fieldStyle("awardId"), width: "100%", paddingRight: "2rem", cursor: "pointer" }}
             >
-              <option value="" disabled style={{ background: "#0f0f16" }}>Select an award category…</option>
+              <option value="" disabled style={{ background: "var(--dark-100)" }}>Select an award category…</option>
               {awards.map((a) => (
-                <option key={a.id} value={a.id} style={{ background: "#0f0f16" }}>
+                <option key={a.id} value={a.id} style={{ background: "var(--dark-100)" }}>
                   {a.title}
                 </option>
               ))}
             </select>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={2} style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--text-lo)" strokeWidth={2} style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
               <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
           </div>
@@ -203,7 +203,7 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
 
         {/* Additional info */}
         <div style={{ marginBottom: "1.5rem" }}>
-          <label htmlFor="additionalInfo" style={label}>Supporting Evidence <span style={{ color: "rgba(255,255,255,0.18)", fontWeight: 400, letterSpacing: "0.05em", textTransform: "none" }}>(optional)</span></label>
+          <label htmlFor="additionalInfo" style={label}>Supporting Evidence <span style={{ color: "var(--text-5)", fontWeight: 400, letterSpacing: "0.05em", textTransform: "none" }}>(optional)</span></label>
           <textarea id="additionalInfo" name="additionalInfo" value={form.additionalInfo}
             onChange={handleChange} rows={2}
             placeholder="Links, data, or any additional context…"
@@ -226,7 +226,7 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
       )}
 
       {/* Submit */}
-      <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "1rem 1.5rem" }}>
+      <div style={{ borderTop: "1px solid var(--border-faint)", padding: "1rem 1.5rem" }}>
         <button
           type="submit"
           disabled={loading}
@@ -235,7 +235,7 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
             display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
             padding: "0.85rem 1rem",
             background: loading ? "rgba(201,168,76,0.5)" : "#c9a84c",
-            color: "#0a0a0f",
+            color: "var(--surface-page)",
             fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
             border: "none", cursor: loading ? "not-allowed" : "pointer",
             fontFamily: "'DM Sans', sans-serif",
@@ -252,7 +252,7 @@ export default function SubmissionForm({ awards }: { awards: Award[] }) {
             </>
           ) : "Submit Entry →"}
         </button>
-        <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.18)", textAlign: "center", marginTop: "0.75rem", lineHeight: 1.6 }}>
+        <p style={{ fontSize: "0.68rem", color: "var(--text-5)", textAlign: "center", marginTop: "0.75rem", lineHeight: 1.6 }}>
           All entries are reviewed by an independent judging panel. Submissions close 30 June 2026.
         </p>
       </div>

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
 export interface Winner {
   id: string
@@ -79,7 +79,7 @@ function FeaturedWinnerCard({ winner }: { winner: Winner }) {
             {winner.name}
           </p>
           {winner.company && (
-            <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', margin: '0.2rem 0 0' }}>
+            <p style={{ fontSize: '0.72rem', color: 'var(--text-lo)', margin: '0.2rem 0 0' }}>
               {winner.company}
             </p>
           )}
@@ -92,11 +92,11 @@ function FeaturedWinnerCard({ winner }: { winner: Winner }) {
           {winner.category}
         </span>
         {winner.region && (
-          <span style={{ fontSize: '0.58rem', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.04)', padding: '0.22rem 0.5rem', border: '1px solid rgba(255,255,255,0.07)' }}>
+          <span style={{ fontSize: '0.58rem', letterSpacing: '0.1em', color: 'var(--text-lo)', background: 'var(--border-faint)', padding: '0.22rem 0.5rem', border: '1px solid var(--border-dim)' }}>
             {winner.region}
           </span>
         )}
-        <span style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.3)', marginLeft: 'auto' }}>
+        <span style={{ fontSize: '0.58rem', color: 'var(--text-lo)', marginLeft: 'auto' }}>
           {quarterLabel(winner.quarter) ? `${quarterLabel(winner.quarter)} · ` : ''}{winner.year}
         </span>
       </div>
@@ -156,7 +156,7 @@ function WinnerCard({ winner }: { winner: Winner }) {
             {winner.name}
           </p>
           {winner.company && (
-            <p style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.28)', margin: '0.1rem 0 0' }}>
+            <p style={{ fontSize: '0.62rem', color: 'var(--text-4)', margin: '0.1rem 0 0' }}>
               {winner.company}
             </p>
           )}
@@ -168,17 +168,17 @@ function WinnerCard({ winner }: { winner: Winner }) {
           {winner.category}
         </span>
         {winner.region && (
-          <span style={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.25)', padding: '0.18rem 0.4rem', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)' }}>
+          <span style={{ fontSize: '0.55rem', color: 'var(--text-4)', padding: '0.18rem 0.4rem', border: '1px solid var(--border-faint)', background: 'var(--surface-hover)' }}>
             {winner.region}
           </span>
         )}
-        <span style={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.25)', marginLeft: 'auto' }}>
+        <span style={{ fontSize: '0.55rem', color: 'var(--text-4)', marginLeft: 'auto' }}>
           {quarterLabel(winner.quarter) ? `${quarterLabel(winner.quarter)} · ` : ''}{winner.year}
         </span>
       </div>
 
       {(winner.slug || winner.link) && (
-        <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.3)', margin: 0, marginTop: 'auto' }}>
+        <p style={{ fontSize: '0.6rem', color: 'var(--text-lo)', margin: 0, marginTop: 'auto' }}>
           View profile →
         </p>
       )}
@@ -250,8 +250,8 @@ export default function AwardWinners({ winners }: { winners: Winner[] }) {
               {[...quarters.entries()].map(([label, group]) => (
                 <div key={label}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <span style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{label}</span>
-                    <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.05)' }} />
+                    <span style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-lo)' }}>{label}</span>
+                    <div style={{ flex: 1, height: 1, background: 'var(--border-faint)' }} />
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }} className="winners-grid">
                     {group.map((w) => <WinnerCard key={w.id} winner={w} />)}

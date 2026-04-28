@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -104,11 +104,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "2.5rem clamp(1.25rem, 5vw, 5rem) 2.5rem" }}>
           {/* Breadcrumb */}
           <nav style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.5rem" }}>
-            <Link href="/insights" style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.45)", letterSpacing: "0.14em", textTransform: "uppercase" }}>
+            <Link href="/insights" style={{ fontSize: "0.65rem", color: "var(--text-lo)", letterSpacing: "0.14em", textTransform: "uppercase" }}>
               Insights
             </Link>
-            <span style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.65rem" }}>/</span>
-            <span style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", letterSpacing: "0.14em", textTransform: "uppercase" }}>{category}</span>
+            <span style={{ color: "var(--text-4)", fontSize: "0.65rem" }}>/</span>
+            <span style={{ fontSize: "0.65rem", color: "var(--text-lo)", letterSpacing: "0.14em", textTransform: "uppercase" }}>{category}</span>
           </nav>
 
           {/* Category badge */}
@@ -119,7 +119,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </div>
 
           {/* Title */}
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(1.6rem, 3.5vw, 3rem)", fontWeight: 300, lineHeight: 1.15, color: "#f0ede6", maxWidth: 820, marginBottom: "1rem" }}>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(1.6rem, 3.5vw, 3rem)", fontWeight: 300, lineHeight: 1.15, color: "var(--text-hi)", maxWidth: 820, marginBottom: "1rem" }}>
             {article.title}
           </h1>
 
@@ -129,14 +129,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.58rem", fontWeight: 700, color: "#c9a84c" }}>
                 {authorInitials}
               </div>
-              <span style={{ fontSize: "0.74rem", color: "rgba(255,255,255,0.65)" }}>{authorName}</span>
+              <span style={{ fontSize: "0.74rem", color: "var(--text-mid)" }}>{authorName}</span>
             </div>
-            <span style={{ width: 1, height: 14, background: "rgba(255,255,255,0.15)", display: "block" }} />
-            <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)" }}>{date}</span>
+            <span style={{ width: 1, height: 14, background: "var(--text-5)", display: "block" }} />
+            <span style={{ fontSize: "0.68rem", color: "var(--text-lo)" }}>{date}</span>
             {article.readTime && (
               <>
-                <span style={{ width: 1, height: 14, background: "rgba(255,255,255,0.15)", display: "block" }} />
-                <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)" }}>{article.readTime} min read</span>
+                <span style={{ width: 1, height: 14, background: "var(--text-5)", display: "block" }} />
+                <span style={{ fontSize: "0.68rem", color: "var(--text-lo)" }}>{article.readTime} min read</span>
               </>
             )}
           </div>
@@ -148,7 +148,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         {/* Excerpt lead */}
         {article.excerpt && (
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)", fontStyle: "italic", fontWeight: 300, lineHeight: 1.75, color: "rgba(240,237,230,0.8)", marginBottom: "2.5rem", paddingBottom: "2.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)", fontStyle: "italic", fontWeight: 300, lineHeight: 1.75, color: "rgba(240,237,230,0.8)", marginBottom: "2.5rem", paddingBottom: "2.5rem", borderBottom: "1px solid var(--border-faint)" }}>
             {article.excerpt}
           </p>
         )}
@@ -174,11 +174,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               12 to 24 months.
             </p>
             <blockquote style={{ margin: "0.5rem 0", padding: "2rem 2.25rem", borderLeft: "2px solid #c9a84c", background: "rgba(201,168,76,0.03)" }}>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.25rem", fontStyle: "italic", fontWeight: 300, lineHeight: 1.75, color: "#f0ede6" }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.25rem", fontStyle: "italic", fontWeight: 300, lineHeight: 1.75, color: "var(--text-hi)" }}>
                 &ldquo;The data is unambiguous: capital is moving toward markets that combine political stability,
                 regulatory transparency, and credible ESG frameworks.&rdquo;
               </p>
-              <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.3)", marginTop: "1rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              <p style={{ fontSize: "0.68rem", color: "var(--text-lo)", marginTop: "1rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
                 Purtivon Research Team
               </p>
             </blockquote>
@@ -190,7 +190,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         )}
 
         {/* Footer nav */}
-        <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+        <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--border-faint)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
           <Link href="/insights" className="btn btn-outline btn-sm">← All Insights</Link>
           <Link href="/contact" className="btn btn-ghost btn-sm">Enquire About Full Report →</Link>
         </div>

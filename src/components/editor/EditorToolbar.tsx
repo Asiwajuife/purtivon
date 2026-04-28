@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { type Editor } from "@tiptap/react";
 import { useRef } from "react";
 
@@ -12,7 +12,7 @@ const btn: React.CSSProperties = {
   border: "none",
   borderRadius: 3,
   cursor: "pointer",
-  color: "rgba(255,255,255,0.5)",
+  color: "var(--text-mid)",
   fontSize: "0.78rem",
   fontWeight: 600,
   transition: "background 0.15s, color 0.15s",
@@ -47,7 +47,7 @@ function TB({ active, onClick, title, children, disabled }: ToolbarButtonProps) 
 }
 
 function Divider() {
-  return <span style={{ width: 1, height: 18, background: "rgba(255,255,255,0.08)", margin: "0 2px", flexShrink: 0 }} />;
+  return <span style={{ width: 1, height: 18, background: "var(--border-dim)", margin: "0 2px", flexShrink: 0 }} />;
 }
 
 export default function EditorToolbar({ editor }: { editor: Editor | null }) {
@@ -92,8 +92,8 @@ export default function EditorToolbar({ editor }: { editor: Editor | null }) {
       alignItems: "center",
       gap: 2,
       padding: "6px 10px",
-      borderBottom: "1px solid rgba(255,255,255,0.07)",
-      background: "rgba(255,255,255,0.02)",
+      borderBottom: "1px solid var(--border-dim)",
+      background: "var(--surface-subtle)",
     }}>
       {/* Headings */}
       <TB title="Heading 1" active={editor.isActive("heading", { level: 1 })} onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>H1</TB>

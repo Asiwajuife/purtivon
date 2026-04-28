@@ -1,10 +1,10 @@
-export default function GlobalNotFound() {
+﻿export default function GlobalNotFound() {
   return (
     <html lang="en">
       <body
         style={{
-          background: "#0a0a0f",
-          color: "#f0ede6",
+          background: "var(--surface-page)",
+          color: "var(--text-hi)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -33,7 +33,7 @@ export default function GlobalNotFound() {
             fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
             fontWeight: 300,
             marginBottom: "1rem",
-            color: "#f0ede6",
+            color: "var(--text-hi)",
           }}
         >
           Page not found
@@ -57,7 +57,7 @@ export default function GlobalNotFound() {
             alignItems: "center",
             padding: "0.8rem 2rem",
             background: "#c9a84c",
-            color: "#0a0a0f",
+            color: "var(--surface-page)",
             fontSize: "0.75rem",
             fontWeight: 600,
             letterSpacing: "0.12em",

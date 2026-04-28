@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#0a0a0f',
+      background: 'var(--surface-page)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -71,22 +71,22 @@ export default function AdminLoginPage() {
           <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', fontWeight: 300, color: '#f0ede6', letterSpacing: '0.02em', marginBottom: '0.25rem' }}>
             Admin Sign In
           </h1>
-          <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.05em' }}>
+          <p style={{ fontSize: '0.72rem', color: 'var(--text-lo)', letterSpacing: '0.05em' }}>
             Restricted access — authorised personnel only
           </p>
         </div>
 
         {/* Card */}
         <div style={{
-          background: '#141420',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'var(--surface-card)',
+          border: '1px solid var(--border-dim)',
           borderRadius: 4,
           padding: '1.5rem',
         }}>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
             <div>
-              <label htmlFor="email" style={{ display: 'block', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '0.4rem' }}>
+              <label htmlFor="email" style={{ display: 'block', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-lo)', marginBottom: '0.4rem' }}>
                 Email
               </label>
               <input
@@ -99,8 +99,8 @@ export default function AdminLoginPage() {
                 autoComplete="email"
                 placeholder="you@example.com"
                 style={{
-                  width: '100%', background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.8)',
+                  width: '100%', background: 'var(--surface-hover)',
+                  border: '1px solid var(--border-dim)', color: 'var(--text-hi)',
                   fontSize: '0.8rem', padding: '0.55rem 0.75rem', outline: 'none',
                   borderRadius: 3, boxSizing: 'border-box',
                 }}
@@ -108,7 +108,7 @@ export default function AdminLoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" style={{ display: 'block', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '0.4rem' }}>
+              <label htmlFor="password" style={{ display: 'block', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-lo)', marginBottom: '0.4rem' }}>
                 Password
               </label>
               <input
@@ -121,8 +121,8 @@ export default function AdminLoginPage() {
                 autoComplete="current-password"
                 placeholder="••••••••"
                 style={{
-                  width: '100%', background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.8)',
+                  width: '100%', background: 'var(--surface-hover)',
+                  border: '1px solid var(--border-dim)', color: 'var(--text-hi)',
                   fontSize: '0.8rem', padding: '0.55rem 0.75rem', outline: 'none',
                   borderRadius: 3, boxSizing: 'border-box',
                 }}
@@ -141,7 +141,7 @@ export default function AdminLoginPage() {
               style={{
                 width: '100%', padding: '0.65rem',
                 background: 'linear-gradient(90deg, #c9a84c, #e8c97a)',
-                color: '#0a0a0f', fontSize: '0.7rem', fontWeight: 700,
+                color: 'var(--surface-page)', fontSize: '0.7rem', fontWeight: 700,
                 letterSpacing: '0.18em', textTransform: 'uppercase',
                 border: 'none', borderRadius: 3, cursor: loading ? 'not-allowed' : 'pointer',
                 opacity: loading ? 0.5 : 1, marginTop: '0.25rem',
@@ -152,7 +152,7 @@ export default function AdminLoginPage() {
           </form>
         </div>
 
-        <p style={{ textAlign: 'center', fontSize: '0.65rem', color: 'rgba(255,255,255,0.15)', marginTop: '1rem', letterSpacing: '0.05em' }}>
+        <p style={{ textAlign: 'center', fontSize: '0.65rem', color: 'var(--text-5)', marginTop: '1rem', letterSpacing: '0.05em' }}>
           Access is by invitation only
         </p>
       </div>

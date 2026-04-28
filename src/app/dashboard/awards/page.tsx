@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -8,7 +8,7 @@ import AwardsClient from "./AwardsClient";
 
 export const metadata: Metadata = { title: "Manage Awards" };
 
-const P = { gold: "#c9a84c", textPrimary: "#f0ede6" } as const;
+const P = { gold: "#c9a84c", textPrimary: "var(--text-hi)" } as const;
 
 export default async function AdminAwardsPage() {
   const session = await getServerSession(authOptions);
@@ -31,7 +31,7 @@ export default async function AdminAwardsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", maxWidth: 900 }}>
-      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid var(--border-faint)" }}>
         <span style={{ display: "block", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: P.gold, marginBottom: "0.3rem" }}>
           Recognition
         </span>

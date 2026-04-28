@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -113,7 +113,7 @@ export default function MediaKitPage() {
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "clamp(1.6rem, 5vw, 2.4rem)",
           fontWeight: 300, letterSpacing: "0.06em",
-          color: "#f0ede6", lineHeight: 1.2,
+          color: "var(--text-hi)", lineHeight: 1.2,
           marginBottom: "1.5rem",
         }}>
           Coming Soon

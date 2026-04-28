@@ -1,14 +1,14 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const P = {
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 type ArticleStatus = "DRAFT" | "REVIEW" | "PUBLISHED";
@@ -26,7 +26,7 @@ interface Article {
 }
 
 const STATUS_STYLES: Record<ArticleStatus, { label: string; color: string; bg: string; border: string }> = {
-  DRAFT:     { label: "Draft",      color: P.textMuted, bg: "rgba(255,255,255,0.04)", border: "rgba(255,255,255,0.08)" },
+  DRAFT:     { label: "Draft",      color: P.textMuted, bg: "var(--border-faint)", border: "var(--border-dim)" },
   REVIEW:    { label: "In Review",  color: "#f59e0b",   bg: "rgba(245,158,11,0.08)",  border: "rgba(245,158,11,0.25)" },
   PUBLISHED: { label: "Published",  color: P.gold,      bg: "rgba(201,168,76,0.08)",  border: "rgba(201,168,76,0.25)" },
 };
@@ -83,14 +83,14 @@ export default function ArticlesClient({ articles }: { articles: Article[] }) {
     padding: "0.7rem 1rem",
     fontSize: "0.72rem",
     color: P.textMuted,
-    borderBottom: "1px solid rgba(255,255,255,0.03)",
+    borderBottom: "1px solid var(--surface-hover)",
     verticalAlign: "middle",
   };
 
   if (articles.length === 0) {
     return (
       <div style={{ background: P.surface, border: `1px solid ${P.border}`, borderRadius: 4, padding: "3rem 1.5rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem" }}>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth={1.5}>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--border-dim)" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
         </svg>
         <p style={{ fontSize: "0.78rem", color: P.textMuted, margin: 0 }}>No articles yet</p>
@@ -106,7 +106,7 @@ export default function ArticlesClient({ articles }: { articles: Article[] }) {
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "auto" }}>
             <thead>
-              <tr style={{ background: "rgba(255,255,255,0.015)" }}>
+              <tr style={{ background: "var(--surface-subtle)" }}>
                 <th style={thStyle}>Title</th>
                 <th style={{ ...thStyle, textAlign: "center" }}>Image</th>
                 <th style={thStyle}>Category</th>
@@ -118,20 +118,20 @@ export default function ArticlesClient({ articles }: { articles: Article[] }) {
             </thead>
             <tbody>
               {articles.map((article, idx) => (
-                <tr key={article.id} style={{ background: idx % 2 === 0 ? "transparent" : "rgba(255,255,255,0.008)" }}>
+                <tr key={article.id} style={{ background: idx % 2 === 0 ? "transparent" : "var(--surface-subtle)" }}>
                   <td style={{ ...tdStyle, color: P.textPrimary, maxWidth: 260 }}>
                     <p style={{ margin: 0, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.74rem" }} title={article.title}>{article.title}</p>
                     {article.excerpt && <p style={{ margin: "0.2rem 0 0", fontSize: "0.6rem", color: P.textMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{article.excerpt}</p>}
                   </td>
                   <td style={{ ...tdStyle, textAlign: "center" }}>
                     {article.coverImage
-                      ? /* eslint-disable-next-line @next/next/no-img-element */ <img src={article.coverImage} alt="" style={{ width: 44, height: 30, objectFit: "cover", border: "1px solid rgba(255,255,255,0.08)" }} />
-                      : <span style={{ color: "rgba(255,255,255,0.15)", fontSize: "0.65rem" }}>—</span>}
+                      ? /* eslint-disable-next-line @next/next/no-img-element */ <img src={article.coverImage} alt="" style={{ width: 44, height: 30, objectFit: "cover", border: "1px solid var(--border-dim)" }} />
+                      : <span style={{ color: "var(--text-5)", fontSize: "0.65rem" }}>—</span>}
                   </td>
                   <td style={tdStyle}>
                     {article.category
-                      ? <span style={{ fontSize: "0.64rem", padding: "0.15rem 0.45rem", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 3 }}>{article.category}</span>
-                      : <span style={{ color: "rgba(255,255,255,0.18)", fontSize: "0.64rem" }}>—</span>}
+                      ? <span style={{ fontSize: "0.64rem", padding: "0.15rem 0.45rem", background: "var(--border-faint)", border: "1px solid var(--border-dim)", borderRadius: 3 }}>{article.category}</span>
+                      : <span style={{ color: "var(--text-5)", fontSize: "0.64rem" }}>—</span>}
                   </td>
                   <td style={{ ...tdStyle, textAlign: "center" }}><StatusBadge status={article.status} /></td>
                   <td style={tdStyle}><span style={{ whiteSpace: "nowrap" }}>{article.author}</span></td>
@@ -143,7 +143,7 @@ export default function ArticlesClient({ articles }: { articles: Article[] }) {
                       <Link
                         href={`/dashboard/articles/${article.id}/preview`}
                         target="_blank"
-                        style={{ padding: "0.28rem 0.6rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 3, textDecoration: "none" }}
+                        style={{ padding: "0.28rem 0.6rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-lo)", background: "var(--surface-hover)", border: "1px solid var(--border-dim)", borderRadius: 3, textDecoration: "none" }}
                       >
                         Preview
                       </Link>

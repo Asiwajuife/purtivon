@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -45,9 +45,9 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
   return (
     <div style={{
-      border: "1px solid rgba(255,255,255,0.07)",
+      border: "1px solid var(--border-dim)",
       borderRadius: 4,
-      background: "rgba(255,255,255,0.02)",
+      background: "var(--surface-subtle)",
       overflow: "hidden",
     }}>
       <EditorToolbar editor={editor} />
@@ -120,7 +120,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         .tiptap-editor-content p.is-editor-empty:first-child::before {
           content: attr(data-placeholder);
           float: left;
-          color: rgba(255,255,255,0.2);
+          color: var(--text-4);
           pointer-events: none;
           height: 0;
         }
@@ -128,15 +128,15 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           outline: none;
         }
         .tiptap-editor-content code {
-          background: rgba(255,255,255,0.06);
+          background: var(--border-faint);
           padding: 0.1em 0.35em;
           border-radius: 3px;
           font-size: 0.85em;
           font-family: 'Fira Code', monospace;
         }
         .tiptap-editor-content pre {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.07);
+          background: var(--border-faint);
+          border: 1px solid var(--border-dim);
           border-radius: 4px;
           padding: 1rem 1.25rem;
           overflow-x: auto;
@@ -148,7 +148,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         }
         .tiptap-editor-content hr {
           border: none;
-          border-top: 1px solid rgba(255,255,255,0.08);
+          border-top: 1px solid var(--border-dim);
           margin: 1.5rem 0;
         }
       `}</style>

@@ -1,18 +1,18 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const P = {
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.03)",
-  border: "1px solid rgba(255,255,255,0.07)",
+  background: "var(--surface-hover)",
+  border: "1px solid var(--border-dim)",
   color: P.textPrimary,
   fontSize: "0.82rem",
   padding: "0.55rem 0.85rem",
@@ -120,7 +120,7 @@ export default function CategoriesClient({ categories: initial }: { categories: 
   }
 
   const thStyle: React.CSSProperties = { padding: "0.6rem 1rem", fontSize: "0.58rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: P.textMuted, textAlign: "left", borderBottom: `1px solid ${P.border}` };
-  const tdStyle: React.CSSProperties = { padding: "0.7rem 1rem", fontSize: "0.78rem", color: P.textMuted, borderBottom: "1px solid rgba(255,255,255,0.03)", verticalAlign: "middle" };
+  const tdStyle: React.CSSProperties = { padding: "0.7rem 1rem", fontSize: "0.78rem", color: P.textMuted, borderBottom: "1px solid var(--surface-hover)", verticalAlign: "middle" };
 
   return (
     <>
@@ -138,7 +138,7 @@ export default function CategoriesClient({ categories: initial }: { categories: 
             <label style={labelStyle}>Slug</label>
             <input style={inputStyle} value={newSlug} onChange={(e) => { setSlugManual(true); setNewSlug(slugify(e.target.value)); }} placeholder="fdi-intelligence" required />
           </div>
-          <button type="submit" disabled={creating} style={{ padding: "0.55rem 1.1rem", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "#0a0a0f", border: "none", borderRadius: 3, cursor: "pointer", opacity: creating ? 0.7 : 1, whiteSpace: "nowrap" }}>
+          <button type="submit" disabled={creating} style={{ padding: "0.55rem 1.1rem", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", border: "none", borderRadius: 3, cursor: "pointer", opacity: creating ? 0.7 : 1, whiteSpace: "nowrap" }}>
             {creating ? "Adding…" : "Add"}
           </button>
         </form>
@@ -155,7 +155,7 @@ export default function CategoriesClient({ categories: initial }: { categories: 
         ) : (
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "rgba(255,255,255,0.015)" }}>
+              <tr style={{ background: "var(--surface-subtle)" }}>
                 <th style={thStyle}>Name</th>
                 <th style={thStyle}>Slug</th>
                 <th style={{ ...thStyle, textAlign: "center" }}>Articles</th>
@@ -166,7 +166,7 @@ export default function CategoriesClient({ categories: initial }: { categories: 
               {categories.map((c) => (
                 <tr key={c.id}>
                   {editId === c.id ? (
-                    <td colSpan={4} style={{ padding: "0.85rem 1rem", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+                    <td colSpan={4} style={{ padding: "0.85rem 1rem", borderBottom: "1px solid var(--surface-hover)" }}>
                       <form onSubmit={handleSaveEdit} style={{ display: "flex", gap: "0.6rem", alignItems: "flex-end", flexWrap: "wrap" }}>
                         <div style={{ flex: 1, minWidth: 140 }}>
                           <label style={labelStyle}>Name</label>
@@ -177,10 +177,10 @@ export default function CategoriesClient({ categories: initial }: { categories: 
                           <input style={inputStyle} value={editSlug} onChange={(e) => setEditSlug(slugify(e.target.value))} required />
                         </div>
                         <div style={{ display: "flex", gap: "0.4rem" }}>
-                          <button type="submit" disabled={saving} style={{ padding: "0.5rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "#0a0a0f", border: "none", borderRadius: 3, cursor: "pointer", opacity: saving ? 0.7 : 1 }}>
+                          <button type="submit" disabled={saving} style={{ padding: "0.5rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", border: "none", borderRadius: 3, cursor: "pointer", opacity: saving ? 0.7 : 1 }}>
                             {saving ? "…" : "Save"}
                           </button>
-                          <button type="button" onClick={() => setEditId(null)} style={{ padding: "0.5rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "transparent", color: P.textMuted, border: "1px solid rgba(255,255,255,0.1)", borderRadius: 3, cursor: "pointer" }}>
+                          <button type="button" onClick={() => setEditId(null)} style={{ padding: "0.5rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "transparent", color: P.textMuted, border: "1px solid var(--border-dim)", borderRadius: 3, cursor: "pointer" }}>
                             Cancel
                           </button>
                         </div>
@@ -191,17 +191,17 @@ export default function CategoriesClient({ categories: initial }: { categories: 
                     <>
                       <td style={{ ...tdStyle, color: P.textPrimary, fontWeight: 500 }}>{c.name}</td>
                       <td style={tdStyle}>
-                        <code style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.03)", padding: "0.15rem 0.4rem", borderRadius: 2 }}>{c.slug}</code>
+                        <code style={{ fontSize: "0.7rem", color: "var(--text-lo)", background: "var(--surface-hover)", padding: "0.15rem 0.4rem", borderRadius: 2 }}>{c.slug}</code>
                       </td>
                       <td style={{ ...tdStyle, textAlign: "center" }}>
-                        <span style={{ fontSize: "0.7rem", color: c.articleCount > 0 ? P.gold : "rgba(255,255,255,0.2)" }}>{c.articleCount}</span>
+                        <span style={{ fontSize: "0.7rem", color: c.articleCount > 0 ? P.gold : "var(--text-4)" }}>{c.articleCount}</span>
                       </td>
                       <td style={{ ...tdStyle, textAlign: "right" }}>
                         <div style={{ display: "flex", gap: "0.4rem", justifyContent: "flex-end" }}>
                           <button onClick={() => startEdit(c)} style={{ padding: "0.28rem 0.6rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: P.gold, background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: 3, cursor: "pointer" }}>
                             Edit
                           </button>
-                          <button onClick={() => handleDelete(c.id, c.name, c.articleCount)} disabled={deletingId === c.id} style={{ padding: "0.28rem 0.6rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: c.articleCount > 0 ? "rgba(255,255,255,0.15)" : "#f87171", background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.1)", borderRadius: 3, cursor: c.articleCount > 0 ? "not-allowed" : "pointer", opacity: deletingId === c.id ? 0.5 : 1 }}>
+                          <button onClick={() => handleDelete(c.id, c.name, c.articleCount)} disabled={deletingId === c.id} style={{ padding: "0.28rem 0.6rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: c.articleCount > 0 ? "var(--text-5)" : "#f87171", background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.1)", borderRadius: 3, cursor: c.articleCount > 0 ? "not-allowed" : "pointer", opacity: deletingId === c.id ? 0.5 : 1 }}>
                             {deletingId === c.id ? "…" : "Delete"}
                           </button>
                         </div>

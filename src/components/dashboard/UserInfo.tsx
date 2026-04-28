@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { signOut } from "next-auth/react";
 
 export default function UserInfo({ user }: { user: { name?: string | null; email?: string | null } }) {
@@ -17,9 +17,9 @@ export default function UserInfo({ user }: { user: { name?: string | null; email
           display: "flex", alignItems: "center", gap: "0.35rem",
           padding: "0.3rem 0.65rem",
           fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
-          color: "rgba(255,255,255,0.3)",
+          color: "var(--text-lo)",
           background: "transparent",
-          border: "1px solid rgba(255,255,255,0.07)",
+          border: "1px solid var(--border-dim)",
           borderRadius: 3,
           cursor: "pointer",
           transition: "color 0.2s, border-color 0.2s, background 0.2s",
@@ -30,8 +30,8 @@ export default function UserInfo({ user }: { user: { name?: string | null; email
           (e.currentTarget as HTMLButtonElement).style.background = "rgba(248,113,113,0.05)";
         }}
         onMouseLeave={e => {
-          (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.3)";
-          (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.07)";
+          (e.currentTarget as HTMLButtonElement).style.color = "var(--text-lo)";
+          (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border-dim)";
           (e.currentTarget as HTMLButtonElement).style.background = "transparent";
         }}
       >

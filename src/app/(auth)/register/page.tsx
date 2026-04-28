@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +8,7 @@ export default function RegisterPage() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#0a0a0f",
+      background: "var(--surface-page)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -29,8 +29,8 @@ export default function RegisterPage() {
         </Link>
 
         <div style={{
-          background: "#141420",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "var(--surface-card)",
+          border: "1px solid var(--border-dim)",
           borderRadius: 4,
           padding: "2.5rem 2rem",
           display: "flex",
@@ -54,17 +54,17 @@ export default function RegisterPage() {
             <h1 style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontSize: "1.4rem", fontWeight: 300,
-              color: "#f0ede6", marginBottom: "0.4rem",
+              color: "var(--text-hi)", marginBottom: "0.4rem",
             }}>
               Access by Invitation
             </h1>
-            <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.6, maxWidth: 260, margin: "0 auto" }}>
+            <p style={{ fontSize: "0.72rem", color: "var(--text-lo)", lineHeight: 1.6, maxWidth: 260, margin: "0 auto" }}>
               Purtivon accounts are created by administrators only. Contact your administrator to request access.
             </p>
           </div>
         </div>
 
-        <p style={{ marginTop: "1.25rem", fontSize: "0.7rem", color: "rgba(255,255,255,0.2)" }}>
+        <p style={{ marginTop: "1.25rem", fontSize: "0.7rem", color: "var(--text-4)" }}>
           Already have an account?{" "}
           <Link href="/admin/login" style={{ color: "#c9a84c", textDecoration: "none" }}>
             Sign in

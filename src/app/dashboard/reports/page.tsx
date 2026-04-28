@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -8,12 +8,12 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = { title: "Reports" };
 
 const PALETTE = {
-  bg: "#0a0a0f",
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  bg: "var(--surface-page)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 async function getReportStats(userId: string, isAdmin: boolean) {
@@ -198,7 +198,7 @@ export default async function ReportsPage() {
       <div
         style={{
           paddingBottom: "0.75rem",
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
+          borderBottom: "1px solid var(--border-faint)",
         }}
       >
         <span
@@ -292,7 +292,7 @@ export default async function ReportsPage() {
             style={{
               flex: 1,
               height: 1,
-              background: "rgba(255,255,255,0.04)",
+              background: "var(--border-faint)",
             }}
           />
         </div>

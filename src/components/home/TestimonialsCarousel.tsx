@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
@@ -138,7 +138,7 @@ export default function TestimonialsCarousel() {
                     width: i === active ? 20 : 6,
                     height: 6,
                     borderRadius: 3,
-                    background: i === active ? "#c9a84c" : "rgba(255,255,255,0.25)",
+                    background: i === active ? "#c9a84c" : "var(--text-4)",
                     border: "none",
                     cursor: "pointer",
                     padding: 0,
@@ -196,7 +196,7 @@ export default function TestimonialsCarousel() {
                     fontStyle: "italic",
                     fontWeight: 300,
                     lineHeight: 1.75,
-                    color: "#f0ede6",
+                    color: "var(--text-hi)",
                     flex: 1,
                     textShadow: "0 1px 3px rgba(0,0,0,0.4)",
                   }}
@@ -238,7 +238,7 @@ export default function TestimonialsCarousel() {
                     <p
                       style={{
                         fontSize: "0.68rem",
-                        color: "rgba(255,255,255,0.55)",
+                        color: "var(--text-mid)",
                         margin: "0.15rem 0 0",
                       }}
                     >

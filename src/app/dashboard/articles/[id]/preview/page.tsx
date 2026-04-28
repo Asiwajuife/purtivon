@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect, notFound } from "next/navigation";
@@ -17,7 +17,7 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 const STATUS_COLOR: Record<string, string> = {
-  DRAFT: "rgba(255,255,255,0.35)",
+  DRAFT: "var(--text-lo)",
   REVIEW: "#f59e0b",
   PUBLISHED: "#c9a84c",
 };
@@ -46,7 +46,7 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
   const content = article.content as JSONContent | null;
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0f" }}>
+    <div style={{ minHeight: "100vh", background: "var(--surface-page)" }}>
 
       {/* Preview banner */}
       <div style={{
@@ -60,14 +60,14 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
         padding: "0.65rem 1.5rem",
         background: "rgba(10,10,15,0.97)",
         backdropFilter: "blur(12px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        borderBottom: "1px solid var(--border-faint)",
         flexWrap: "wrap",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", padding: "0.2rem 0.6rem", background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.4)", borderRadius: 3 }}>
+          <span style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", padding: "0.2rem 0.6rem", background: "var(--border-faint)", color: "var(--text-lo)", borderRadius: 3 }}>
             Preview
           </span>
-          <span style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.35)" }}>
+          <span style={{ fontSize: "0.65rem", color: "var(--text-lo)" }}>
             This is how the article will appear when published
           </span>
           <span style={{
@@ -77,7 +77,7 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
             textTransform: "uppercase",
             padding: "0.18rem 0.55rem",
             borderRadius: 3,
-            color: STATUS_COLOR[article.status] ?? "rgba(255,255,255,0.35)",
+            color: STATUS_COLOR[article.status] ?? "var(--text-lo)",
             background: `${STATUS_COLOR[article.status]}18`,
             border: `1px solid ${STATUS_COLOR[article.status]}33`,
           }}>
@@ -94,7 +94,7 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
-              color: "#0a0a0f",
+              color: "var(--surface-page)",
               borderRadius: 3,
               textDecoration: "none",
               whiteSpace: "nowrap",
@@ -135,7 +135,7 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
             fontSize: "clamp(1.6rem, 3.5vw, 3rem)",
             fontWeight: 300,
             lineHeight: 1.15,
-            color: "#f0ede6",
+            color: "var(--text-hi)",
             maxWidth: 820,
             marginBottom: "1rem",
           }}>
@@ -148,14 +148,14 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
               <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.58rem", fontWeight: 700, color: "#c9a84c" }}>
                 {authorInitials}
               </div>
-              <span style={{ fontSize: "0.74rem", color: "rgba(255,255,255,0.65)" }}>{authorName}</span>
+              <span style={{ fontSize: "0.74rem", color: "var(--text-mid)" }}>{authorName}</span>
             </div>
-            <span style={{ width: 1, height: 14, background: "rgba(255,255,255,0.15)", display: "block" }} />
-            <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)" }}>{date}</span>
+            <span style={{ width: 1, height: 14, background: "var(--text-5)", display: "block" }} />
+            <span style={{ fontSize: "0.68rem", color: "var(--text-lo)" }}>{date}</span>
             {article.readTime && (
               <>
-                <span style={{ width: 1, height: 14, background: "rgba(255,255,255,0.15)", display: "block" }} />
-                <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)" }}>{article.readTime} min read</span>
+                <span style={{ width: 1, height: 14, background: "var(--text-5)", display: "block" }} />
+                <span style={{ fontSize: "0.68rem", color: "var(--text-lo)" }}>{article.readTime} min read</span>
               </>
             )}
           </div>
@@ -176,7 +176,7 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
             color: "rgba(240,237,230,0.8)",
             marginBottom: "2.5rem",
             paddingBottom: "2.5rem",
-            borderBottom: "1px solid rgba(255,255,255,0.06)",
+            borderBottom: "1px solid var(--border-faint)",
           }}>
             {article.excerpt}
           </p>
@@ -189,13 +189,13 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
         {content && (content as { content?: unknown[] }).content && (content as { content: unknown[] }).content.length > 0 ? (
           <TipTapRenderer content={content} />
         ) : (
-          <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.25)", fontStyle: "italic" }}>
+          <p style={{ fontSize: "0.85rem", color: "var(--text-4)", fontStyle: "italic" }}>
             No content written yet. Go back to the editor to add content.
           </p>
         )}
 
         {/* Bottom nav */}
-        <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+        <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--border-faint)", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
           <Link
             href={`/dashboard/articles/${id}`}
             style={{
@@ -205,7 +205,7 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
-              color: "#0a0a0f",
+              color: "var(--surface-page)",
               borderRadius: 3,
               textDecoration: "none",
             }}
@@ -221,8 +221,8 @@ export default async function ArticlePreviewPage({ params }: { params: Promise<{
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               background: "transparent",
-              color: "rgba(255,255,255,0.35)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              color: "var(--text-lo)",
+              border: "1px solid var(--border-dim)",
               borderRadius: 3,
               textDecoration: "none",
             }}

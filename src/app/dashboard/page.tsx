@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -208,7 +208,7 @@ export default async function DashboardPage() {
                 <p style={{ fontSize: "0.72rem", fontWeight: 500, color: "var(--text-mid)", marginBottom: "0.15rem" }}>{label}</p>
                 <p style={{ fontSize: "0.7rem", color: "var(--text-4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{description}</p>
               </div>
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth={2.5}>
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--text-5)" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />
               </svg>
             </Link>
@@ -305,7 +305,7 @@ export default async function DashboardPage() {
       <style>{`
         @media (max-width: 700px) { .dash-stats { grid-template-columns: 1fr 1fr !important; } }
         @media (max-width: 480px) { .dash-stats { grid-template-columns: 1fr !important; } }
-        .dash-action:hover { border-color: rgba(201,168,76,0.2) !important; background: rgba(255,255,255,0.03) !important; }
+        .dash-action:hover { border-color: rgba(201,168,76,0.2) !important; background: var(--surface-hover) !important; }
         .dash-admin-action:hover { border-color: rgba(201,168,76,0.25) !important; background: rgba(201,168,76,0.06) !important; }
         @media (max-width: 700px) { .dash-admin { grid-template-columns: 1fr 1fr !important; } }
         @media (max-width: 480px) { .dash-admin { grid-template-columns: 1fr !important; } }

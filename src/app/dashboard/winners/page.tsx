@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -8,7 +8,7 @@ import WinnersClient from "./WinnersClient";
 
 export const metadata: Metadata = { title: "Award Winners" };
 
-const P = { gold: "#c9a84c", textPrimary: "#f0ede6", textMuted: "rgba(255,255,255,0.35)" } as const;
+const P = { gold: "#c9a84c", textPrimary: "var(--text-hi)", textMuted: "var(--text-lo)" } as const;
 
 export default async function WinnersPage() {
   const session = await getServerSession(authOptions);
@@ -46,7 +46,7 @@ export default async function WinnersPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", maxWidth: 1140 }}>
-      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid var(--border-faint)", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
         <div>
           <span style={{ display: "block", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: P.gold, marginBottom: "0.3rem" }}>
             Awards
@@ -59,10 +59,10 @@ export default async function WinnersPage() {
           </p>
         </div>
         <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-          <span style={{ fontSize: "0.62rem", color: P.textMuted, background: "#141420", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 3, padding: "0.3rem 0.7rem" }}>
+          <span style={{ fontSize: "0.62rem", color: P.textMuted, background: "var(--surface-card)", border: "1px solid var(--border-dim)", borderRadius: 3, padding: "0.3rem 0.7rem" }}>
             {winners.filter((w) => w.featured).length} featured
           </span>
-          <span style={{ fontSize: "0.62rem", color: P.textMuted, background: "#141420", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 3, padding: "0.3rem 0.7rem" }}>
+          <span style={{ fontSize: "0.62rem", color: P.textMuted, background: "var(--surface-card)", border: "1px solid var(--border-dim)", borderRadius: 3, padding: "0.3rem 0.7rem" }}>
             {winners.length} {winners.length === 1 ? "winner" : "winners"} total
           </span>
         </div>

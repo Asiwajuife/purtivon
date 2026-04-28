@@ -1,18 +1,18 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const P = {
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.03)",
-  border: "1px solid rgba(255,255,255,0.07)",
+  background: "var(--surface-hover)",
+  border: "1px solid var(--border-dim)",
   color: P.textPrimary,
   fontSize: "0.82rem",
   padding: "0.55rem 0.85rem",
@@ -44,7 +44,7 @@ interface User {
 function RoleBadge({ role }: { role: string }) {
   const styles: Record<string, { bg: string; color: string; border: string }> = {
     ADMIN: { bg: "rgba(201,168,76,0.1)", color: "#c9a84c", border: "rgba(201,168,76,0.3)" },
-    USER: { bg: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.35)", border: "rgba(255,255,255,0.08)" },
+    USER: { bg: "var(--border-faint)", color: "var(--text-lo)", border: "var(--border-dim)" },
   };
   const s = styles[role] ?? styles.USER;
   return (
@@ -57,7 +57,7 @@ function RoleBadge({ role }: { role: string }) {
 function PlanBadge({ plan }: { plan: string }) {
   const isPaid = plan !== "FREE";
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", padding: "0.18rem 0.5rem", fontSize: "0.56rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", borderRadius: 3, background: isPaid ? "rgba(201,168,76,0.08)" : "rgba(255,255,255,0.03)", color: isPaid ? P.gold : P.textMuted, border: `1px solid ${isPaid ? "rgba(201,168,76,0.2)" : "rgba(255,255,255,0.06)"}` }}>
+    <span style={{ display: "inline-flex", alignItems: "center", padding: "0.18rem 0.5rem", fontSize: "0.56rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", borderRadius: 3, background: isPaid ? "rgba(201,168,76,0.08)" : "var(--surface-hover)", color: isPaid ? P.gold : P.textMuted, border: `1px solid ${isPaid ? "rgba(201,168,76,0.2)" : "var(--border-faint)"}` }}>
       {plan}
     </span>
   );
@@ -92,7 +92,7 @@ export default function UsersClient({ users: initial }: { users: User[] }) {
   }
 
   const thStyle: React.CSSProperties = { padding: "0.6rem 1rem", fontSize: "0.58rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: P.textMuted, textAlign: "left", borderBottom: `1px solid ${P.border}`, whiteSpace: "nowrap" };
-  const tdStyle: React.CSSProperties = { padding: "0.75rem 1rem", fontSize: "0.72rem", color: P.textMuted, borderBottom: "1px solid rgba(255,255,255,0.03)", verticalAlign: "middle" };
+  const tdStyle: React.CSSProperties = { padding: "0.75rem 1rem", fontSize: "0.72rem", color: P.textMuted, borderBottom: "1px solid var(--surface-hover)", verticalAlign: "middle" };
 
   return (
     <>
@@ -126,7 +126,7 @@ export default function UsersClient({ users: initial }: { users: User[] }) {
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-            <button type="submit" disabled={creating} style={{ padding: "0.55rem 1.2rem", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "#0a0a0f", border: "none", borderRadius: 3, cursor: creating ? "not-allowed" : "pointer", opacity: creating ? 0.7 : 1 }}>
+            <button type="submit" disabled={creating} style={{ padding: "0.55rem 1.2rem", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", border: "none", borderRadius: 3, cursor: creating ? "not-allowed" : "pointer", opacity: creating ? 0.7 : 1 }}>
               {creating ? "Creating…" : "Create Account"}
             </button>
             {error && <p style={{ fontSize: "0.72rem", color: "#f87171", margin: 0 }}>{error}</p>}
@@ -143,7 +143,7 @@ export default function UsersClient({ users: initial }: { users: User[] }) {
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ background: "rgba(255,255,255,0.015)" }}>
+                <tr style={{ background: "var(--surface-subtle)" }}>
                   <th style={thStyle}>Name / Email</th>
                   <th style={thStyle}>Role</th>
                   <th style={thStyle}>Plan</th>
@@ -152,7 +152,7 @@ export default function UsersClient({ users: initial }: { users: User[] }) {
               </thead>
               <tbody>
                 {users.map((user, idx) => (
-                  <tr key={user.id} style={{ background: idx % 2 === 0 ? "transparent" : "rgba(255,255,255,0.008)" }}>
+                  <tr key={user.id} style={{ background: idx % 2 === 0 ? "transparent" : "var(--surface-subtle)" }}>
                     <td style={{ ...tdStyle, color: P.textPrimary }}>
                       <p style={{ margin: 0, fontWeight: 500, fontSize: "0.74rem" }}>{user.name ?? "—"}</p>
                       <p style={{ margin: "0.15rem 0 0", fontSize: "0.62rem", color: P.textMuted }}>{user.email}</p>

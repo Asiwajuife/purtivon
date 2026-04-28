@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import type React from 'react'
 
 export interface HomepageArticle {
@@ -78,12 +78,12 @@ export default function FeaturedArticles({ articles }: { articles: HomepageArtic
                   {hero.title}
                 </h3>
                 {hero.excerpt && (
-                  <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: '1.25rem', maxWidth: 520, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as React.CSSProperties}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-mid)', lineHeight: 1.6, marginBottom: '1.25rem', maxWidth: 520, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as React.CSSProperties}>
                     {hero.excerpt}
                   </p>
                 )}
                 <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.3)' }}>{fmt(hero.publishedAt)}</span>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-lo)' }}>{fmt(hero.publishedAt)}</span>
                   {hero.readTime && (
                     <span style={{ fontSize: '0.68rem', color: 'var(--gold-dim)' }}>{hero.readTime} min read</span>
                   )}
@@ -116,7 +116,7 @@ export default function FeaturedArticles({ articles }: { articles: HomepageArtic
                     <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 300, lineHeight: 1.3, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
                       {a.title}
                     </h3>
-                    <span style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>{fmtShort(a.publishedAt)}</span>
+                    <span style={{ fontSize: '0.62rem', color: 'var(--text-lo)' }}>{fmtShort(a.publishedAt)}</span>
                   </div>
                 </article>
               </Link>

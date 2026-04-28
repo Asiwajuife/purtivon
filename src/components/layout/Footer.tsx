@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 
 const NAV_COLS = [
@@ -40,7 +40,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer style={{ background: "#0a0a0f", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+    <footer style={{ background: "var(--surface-page)", borderTop: "1px solid var(--border-faint)" }}>
       {/* Gold accent line */}
       <div style={{ height: 1, background: "linear-gradient(90deg, transparent, #c9a84c 30%, #c9a84c 70%, transparent)" }} />
 
@@ -68,7 +68,7 @@ export default function Footer() {
               background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
               flexShrink: 0,
             }}>
-              <span style={{ color: "#0a0a0f", fontWeight: 900, fontSize: "0.7rem", lineHeight: 1 }}>P</span>
+              <span style={{ color: "var(--surface-page)", fontWeight: 900, fontSize: "0.7rem", lineHeight: 1 }}>P</span>
             </span>
             <span style={{
               fontFamily: "'Cormorant Garamond', serif",
@@ -76,7 +76,7 @@ export default function Footer() {
               fontWeight: 400,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "rgba(255,255,255,0.55)",
+              color: "var(--text-mid)",
             }}>
               Purtivon
             </span>
@@ -84,7 +84,7 @@ export default function Footer() {
 
           <p style={{
             fontSize: "0.78rem",
-            color: "rgba(255,255,255,0.22)",
+            color: "var(--text-4)",
             lineHeight: 1.8,
             maxWidth: 220,
             marginBottom: "1.75rem",
@@ -131,9 +131,9 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 style={{
                   width: 32, height: 32,
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid var(--border-dim)",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  color: "rgba(255,255,255,0.25)",
+                  color: "var(--text-4)",
                   transition: "border-color 0.2s, color 0.2s, transform 0.2s",
                 }}
                 onMouseEnter={(e) => {
@@ -142,8 +142,8 @@ export default function Footer() {
                   (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
-                  (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.25)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "var(--border-dim)";
+                  (e.currentTarget as HTMLElement).style.color = "var(--text-4)";
                   (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                 }}
               >
@@ -161,7 +161,7 @@ export default function Footer() {
               fontWeight: 600,
               letterSpacing: "0.24em",
               textTransform: "uppercase",
-              color: "rgba(255,255,255,0.18)",
+              color: "var(--text-5)",
               marginBottom: "1.1rem",
             }}>
               {heading}
@@ -173,12 +173,12 @@ export default function Footer() {
                     href={href}
                     style={{
                       fontSize: "0.78rem",
-                      color: "rgba(255,255,255,0.32)",
+                      color: "var(--text-lo)",
                       letterSpacing: "0.02em",
                       transition: "color 0.2s",
                     }}
                     onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#c9a84c")}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.32)")}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-lo)")}
                   >
                     {label}
                   </Link>
@@ -191,7 +191,7 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div style={{
-        borderTop: "1px solid rgba(255,255,255,0.04)",
+        borderTop: "1px solid var(--border-faint)",
         maxWidth: 1160,
         margin: "0 auto",
         padding: "1.25rem 2.5rem",
@@ -201,33 +201,33 @@ export default function Footer() {
         gap: "1rem",
         flexWrap: "wrap",
       }}>
-        <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.15)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+        <p style={{ fontSize: "0.72rem", color: "var(--text-5)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
           &copy; {year} Purtivon Limited. All rights reserved.
         </p>
         <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
           <Link
             href="/privacy"
-            style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.15)", letterSpacing: "0.12em", textTransform: "uppercase", transition: "color 0.2s" }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.4)")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.15)")}
+            style={{ fontSize: "0.72rem", color: "var(--text-5)", letterSpacing: "0.12em", textTransform: "uppercase", transition: "color 0.2s" }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-lo)")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-5)")}
           >
             Privacy
           </Link>
-          <span style={{ width: 1, height: 10, background: "rgba(255,255,255,0.08)", display: "block" }} />
+          <span style={{ width: 1, height: 10, background: "var(--border-dim)", display: "block" }} />
           <Link
             href="/terms"
-            style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.15)", letterSpacing: "0.12em", textTransform: "uppercase", transition: "color 0.2s" }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.4)")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.15)")}
+            style={{ fontSize: "0.72rem", color: "var(--text-5)", letterSpacing: "0.12em", textTransform: "uppercase", transition: "color 0.2s" }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-lo)")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-5)")}
           >
             Terms
           </Link>
-          <span style={{ width: 1, height: 10, background: "rgba(255,255,255,0.08)", display: "block" }} />
+          <span style={{ width: 1, height: 10, background: "var(--border-dim)", display: "block" }} />
           <a
             href="mailto:press@purtivon.com"
-            style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.15)", letterSpacing: "0.12em", textTransform: "uppercase", transition: "color 0.2s" }}
+            style={{ fontSize: "0.72rem", color: "var(--text-5)", letterSpacing: "0.12em", textTransform: "uppercase", transition: "color 0.2s" }}
             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#c9a84c")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.15)")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-5)")}
           >
             press@purtivon.com
           </a>

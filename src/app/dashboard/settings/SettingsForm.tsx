@@ -1,18 +1,18 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
 const PALETTE = {
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 };
 
 const inputStyle: React.CSSProperties = {
-  width: "100%", background: "rgba(255,255,255,0.03)",
-  border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.8)",
+  width: "100%", background: "var(--surface-hover)",
+  border: "1px solid var(--border-dim)", color: "var(--text-hi)",
   fontSize: "0.8rem", padding: "0.55rem 0.75rem", outline: "none",
   borderRadius: 3, boxSizing: "border-box", fontFamily: "inherit",
 };
@@ -81,7 +81,7 @@ export default function SettingsPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", maxWidth: 560 }}>
       {/* Header */}
-      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid var(--border-faint)" }}>
         <span style={{ display: "block", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: PALETTE.gold, marginBottom: "0.3rem" }}>Account</span>
         <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.4rem", fontWeight: 300, color: PALETTE.textPrimary, letterSpacing: "0.01em", margin: 0 }}>Settings</h1>
       </div>
@@ -131,7 +131,7 @@ export default function SettingsPage() {
         <button
           type="submit"
           disabled={loading}
-          style={{ alignSelf: "flex-start", padding: "0.65rem 1.5rem", background: "linear-gradient(90deg,#c9a84c,#e8c97a)", color: "#0a0a0f", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", border: "none", borderRadius: 3, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.5 : 1 }}
+          style={{ alignSelf: "flex-start", padding: "0.65rem 1.5rem", background: "linear-gradient(90deg,#c9a84c,#e8c97a)", color: "var(--surface-page)", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", border: "none", borderRadius: 3, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.5 : 1 }}
         >
           {loading ? "Saving…" : "Save Changes"}
         </button>

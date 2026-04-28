@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -9,22 +9,22 @@ const RichTextEditor = dynamic(() => import("@/components/editor/RichTextEditor"
   loading: () => (
     <div style={{
       minHeight: 380,
-      border: "1px solid rgba(255,255,255,0.07)",
+      border: "1px solid var(--border-dim)",
       borderRadius: 4,
-      background: "rgba(255,255,255,0.02)",
+      background: "var(--surface-subtle)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
     }}>
-      <span style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.2)" }}>Loading editor…</span>
+      <span style={{ fontSize: "0.75rem", color: "var(--text-4)" }}>Loading editor…</span>
     </div>
   ),
 });
 
 const P = {
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 interface Category { id: string; name: string }
@@ -70,8 +70,8 @@ const labelStyle: React.CSSProperties = {
 };
 
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.03)",
-  border: "1px solid rgba(255,255,255,0.07)",
+  background: "var(--surface-hover)",
+  border: "1px solid var(--border-dim)",
   color: P.textPrimary,
   fontSize: "0.82rem",
   padding: "0.6rem 0.85rem",
@@ -89,7 +89,7 @@ const btnPrimary: React.CSSProperties = {
   letterSpacing: "0.14em",
   textTransform: "uppercase",
   background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
-  color: "#0a0a0f",
+  color: "var(--surface-page)",
   border: "none",
   borderRadius: 3,
   cursor: "pointer",
@@ -104,7 +104,7 @@ const btnOutline: React.CSSProperties = {
   textTransform: "uppercase",
   background: "transparent",
   color: P.textMuted,
-  border: "1px solid rgba(255,255,255,0.1)",
+  border: "1px solid var(--border-dim)",
   borderRadius: 3,
   cursor: "pointer",
   whiteSpace: "nowrap",
@@ -114,7 +114,7 @@ const btnOutline: React.CSSProperties = {
 };
 
 const STATUS_CONFIG: Record<ArticleStatus, { label: string; color: string; bg: string; border: string }> = {
-  DRAFT:     { label: "Draft",      color: P.textMuted, bg: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.08)" },
+  DRAFT:     { label: "Draft",      color: P.textMuted, bg: "var(--surface-hover)", border: "var(--border-dim)" },
   REVIEW:    { label: "In Review",  color: "#f59e0b",   bg: "rgba(245,158,11,0.06)",  border: "rgba(245,158,11,0.25)" },
   PUBLISHED: { label: "Published",  color: P.gold,      bg: "rgba(201,168,76,0.06)",  border: "rgba(201,168,76,0.25)" },
 };
@@ -235,7 +235,7 @@ export default function ArticleForm({ categories, tags, authorId, initial }: Art
           placeholder="auto-generated-from-title"
           required
         />
-        <p style={{ fontSize: "0.62rem", color: "rgba(255,255,255,0.2)", marginTop: 4 }}>
+        <p style={{ fontSize: "0.62rem", color: "var(--text-4)", marginTop: 4 }}>
           URL: /insights/{slug || "…"}
           {!slugManual && <span style={{ marginLeft: 8, color: "rgba(201,168,76,0.5)" }}>Auto-generated</span>}
         </p>
@@ -245,7 +245,7 @@ export default function ArticleForm({ categories, tags, authorId, initial }: Art
       <div>
         <label style={labelStyle}>
           Excerpt{" "}
-          <span style={{ color: "rgba(255,255,255,0.2)", fontWeight: 400, letterSpacing: "0.05em", textTransform: "none" }}>
+          <span style={{ color: "var(--text-4)", fontWeight: 400, letterSpacing: "0.05em", textTransform: "none" }}>
             (shown on cards)
           </span>
         </label>
@@ -277,7 +277,7 @@ export default function ArticleForm({ categories, tags, authorId, initial }: Art
             <img
               src={coverImage}
               alt="Cover preview"
-              style={{ width: 120, height: 80, objectFit: "cover", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 3, flexShrink: 0 }}
+              style={{ width: 120, height: 80, objectFit: "cover", border: "1px solid var(--border-dim)", borderRadius: 3, flexShrink: 0 }}
             />
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
@@ -341,9 +341,9 @@ export default function ArticleForm({ categories, tags, authorId, initial }: Art
                     textTransform: "uppercase",
                     borderRadius: 3,
                     cursor: "pointer",
-                    background: active ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.03)",
+                    background: active ? "rgba(201,168,76,0.12)" : "var(--surface-hover)",
                     color: active ? P.gold : P.textMuted,
-                    border: `1px solid ${active ? "rgba(201,168,76,0.3)" : "rgba(255,255,255,0.07)"}`,
+                    border: `1px solid ${active ? "rgba(201,168,76,0.3)" : "var(--border-dim)"}`,
                     transition: "all 0.15s",
                   }}
                 >
@@ -353,7 +353,7 @@ export default function ArticleForm({ categories, tags, authorId, initial }: Art
               );
             })}
           </div>
-          <p style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.2)", marginTop: 4 }}>
+          <p style={{ fontSize: "0.6rem", color: "var(--text-4)", marginTop: 4 }}>
             The first selected category is used for filtering on the homepage.
           </p>
         </div>
@@ -389,12 +389,12 @@ export default function ArticleForm({ categories, tags, authorId, initial }: Art
             onChange={(e) => setStatus(e.target.value as ArticleStatus)}
           >
             {(Object.keys(STATUS_CONFIG) as ArticleStatus[]).map((s) => (
-              <option key={s} value={s} style={{ background: "#0f0f16", color: "#f0ede6" }}>
+              <option key={s} value={s} style={{ background: "var(--dark-100)", color: "var(--text-hi)" }}>
                 {STATUS_CONFIG[s].label}
               </option>
             ))}
           </select>
-          <p style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.2)", marginTop: 4 }}>
+          <p style={{ fontSize: "0.6rem", color: "var(--text-4)", marginTop: 4 }}>
             {status === "PUBLISHED"
               ? "Visible on public Insights page"
               : status === "REVIEW"
@@ -424,9 +424,9 @@ export default function ArticleForm({ categories, tags, authorId, initial }: Art
                     textTransform: "uppercase",
                     borderRadius: 3,
                     cursor: "pointer",
-                    background: active ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.03)",
+                    background: active ? "rgba(201,168,76,0.12)" : "var(--surface-hover)",
                     color: active ? P.gold : P.textMuted,
-                    border: `1px solid ${active ? "rgba(201,168,76,0.3)" : "rgba(255,255,255,0.07)"}`,
+                    border: `1px solid ${active ? "rgba(201,168,76,0.3)" : "var(--border-dim)"}`,
                     transition: "all 0.15s",
                   }}
                 >

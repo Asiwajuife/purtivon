@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -237,7 +237,7 @@ export default function Navbar() {
             {session ? (
               <Link
                 href="/dashboard"
-                style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.25rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.25rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}
               >
                 Dashboard
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
@@ -339,11 +339,11 @@ export default function Navbar() {
           {/* CTA + theme toggle */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", transition: `opacity 0.5s ${menuOpen ? "400ms" : "0ms"}, transform 0.5s ${menuOpen ? "400ms" : "0ms"}`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(16px)" }}>
             {session ? (
-              <Link href="/dashboard" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
+              <Link href="/dashboard" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
                 Go to Dashboard
               </Link>
             ) : (
-              <Link href="/awards" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
+              <Link href="/awards" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
                 Submit Nomination
               </Link>
             )}

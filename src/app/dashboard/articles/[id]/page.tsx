@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect, notFound } from "next/navigation";
@@ -8,7 +8,7 @@ import ArticleForm from "@/components/dashboard/ArticleForm";
 
 export const metadata: Metadata = { title: "Edit Article" };
 
-const P = { gold: "#c9a84c", textPrimary: "#f0ede6" } as const;
+const P = { gold: "#c9a84c", textPrimary: "var(--text-hi)" } as const;
 
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -54,14 +54,14 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", maxWidth: 900 }}>
-      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid var(--border-faint)" }}>
         <span style={{ display: "block", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: P.gold, marginBottom: "0.3rem" }}>
           Content
         </span>
         <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.4rem", fontWeight: 300, color: P.textPrimary, margin: 0 }}>
           Edit Article
         </h1>
-        <p style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.2)", marginTop: 4 }}>{article.title}</p>
+        <p style={{ fontSize: "0.65rem", color: "var(--text-4)", marginTop: 4 }}>{article.title}</p>
       </div>
 
       <ArticleForm

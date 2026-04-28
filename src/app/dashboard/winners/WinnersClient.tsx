@@ -1,13 +1,13 @@
-"use client";
+﻿"use client";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 const P = {
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 interface Winner {
@@ -100,7 +100,7 @@ function LogoUpload({
   }
 
   const inputStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,0.03)",
+    background: "var(--surface-hover)",
     border: `1px solid ${P.border}`,
     borderRadius: 3, padding: "0.45rem 0.7rem",
     fontSize: "0.78rem", color: P.textPrimary, outline: "none",
@@ -120,7 +120,7 @@ function LogoUpload({
           <img
             src={value}
             alt="logo preview"
-            style={{ width: 56, height: 56, objectFit: "contain", background: "#fff", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "0.25rem" }}
+            style={{ width: 56, height: 56, objectFit: "contain", background: "#fff", border: "1px solid var(--border-dim)", borderRadius: 4, padding: "0.25rem" }}
           />
           <button
             type="button"
@@ -177,7 +177,7 @@ export default function WinnersClient({ winners: initial }: { winners: Winner[] 
   const [error, setError] = useState("");
 
   const inputStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,0.03)",
+    background: "var(--surface-hover)",
     border: `1px solid ${P.border}`,
     borderRadius: 3, padding: "0.45rem 0.7rem",
     fontSize: "0.78rem", color: P.textPrimary, outline: "none",
@@ -337,7 +337,7 @@ export default function WinnersClient({ winners: initial }: { winners: Winner[] 
   };
   const tdStyle: React.CSSProperties = {
     padding: "0.7rem 1rem", fontSize: "0.74rem", color: P.textMuted,
-    borderBottom: "1px solid rgba(255,255,255,0.03)", verticalAlign: "middle",
+    borderBottom: "1px solid var(--surface-hover)", verticalAlign: "middle",
   };
 
   return (
@@ -383,7 +383,7 @@ export default function WinnersClient({ winners: initial }: { winners: Winner[] 
             <button
               type="submit"
               disabled={saving}
-              style={{ padding: "0.5rem 1.4rem", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "#0a0a0f", borderRadius: 3, border: "none", cursor: "pointer", opacity: saving ? 0.6 : 1 }}
+              style={{ padding: "0.5rem 1.4rem", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", borderRadius: 3, border: "none", cursor: "pointer", opacity: saving ? 0.6 : 1 }}
             >
               {saving ? "Saving…" : "+ Add Winner"}
             </button>
@@ -401,7 +401,7 @@ export default function WinnersClient({ winners: initial }: { winners: Winner[] 
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ background: "rgba(255,255,255,0.015)" }}>
+                <tr style={{ background: "var(--surface-subtle)" }}>
                   <th style={thStyle}>Company</th>
                   <th style={thStyle}>Category</th>
                   <th style={{ ...thStyle, textAlign: "center" }}>Period</th>
@@ -442,7 +442,7 @@ export default function WinnersClient({ winners: initial }: { winners: Winner[] 
                             "Write a full description of the company…"
                           )}
                           <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-                            <button type="submit" disabled={saving} style={{ padding: "0.4rem 0.9rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "#0a0a0f", borderRadius: 3, border: "none", cursor: "pointer", opacity: saving ? 0.6 : 1 }}>
+                            <button type="submit" disabled={saving} style={{ padding: "0.4rem 0.9rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", borderRadius: 3, border: "none", cursor: "pointer", opacity: saving ? 0.6 : 1 }}>
                               {saving ? "…" : "Save"}
                             </button>
                             <button type="button" onClick={() => setEditId(null)} style={{ padding: "0.4rem 0.9rem", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "transparent", color: P.textMuted, border: `1px solid ${P.border}`, borderRadius: 3, cursor: "pointer" }}>
@@ -453,12 +453,12 @@ export default function WinnersClient({ winners: initial }: { winners: Winner[] 
                       </td>
                     </tr>
                   ) : (
-                    <tr key={w.id} style={{ background: idx % 2 === 0 ? "transparent" : "rgba(255,255,255,0.008)" }}>
+                    <tr key={w.id} style={{ background: idx % 2 === 0 ? "transparent" : "var(--surface-subtle)" }}>
                       <td style={{ ...tdStyle, color: P.textPrimary, fontWeight: 500 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
                           {(w.logo || w.image)
                             ? /* eslint-disable-next-line @next/next/no-img-element */
-                              <img src={w.logo ?? w.image!} alt="" style={{ width: 28, height: 28, borderRadius: 4, objectFit: "contain", background: "#fff", border: "1px solid rgba(255,255,255,0.08)", flexShrink: 0, padding: "2px" }} />
+                              <img src={w.logo ?? w.image!} alt="" style={{ width: 28, height: 28, borderRadius: 4, objectFit: "contain", background: "#fff", border: "1px solid var(--border-dim)", flexShrink: 0, padding: "2px" }} />
                             : <div style={{ width: 28, height: 28, borderRadius: 4, background: "rgba(201,168,76,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.55rem", fontWeight: 700, color: P.gold, flexShrink: 0 }}>{w.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}</div>
                           }
                           <div>
@@ -473,18 +473,18 @@ export default function WinnersClient({ winners: initial }: { winners: Winner[] 
                       <td style={{ ...tdStyle, textAlign: "center", whiteSpace: "nowrap" }}>
                         {w.quarter ? `Q${w.quarter} ` : ""}{w.year}
                       </td>
-                      <td style={tdStyle}>{w.company ?? <span style={{ color: "rgba(255,255,255,0.15)" }}>—</span>}</td>
-                      <td style={tdStyle}>{w.region ?? <span style={{ color: "rgba(255,255,255,0.15)" }}>—</span>}</td>
+                      <td style={tdStyle}>{w.company ?? <span style={{ color: "var(--text-5)" }}>—</span>}</td>
+                      <td style={tdStyle}>{w.region ?? <span style={{ color: "var(--text-5)" }}>—</span>}</td>
                       <td style={{ ...tdStyle, textAlign: "center" }}>
                         {(w.logo || w.image)
                           ? <span style={{ color: P.gold, fontSize: "0.7rem" }}>✓</span>
-                          : <span style={{ color: "rgba(255,255,255,0.15)", fontSize: "0.7rem" }}>—</span>
+                          : <span style={{ color: "var(--text-5)", fontSize: "0.7rem" }}>—</span>
                         }
                       </td>
                       <td style={{ ...tdStyle, textAlign: "center" }}>
                         {w.featured
                           ? <span style={{ color: P.gold, fontSize: "0.7rem" }}>★</span>
-                          : <span style={{ color: "rgba(255,255,255,0.15)", fontSize: "0.7rem" }}>—</span>
+                          : <span style={{ color: "var(--text-5)", fontSize: "0.7rem" }}>—</span>
                         }
                       </td>
                       <td style={{ ...tdStyle, textAlign: "right" }}>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useRef, useState } from "react";
 
 interface Ticker {
@@ -67,7 +67,7 @@ export default function StockTicker() {
         letterSpacing: "0.15em",
         color: "rgba(201,168,76,0.7)",
         textTransform: "uppercase",
-        borderRight: "1px solid rgba(255,255,255,0.07)",
+        borderRight: "1px solid var(--border-dim)",
         whiteSpace: "nowrap",
         height: "100%",
         display: "flex",
@@ -96,17 +96,17 @@ export default function StockTicker() {
                 alignItems: "center",
                 gap: "0.4rem",
                 padding: "0 1.25rem",
-                borderRight: "1px solid rgba(255,255,255,0.05)",
+                borderRight: "1px solid var(--border-faint)",
                 height: 36,
               }}
             >
-              <span style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", color: "#f0ede6" }}>
+              <span style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--text-hi)" }}>
                 {t.symbol}
               </span>
-              <span style={{ fontSize: "0.58rem", color: "rgba(255,255,255,0.3)", letterSpacing: "0.04em" }}>
+              <span style={{ fontSize: "0.58rem", color: "var(--text-lo)", letterSpacing: "0.04em" }}>
                 {t.name}
               </span>
-              <span style={{ fontSize: "0.62rem", fontWeight: 600, color: "#f0ede6", letterSpacing: "0.04em" }}>
+              <span style={{ fontSize: "0.62rem", fontWeight: 600, color: "var(--text-hi)", letterSpacing: "0.04em" }}>
                 {t.price}
               </span>
               <span style={{

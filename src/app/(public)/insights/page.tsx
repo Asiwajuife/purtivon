@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -97,7 +97,7 @@ export default async function InsightsPage({
       {/* Hero header */}
       <div
         style={{
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
+          borderBottom: "1px solid var(--border-faint)",
           padding: "5rem 2.5rem 3.5rem",
           maxWidth: 1160,
           margin: "0 auto",
@@ -154,13 +154,13 @@ export default async function InsightsPage({
             ...(activeCategory === null
               ? {
                   background: "#c9a84c",
-                  color: "#0a0a0f",
+                  color: "var(--surface-page)",
                   border: "1px solid #c9a84c",
                 }
               : {
                   background: "transparent",
-                  color: "rgba(255,255,255,0.35)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "var(--text-lo)",
+                  border: "1px solid var(--border-dim)",
                 }),
           }}
           className="cat-pill"
@@ -185,13 +185,13 @@ export default async function InsightsPage({
                 ...(isActive
                   ? {
                       background: "#c9a84c",
-                      color: "#0a0a0f",
+                      color: "var(--surface-page)",
                       border: "1px solid #c9a84c",
                     }
                   : {
                       background: "transparent",
-                      color: "rgba(255,255,255,0.35)",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      color: "var(--text-lo)",
+                      border: "1px solid var(--border-dim)",
                     }),
               }}
               className="cat-pill"
@@ -220,7 +220,7 @@ export default async function InsightsPage({
               fontWeight: 600,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "rgba(255,255,255,0.2)",
+              color: "var(--text-4)",
             }}
           >
             Showing {articles.length}{" "}
@@ -241,9 +241,9 @@ export default async function InsightsPage({
             href="/insights"
             style={{
               fontSize: "0.6rem",
-              color: "rgba(255,255,255,0.2)",
+              color: "var(--text-4)",
               textDecoration: "none",
-              border: "1px solid rgba(255,255,255,0.06)",
+              border: "1px solid var(--border-faint)",
               padding: "0.2rem 0.5rem",
               borderRadius: 2,
             }}
@@ -267,15 +267,15 @@ export default async function InsightsPage({
               justifyContent: "center",
               padding: "6rem 2rem",
               textAlign: "center",
-              border: "1px solid rgba(255,255,255,0.04)",
-              background: "rgba(255,255,255,0.01)",
+              border: "1px solid var(--border-faint)",
+              background: "var(--surface-subtle)",
             }}
           >
             <div
               style={{
                 width: 48,
                 height: 48,
-                border: "1px solid rgba(255,255,255,0.06)",
+                border: "1px solid var(--border-faint)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -287,7 +287,7 @@ export default async function InsightsPage({
                 height="20"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="rgba(255,255,255,0.2)"
+                stroke="var(--text-4)"
                 strokeWidth={1.5}
               >
                 <path
@@ -301,7 +301,7 @@ export default async function InsightsPage({
               className="display-md"
               style={{
                 marginBottom: "0.5rem",
-                color: "rgba(255,255,255,0.25)",
+                color: "var(--text-4)",
               }}
             >
               {activeCategory
@@ -333,8 +333,8 @@ export default async function InsightsPage({
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    background: "rgba(255,255,255,0.02)",
+                    border: "1px solid var(--border-faint)",
+                    background: "var(--surface-subtle)",
                     transition: "border-color 0.3s, background 0.3s",
                   }}
                   className="featured-card"
@@ -377,8 +377,8 @@ export default async function InsightsPage({
                             fontWeight: 600,
                             letterSpacing: "0.16em",
                             textTransform: "uppercase",
-                            color: "rgba(255,255,255,0.25)",
-                            background: "rgba(255,255,255,0.06)",
+                            color: "var(--text-4)",
+                            background: "var(--border-faint)",
                             padding: "0.3rem 0.75rem",
                           }}
                         >
@@ -411,7 +411,7 @@ export default async function InsightsPage({
                         <span
                           style={{
                             fontSize: "0.72rem",
-                            color: "rgba(255,255,255,0.3)",
+                            color: "var(--text-lo)",
                           }}
                         >
                           {new Date(featured.createdAt).toLocaleDateString(
@@ -427,7 +427,7 @@ export default async function InsightsPage({
                           <span
                             style={{
                               fontSize: "0.72rem",
-                              color: "rgba(255,255,255,0.3)",
+                              color: "var(--text-lo)",
                             }}
                           >
                             {featured.readTime} min read
@@ -467,7 +467,7 @@ export default async function InsightsPage({
                   {/* Right: cover image or decorative fallback */}
                   <div
                     style={{
-                      borderLeft: "1px solid rgba(255,255,255,0.04)",
+                      borderLeft: "1px solid var(--border-faint)",
                       position: "relative",
                       overflow: "hidden",
                       minHeight: 320,
@@ -503,7 +503,7 @@ export default async function InsightsPage({
                           position: "absolute",
                           inset: 0,
                           background:
-                            "linear-gradient(135deg, rgba(201,168,76,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+                            "linear-gradient(135deg, rgba(201,168,76,0.04) 0%, var(--surface-subtle) 100%)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -529,7 +529,7 @@ export default async function InsightsPage({
                               fontSize: "1rem",
                               fontStyle: "italic",
                               fontWeight: 300,
-                              color: "rgba(255,255,255,0.2)",
+                              color: "var(--text-4)",
                               maxWidth: 260,
                               lineHeight: 1.7,
                             }}
@@ -560,7 +560,7 @@ export default async function InsightsPage({
                     fontWeight: 600,
                     letterSpacing: "0.22em",
                     textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.18)",
+                    color: "var(--text-5)",
                     flexShrink: 0,
                   }}
                 >
@@ -571,7 +571,7 @@ export default async function InsightsPage({
                   style={{
                     flex: 1,
                     height: 1,
-                    background: "rgba(255,255,255,0.04)",
+                    background: "var(--border-faint)",
                   }}
                 />
               </div>
@@ -584,7 +584,7 @@ export default async function InsightsPage({
                   display: "grid",
                   gridTemplateColumns: "repeat(3, 1fr)",
                   gap: "1px",
-                  background: "rgba(255,255,255,0.04)",
+                  background: "var(--border-faint)",
                 }}
                 className="insights-grid"
               >
@@ -596,7 +596,7 @@ export default async function InsightsPage({
                   >
                     <article
                       style={{
-                        background: "rgba(255,255,255,0.015)",
+                        background: "var(--surface-subtle)",
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
@@ -635,7 +635,7 @@ export default async function InsightsPage({
                               width: "100%",
                               height: "100%",
                               background:
-                                "linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(255,255,255,0.01) 100%)",
+                                "linear-gradient(135deg, rgba(201,168,76,0.06) 0%, var(--surface-subtle) 100%)",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
@@ -693,7 +693,7 @@ export default async function InsightsPage({
                           <span
                             style={{
                               fontSize: "0.68rem",
-                              color: "rgba(255,255,255,0.22)",
+                              color: "var(--text-4)",
                             }}
                           >
                             {new Date(article.createdAt).toLocaleDateString(
@@ -727,14 +727,14 @@ export default async function InsightsPage({
                             alignItems: "center",
                             justifyContent: "space-between",
                             paddingTop: "0.75rem",
-                            borderTop: "1px solid rgba(255,255,255,0.04)",
+                            borderTop: "1px solid var(--border-faint)",
                           }}
                         >
                           {article.readTime && (
                             <span
                               style={{
                                 fontSize: "0.68rem",
-                                color: "rgba(255,255,255,0.2)",
+                                color: "var(--text-4)",
                               }}
                             >
                               {article.readTime} min read
@@ -767,11 +767,11 @@ export default async function InsightsPage({
       </div>
 
       <style>{`
-        .featured-card:hover { border-color: rgba(201,168,76,0.2) !important; background: rgba(255,255,255,0.03) !important; }
-        .insight-card:hover { background: rgba(255,255,255,0.03) !important; }
+        .featured-card:hover { border-color: rgba(201,168,76,0.2) !important; background: var(--surface-hover) !important; }
+        .insight-card:hover { background: var(--surface-hover) !important; }
         .insight-card:hover .card-img { transform: scale(1.04); }
-        .cat-pill:hover { color: rgba(255,255,255,0.7) !important; border-color: rgba(255,255,255,0.2) !important; }
-        .cat-clear:hover { color: rgba(255,255,255,0.5) !important; border-color: rgba(255,255,255,0.15) !important; }
+        .cat-pill:hover { color: var(--text-hi) !important; border-color: var(--text-4) !important; }
+        .cat-clear:hover { color: var(--text-mid) !important; border-color: var(--text-5) !important; }
         @media (max-width: 860px) {
           .featured-card { grid-template-columns: 1fr !important; }
           .featured-card > div:last-child { display: none !important; }

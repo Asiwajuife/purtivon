@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { STATIC_WINNERS } from '@/lib/staticWinners'
@@ -169,7 +169,7 @@ export default async function WinnersPage() {
       <div style={{
         position: 'relative',
         overflow: 'hidden',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        borderBottom: '1px solid var(--border-faint)',
         padding: '7rem 2.5rem 5rem',
         textAlign: 'center',
       }}>
@@ -208,7 +208,7 @@ export default async function WinnersPage() {
             Award <em style={{ fontStyle: 'italic', color: '#c9a84c' }}>Winners</em>
           </h1>
           <p style={{
-            fontSize: '0.875rem', color: 'rgba(255,255,255,0.75)',
+            fontSize: '0.875rem', color: 'var(--text-hi)',
             maxWidth: 480, margin: '0 auto 2rem', lineHeight: 1.75,
             textShadow: '0 1px 4px rgba(0,0,0,0.6)',
           }}>

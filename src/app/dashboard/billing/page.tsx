@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+﻿export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -8,12 +8,12 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = { title: "Billing" };
 
 const PALETTE = {
-  bg: "#0a0a0f",
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  bg: "var(--surface-page)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 type Plan = "FREE" | "PRO" | "ENTERPRISE";
@@ -79,9 +79,9 @@ function PlanBadge({ plan }: { plan: Plan }) {
         letterSpacing: "0.18em",
         textTransform: "uppercase",
         borderRadius: 3,
-        background: isPaid ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.05)",
+        background: isPaid ? "rgba(201,168,76,0.12)" : "var(--border-faint)",
         color: isPaid ? PALETTE.gold : PALETTE.textMuted,
-        border: `1px solid ${isPaid ? "rgba(201,168,76,0.3)" : "rgba(255,255,255,0.08)"}`,
+        border: `1px solid ${isPaid ? "rgba(201,168,76,0.3)" : "var(--border-dim)"}`,
       }}
     >
       {plan}
@@ -118,7 +118,7 @@ function UpgradeButton({ planKey }: { planKey: Plan }) {
           bottom: "calc(100% + 6px)",
           left: "50%",
           transform: "translateX(-50%)",
-          background: "#1c1c2c",
+          background: "var(--dark-300)",
           border: `1px solid ${PALETTE.border}`,
           color: PALETTE.textMuted,
           fontSize: "0.6rem",
@@ -163,7 +163,7 @@ export default async function BillingPage() {
       <div
         style={{
           paddingBottom: "0.75rem",
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
+          borderBottom: "1px solid var(--border-faint)",
         }}
       >
         <span
@@ -276,7 +276,7 @@ export default async function BillingPage() {
             Available Plans
           </span>
           <div
-            style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.04)" }}
+            style={{ flex: 1, height: 1, background: "var(--border-faint)" }}
           />
         </div>
 
@@ -318,7 +318,7 @@ export default async function BillingPage() {
                       letterSpacing: "0.16em",
                       textTransform: "uppercase",
                       color: PALETTE.gold,
-                      background: "#0a0a0f",
+                      background: "var(--surface-page)",
                       padding: "0 0.4rem",
                       lineHeight: "0",
                       transform: "translateY(-50%)",
@@ -487,7 +487,7 @@ export default async function BillingPage() {
             height="28"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="rgba(255,255,255,0.12)"
+            stroke="var(--text-5)"
             strokeWidth={1.5}
           >
             <path
@@ -509,7 +509,7 @@ export default async function BillingPage() {
           <p
             style={{
               fontSize: "0.65rem",
-              color: "rgba(255,255,255,0.18)",
+              color: "var(--text-5)",
               margin: 0,
               textAlign: "center",
             }}

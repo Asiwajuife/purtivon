@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useState } from "react";
 
 interface Podcast {
@@ -33,7 +33,7 @@ function PodcastCard({ podcast }: { podcast: Podcast }) {
       }}
     >
       {/* Thumbnail */}
-      <div style={{ position: "relative", paddingBottom: "56.25%", overflow: "hidden", background: "#0a0a0f" }}>
+      <div style={{ position: "relative", paddingBottom: "56.25%", overflow: "hidden", background: "var(--surface-page)" }}>
         <img
           src={thumb}
           alt={podcast.title}
@@ -148,7 +148,7 @@ export default function PodcastSection() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px", background: "var(--border)" }} className="podcast-grid">
             {[...Array(4)].map((_, i) => (
               <div key={i} style={{ background: "var(--dark-200)", paddingBottom: "56.25%", position: "relative" }}>
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.02) 75%)" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, var(--surface-subtle) 25%, var(--border-faint) 50%, var(--surface-subtle) 75%)" }} />
               </div>
             ))}
           </div>

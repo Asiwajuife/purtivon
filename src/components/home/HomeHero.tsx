@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -166,7 +166,7 @@ export default function HomeHero() {
             gap: "3.5rem",
             marginTop: "5rem",
             paddingTop: "3rem",
-            borderTop: "1px solid rgba(255,255,255,0.15)",
+            borderTop: "1px solid var(--text-5)",
             flexWrap: "wrap",
           }}
         >

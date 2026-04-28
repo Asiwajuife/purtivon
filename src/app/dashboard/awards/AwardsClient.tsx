@@ -1,18 +1,18 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const P = {
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.03)",
-  border: "1px solid rgba(255,255,255,0.07)",
+  background: "var(--surface-hover)",
+  border: "1px solid var(--border-dim)",
   color: P.textPrimary,
   fontSize: "0.82rem",
   padding: "0.55rem 0.85rem",
@@ -124,7 +124,7 @@ export default function AwardsClient({ awards: initial }: { awards: Award[] }) {
   }
 
   const thStyle: React.CSSProperties = { padding: "0.6rem 1rem", fontSize: "0.58rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: P.textMuted, textAlign: "left", borderBottom: `1px solid ${P.border}` };
-  const tdStyle: React.CSSProperties = { padding: "0.7rem 1rem", fontSize: "0.78rem", color: P.textMuted, borderBottom: "1px solid rgba(255,255,255,0.03)", verticalAlign: "top" };
+  const tdStyle: React.CSSProperties = { padding: "0.7rem 1rem", fontSize: "0.78rem", color: P.textMuted, borderBottom: "1px solid var(--surface-hover)", verticalAlign: "top" };
 
   return (
     <>
@@ -156,7 +156,7 @@ export default function AwardsClient({ awards: initial }: { awards: Award[] }) {
             <textarea style={{ ...inputStyle, resize: "vertical" }} rows={2} value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} placeholder="Brief description of this media recognition award…" />
           </div>
           <div>
-            <button type="submit" disabled={creating} style={{ padding: "0.55rem 1.2rem", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "#0a0a0f", border: "none", borderRadius: 3, cursor: "pointer", opacity: creating ? 0.7 : 1 }}>
+            <button type="submit" disabled={creating} style={{ padding: "0.55rem 1.2rem", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", border: "none", borderRadius: 3, cursor: "pointer", opacity: creating ? 0.7 : 1 }}>
               {creating ? "Adding…" : "Add Award"}
             </button>
           </div>
@@ -174,7 +174,7 @@ export default function AwardsClient({ awards: initial }: { awards: Award[] }) {
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ background: "rgba(255,255,255,0.015)" }}>
+                <tr style={{ background: "var(--surface-subtle)" }}>
                   <th style={thStyle}>Title</th>
                   <th style={thStyle}>Category</th>
                   <th style={{ ...thStyle, textAlign: "center" }}>Year</th>
@@ -186,7 +186,7 @@ export default function AwardsClient({ awards: initial }: { awards: Award[] }) {
                 {awards.map((a) => (
                   <tr key={a.id}>
                     {editId === a.id ? (
-                      <td colSpan={5} style={{ padding: "0.85rem 1rem", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+                      <td colSpan={5} style={{ padding: "0.85rem 1rem", borderBottom: "1px solid var(--surface-hover)" }}>
                         <form onSubmit={handleSaveEdit} style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 110px", gap: "0.65rem" }}>
                             <div>
@@ -210,10 +210,10 @@ export default function AwardsClient({ awards: initial }: { awards: Award[] }) {
                             <textarea style={{ ...inputStyle, resize: "vertical" }} rows={2} value={editForm.description} onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))} />
                           </div>
                           <div style={{ display: "flex", gap: "0.4rem" }}>
-                            <button type="submit" disabled={saving} style={{ padding: "0.45rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "#0a0a0f", border: "none", borderRadius: 3, cursor: "pointer", opacity: saving ? 0.7 : 1 }}>
+                            <button type="submit" disabled={saving} style={{ padding: "0.45rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "linear-gradient(135deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", border: "none", borderRadius: 3, cursor: "pointer", opacity: saving ? 0.7 : 1 }}>
                               {saving ? "Saving…" : "Save"}
                             </button>
-                            <button type="button" onClick={() => setEditId(null)} style={{ padding: "0.45rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "transparent", color: P.textMuted, border: "1px solid rgba(255,255,255,0.1)", borderRadius: 3, cursor: "pointer" }}>
+                            <button type="button" onClick={() => setEditId(null)} style={{ padding: "0.45rem 0.9rem", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", background: "transparent", color: P.textMuted, border: "1px solid var(--border-dim)", borderRadius: 3, cursor: "pointer" }}>
                               Cancel
                             </button>
                           </div>
@@ -235,7 +235,7 @@ export default function AwardsClient({ awards: initial }: { awards: Award[] }) {
                           <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", color: P.textPrimary }}>{a.year}</span>
                         </td>
                         <td style={{ ...tdStyle, textAlign: "center" }}>
-                          <span style={{ fontSize: "0.75rem", color: a.submissionCount > 0 ? P.gold : "rgba(255,255,255,0.2)" }}>{a.submissionCount}</span>
+                          <span style={{ fontSize: "0.75rem", color: a.submissionCount > 0 ? P.gold : "var(--text-4)" }}>{a.submissionCount}</span>
                         </td>
                         <td style={{ ...tdStyle, textAlign: "right" }}>
                           <div style={{ display: "flex", gap: "0.4rem", justifyContent: "flex-end" }}>

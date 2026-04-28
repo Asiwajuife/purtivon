@@ -1,12 +1,12 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 
 const P = {
-  surface: "#141420",
-  border: "rgba(255,255,255,0.07)",
+  surface: "var(--surface-card)",
+  border: "var(--border-dim)",
   gold: "#c9a84c",
-  textPrimary: "#f0ede6",
-  textMuted: "rgba(255,255,255,0.35)",
+  textPrimary: "var(--text-hi)",
+  textMuted: "var(--text-lo)",
 } as const;
 
 interface Podcast {
@@ -43,8 +43,8 @@ const BLANK: Omit<Podcast, "id" | "videoId"> = {
 
 const input: React.CSSProperties = {
   width: "100%",
-  background: "rgba(255,255,255,0.03)",
-  border: "1px solid rgba(255,255,255,0.08)",
+  background: "var(--surface-hover)",
+  border: "1px solid var(--border-dim)",
   color: P.textPrimary,
   fontSize: "0.82rem",
   padding: "0.6rem 0.75rem",
@@ -169,7 +169,7 @@ export default function PodcastsClient({ initialPodcasts }: Props) {
         </div>
         <button
           onClick={openAdd}
-          style={{ background: P.gold, color: "#0a0a0f", border: "none", padding: "0.5rem 1rem", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer", borderRadius: 2 }}
+          style={{ background: P.gold, color: "var(--surface-page)", border: "none", padding: "0.5rem 1rem", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer", borderRadius: 2 }}
         >
           + Add Episode
         </button>
@@ -223,7 +223,7 @@ export default function PodcastsClient({ initialPodcasts }: Props) {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  style={{ flex: 1, background: P.gold, color: "#0a0a0f", border: "none", padding: "0.65rem", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.6 : 1, borderRadius: 2 }}
+                  style={{ flex: 1, background: P.gold, color: "var(--surface-page)", border: "none", padding: "0.65rem", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.6 : 1, borderRadius: 2 }}
                 >
                   {saving ? "Saving…" : (adding ? "Create Episode" : "Save Changes")}
                 </button>
@@ -250,7 +250,7 @@ export default function PodcastsClient({ initialPodcasts }: Props) {
           {podcasts.map((p) => (
             <div key={p.id} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "0.75rem 1rem", background: P.surface, border: `1px solid ${P.border}`, borderRadius: 4 }}>
               {/* Thumbnail */}
-              <div style={{ width: 80, height: 45, flexShrink: 0, background: "rgba(255,255,255,0.04)", borderRadius: 2, overflow: "hidden" }}>
+              <div style={{ width: 80, height: 45, flexShrink: 0, background: "var(--border-faint)", borderRadius: 2, overflow: "hidden" }}>
                 <img
                   src={p.thumbnail ?? `https://img.youtube.com/vi/${p.videoId}/mqdefault.jpg`}
                   alt={p.title}
