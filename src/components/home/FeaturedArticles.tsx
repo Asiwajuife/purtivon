@@ -74,16 +74,16 @@ export default function FeaturedArticles({ articles }: { articles: HomepageArtic
                     <span className="badge badge--gold" style={{ fontSize: '0.58rem' }}>Featured</span>
                   )}
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 2.5vw, 2.1rem)', fontWeight: 300, lineHeight: 1.2, color: 'var(--text-primary)', marginBottom: '0.9rem', maxWidth: 580 }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 2.5vw, 2.1rem)', fontWeight: 300, lineHeight: 1.2, color: '#f0ede6', marginBottom: '0.9rem', maxWidth: 580 }}>
                   {hero.title}
                 </h3>
                 {hero.excerpt && (
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-mid)', lineHeight: 1.6, marginBottom: '1.25rem', maxWidth: 520, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as React.CSSProperties}>
+                  <p style={{ fontSize: '0.85rem', color: 'rgba(240,237,230,0.72)', lineHeight: 1.6, marginBottom: '1.25rem', maxWidth: 520, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as React.CSSProperties}>
                     {hero.excerpt}
                   </p>
                 )}
                 <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--text-lo)' }}>{fmt(hero.publishedAt)}</span>
+                  <span style={{ fontSize: '0.68rem', color: 'rgba(240,237,230,0.55)' }}>{fmt(hero.publishedAt)}</span>
                   {hero.readTime && (
                     <span style={{ fontSize: '0.68rem', color: 'var(--gold-dim)' }}>{hero.readTime} min read</span>
                   )}
@@ -113,10 +113,10 @@ export default function FeaturedArticles({ articles }: { articles: HomepageArtic
                     <span style={{ fontSize: '0.56rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', background: 'rgba(201,168,76,0.15)', padding: '0.2rem 0.6rem', alignSelf: 'flex-start', marginBottom: '0.6rem' }}>
                       {a.category}
                     </span>
-                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 300, lineHeight: 1.3, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 300, lineHeight: 1.3, color: '#f0ede6', marginBottom: '0.5rem' }}>
                       {a.title}
                     </h3>
-                    <span style={{ fontSize: '0.62rem', color: 'var(--text-lo)' }}>{fmtShort(a.publishedAt)}</span>
+                    <span style={{ fontSize: '0.62rem', color: 'rgba(240,237,230,0.55)' }}>{fmtShort(a.publishedAt)}</span>
                   </div>
                 </article>
               </Link>

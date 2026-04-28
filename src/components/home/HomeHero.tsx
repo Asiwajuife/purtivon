@@ -30,12 +30,12 @@ export default function HomeHero() {
       ref={ref}
       style={{
         position: "relative",
-        minHeight: "92vh",
+        minHeight: "65vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        padding: "7rem 2.5rem 5rem",
+        padding: "4.5rem 2.5rem 3rem",
       }}
     >
       {/* Parallax background image */}
@@ -163,10 +163,10 @@ export default function HomeHero() {
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: "3.5rem",
-            marginTop: "5rem",
-            paddingTop: "3rem",
-            borderTop: "1px solid var(--text-5)",
+            gap: "2.5rem",
+            marginTop: "3rem",
+            paddingTop: "2rem",
+            borderTop: "1px solid rgba(255,255,255,0.12)",
             flexWrap: "wrap",
           }}
         >

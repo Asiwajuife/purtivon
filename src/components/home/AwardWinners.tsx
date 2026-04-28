@@ -75,7 +75,7 @@ function FeaturedWinnerCard({ winner }: { winner: Winner }) {
           </div>
         )}
         <div style={{ minWidth: 0 }}>
-          <p style={{ fontSize: '0.95rem', fontWeight: 600, color: '#f0ede6', margin: 0, lineHeight: 1.3 }}>
+          <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-hi)', margin: 0, lineHeight: 1.3 }}>
             {winner.name}
           </p>
           {winner.company && (
