@@ -120,14 +120,16 @@ export default function HomeHero() {
         </motion.h1>
 
         <motion.p
-          className="body-lg"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
           style={{
             maxWidth: 520,
             margin: "0 auto 3rem",
-            color: "rgba(240,237,230,0.92)",
+            fontSize: "1.05rem",
+            lineHeight: 1.8,
+            fontWeight: 300,
+            color: "rgba(255,255,255,0.88)",
             textShadow: "0 1px 4px rgba(0,0,0,0.6)",
           }}
         >
