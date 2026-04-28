@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
+import ThemeProvider from '@/components/providers/ThemeProvider'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -46,9 +47,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Prevent flash of wrong theme before React hydrates */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('purtivon-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){}})();` }} />
+      </head>
       <body>
         <GoogleAnalytics />
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )

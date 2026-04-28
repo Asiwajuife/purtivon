@@ -204,6 +204,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       <Link
         href={item.href}
         onClick={() => setMobileOpen(false)}
+        style={isActive ? {} : { color: "var(--text-lo)" }}
         className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 ${
           isActive
             ? "bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/15"
@@ -220,7 +221,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   function SidebarContent() {
     return (
       <div className="flex flex-col h-full">
-        <div className="flex items-center gap-2 px-4 h-11 border-b border-white/5 shrink-0">
+        <div className="flex items-center gap-2 px-4 h-11 border-b border-white/5 shrink-0" style={{ borderBottomColor: "var(--border-faint)" }}>
           <span
             className="font-light uppercase text-xs"
             style={{
@@ -242,7 +243,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
           </ul>
           {isAdmin && (
             <div className="mt-6">
-              <p className="px-3 mb-2 text-[9px] font-semibold tracking-[0.25em] uppercase text-white/15">
+              <p className="px-3 mb-2 text-[9px] font-semibold tracking-[0.25em] uppercase text-white/15" style={{ color: "var(--text-5)" }}>
                 Admin
               </p>
               <ul className="flex flex-col gap-0.5">
@@ -255,18 +256,18 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
             </div>
           )}
         </nav>
-        <div className="px-3 py-4 border-t border-white/5 shrink-0">
-          <div className="flex items-center gap-3 px-3 py-3 rounded-sm bg-white/[0.02] border border-white/5 mb-2">
+        <div className="px-3 py-4 border-t border-white/5 shrink-0" style={{ borderTopColor: "var(--border-faint)" }}>
+          <div className="flex items-center gap-3 px-3 py-3 rounded-sm bg-white/[0.02] border border-white/5 mb-2" style={{ background: "var(--surface-subtle)", borderColor: "var(--border-faint)" }}>
             <div className="w-7 h-7 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center shrink-0">
               <span className="text-[#c9a84c] text-[11px] font-semibold uppercase">
                 {user.name?.charAt(0) ?? "U"}
               </span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-white/60 text-xs font-medium truncate">
+              <p className="text-white/60 text-xs font-medium truncate" style={{ color: "var(--text-mid)" }}>
                 {user.name ?? "User"}
               </p>
-              <p className="text-white/20 text-[10px] truncate">{user.email}</p>
+              <p className="text-white/20 text-[10px] truncate" style={{ color: "var(--text-5)" }}>{user.email}</p>
             </div>
             {isAdmin && (
               <span className="shrink-0 text-[9px] tracking-widest uppercase font-semibold text-[#c9a84c] bg-[#c9a84c]/10 px-1.5 py-0.5 rounded-sm">
@@ -299,7 +300,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   }
   return (
     <>
-      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col bg-[#0a0a0f] border-r border-white/5 z-40" style={{ width: 200 }}>
+      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col bg-[#0a0a0f] border-r border-white/5 z-40" style={{ width: 200, background: "var(--surface-page)", borderRightColor: "var(--border-faint)" }}>
         <SidebarContent />
       </aside>
       <button
@@ -327,7 +328,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="relative w-72 bg-[#0a0a0f] border-r border-white/5 flex flex-col h-full">
+          <aside className="relative w-72 bg-[#0a0a0f] border-r border-white/5 flex flex-col h-full" style={{ background: "var(--surface-page)", borderRightColor: "var(--border-faint)" }}>
             <button
               onClick={() => setMobileOpen(false)}
               aria-label="Close sidebar"

@@ -26,11 +26,18 @@ export default function SubmissionsClient({ submissions: initial, isAdmin }: Pro
     setSubmissions(prev => prev.map(s => s.id === id ? { ...s, status } : s));
   }
 
+  async function handleDelete(id: string) {
+    const res = await fetch(`/api/submissions/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Failed to delete submission");
+    setSubmissions(prev => prev.filter(s => s.id !== id));
+  }
+
   return (
     <SubmissionTable
       submissions={submissions}
       isAdmin={isAdmin}
       onStatusChange={isAdmin ? handleStatusChange : undefined}
+      onDelete={isAdmin ? handleDelete : undefined}
     />
   );
 }

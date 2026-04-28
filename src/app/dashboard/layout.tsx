@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import UserInfo from "@/components/dashboard/UserInfo";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default async function DashboardLayout({
   children,
@@ -19,24 +20,25 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--surface-page)', display: 'flex' }}>
       <DashboardSidebar user={session.user} />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, marginLeft: 200 }}>
         <header style={{
           position: 'sticky', top: 0, zIndex: 30, height: 44,
-          borderBottom: '1px solid rgba(255,255,255,0.05)',
-          background: 'rgba(10,10,15,0.95)', backdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--border-faint)',
+          background: 'var(--nav-backdrop)', backdropFilter: 'blur(16px)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 1.25rem',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#c9a84c' }} />
-            <span style={{ fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
+            <span style={{ fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-4)' }}>
               Dashboard
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <ThemeToggle />
             <UserInfo user={session.user} />
           </div>
         </header>

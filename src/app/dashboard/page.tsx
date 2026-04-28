@@ -13,18 +13,18 @@ function StatCard({ label, value, sub, icon, accent }: {
   return (
     <div style={{
       padding: "1.25rem 1.5rem",
-      border: `1px solid ${accent ? "rgba(201,168,76,0.18)" : "rgba(255,255,255,0.05)"}`,
-      background: accent ? "rgba(201,168,76,0.04)" : "rgba(255,255,255,0.015)",
+      border: `1px solid ${accent ? "rgba(201,168,76,0.18)" : "var(--border-faint)"}`,
+      background: accent ? "rgba(201,168,76,0.04)" : "var(--surface-subtle)",
       display: "flex", flexDirection: "column", gap: "1rem",
     }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <p style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: accent ? "rgba(201,168,76,0.6)" : "rgba(255,255,255,0.25)" }}>
+        <p style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: accent ? "rgba(201,168,76,0.6)" : "var(--text-4)" }}>
           {label}
         </p>
         <span style={{
           width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
-          background: accent ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.04)",
-          color: accent ? "#c9a84c" : "rgba(255,255,255,0.22)",
+          background: accent ? "rgba(201,168,76,0.12)" : "var(--border-faint)",
+          color: accent ? "#c9a84c" : "var(--text-4)",
         }}>
           {icon}
         </span>
@@ -33,12 +33,12 @@ function StatCard({ label, value, sub, icon, accent }: {
         <p style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "1.75rem", fontWeight: 300, lineHeight: 1,
-          color: accent ? "#c9a84c" : "#f0ede6",
+          color: accent ? "#c9a84c" : "var(--text-hi)",
           marginBottom: sub ? "0.4rem" : 0,
         }}>
           {value}
         </p>
-        {sub && <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.22)", letterSpacing: "0.04em" }}>{sub}</p>}
+        {sub && <p style={{ fontSize: "0.68rem", color: "var(--text-4)", letterSpacing: "0.04em" }}>{sub}</p>}
       </div>
     </div>
   );
@@ -135,21 +135,21 @@ export default async function DashboardPage() {
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: 900 }}>
 
       {/* Header */}
-      <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ paddingBottom: "1rem", borderBottom: "1px solid var(--border-faint)" }}>
         <p style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "#c9a84c", marginBottom: "0.3rem" }}>
           {isAdmin ? "Platform Overview" : "My Account"}
         </p>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.6rem", fontWeight: 300, color: "#f0ede6" }}>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.6rem", fontWeight: 300, color: "var(--text-hi)" }}>
             Welcome back,{" "}
             <span style={{ color: "#c9a84c" }}>{session?.user?.name?.split(" ")[0] ?? "there"}</span>
           </h1>
-          <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.2)", letterSpacing: "0.06em" }}>{today}</p>
+          <p style={{ fontSize: "0.68rem", color: "var(--text-4)", letterSpacing: "0.06em" }}>{today}</p>
         </div>
       </div>
 
       {/* Stat cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px", background: "rgba(255,255,255,0.04)" }} className="dash-stats">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px", background: "var(--border-faint)" }} className="dash-stats">
         <StatCard
           label="Total Submissions"
           value={String(data.totalSubmissions)}
@@ -180,8 +180,8 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-          <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)", flexShrink: 0 }}>Quick Actions</span>
-          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.04)" }} />
+          <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--text-4)", flexShrink: 0 }}>Quick Actions</span>
+          <div style={{ flex: 1, height: 1, background: "var(--border-faint)" }} />
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.5rem" }}>
           {QUICK_ACTIONS.map(({ label, href, description, icon }) => (
@@ -191,8 +191,8 @@ export default async function DashboardPage() {
               style={{
                 display: "flex", alignItems: "center", gap: "0.75rem",
                 padding: "0.85rem 1rem",
-                background: "rgba(255,255,255,0.015)",
-                border: "1px solid rgba(255,255,255,0.05)",
+                background: "var(--surface-subtle)",
+                border: "1px solid var(--border-faint)",
                 textDecoration: "none",
                 transition: "border-color 0.2s, background 0.2s",
               }}
@@ -205,8 +205,8 @@ export default async function DashboardPage() {
                 {icon}
               </span>
               <div style={{ minWidth: 0, flex: 1 }}>
-                <p style={{ fontSize: "0.72rem", fontWeight: 500, color: "rgba(255,255,255,0.65)", marginBottom: "0.15rem" }}>{label}</p>
-                <p style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.22)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{description}</p>
+                <p style={{ fontSize: "0.72rem", fontWeight: 500, color: "var(--text-mid)", marginBottom: "0.15rem" }}>{label}</p>
+                <p style={{ fontSize: "0.7rem", color: "var(--text-4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{description}</p>
               </div>
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />
@@ -244,8 +244,8 @@ export default async function DashboardPage() {
                   {icon}
                 </span>
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <p style={{ fontSize: "0.72rem", fontWeight: 500, color: "rgba(255,255,255,0.65)", marginBottom: "0.15rem" }}>{label}</p>
-                  <p style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.22)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{description}</p>
+                  <p style={{ fontSize: "0.72rem", fontWeight: 500, color: "var(--text-mid)", marginBottom: "0.15rem" }}>{label}</p>
+                  <p style={{ fontSize: "0.7rem", color: "var(--text-4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{description}</p>
                 </div>
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,0.3)" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />
@@ -261,14 +261,14 @@ export default async function DashboardPage() {
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)", flexShrink: 0 }}>Recent Submissions</span>
-              <div style={{ width: 120, height: 1, background: "rgba(255,255,255,0.04)" }} />
+              <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--text-4)", flexShrink: 0 }}>Recent Submissions</span>
+              <div style={{ width: 120, height: 1, background: "var(--border-faint)" }} />
             </div>
             <Link href="/dashboard/submissions" style={{ fontSize: "0.7rem", color: "#c9a84c", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>
               View All →
             </Link>
           </div>
-          <div style={{ border: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.01)" }}>
+          <div style={{ border: "1px solid var(--border-faint)", background: "var(--surface-subtle)" }}>
             {data.recentSubmissions.map((sub, i) => {
               const s = STATUS_STYLES[sub.status] ?? STATUS_STYLES.PENDING;
               const subWithUser = sub as typeof sub & { user?: { name: string | null; email: string } };
@@ -278,21 +278,21 @@ export default async function DashboardPage() {
                   style={{
                     display: "flex", alignItems: "center", gap: "1rem",
                     padding: "0.85rem 1.25rem",
-                    borderTop: i > 0 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                    borderTop: i > 0 ? "1px solid var(--border-faint)" : "none",
                   }}
                 >
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: "0.78rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", marginBottom: "0.2rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <p style={{ fontSize: "0.78rem", fontWeight: 500, color: "var(--text-mid)", marginBottom: "0.2rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {sub.companyName}
                     </p>
-                    <p style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.28)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <p style={{ fontSize: "0.65rem", color: "var(--text-4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {sub.award.title}{isAdmin && subWithUser.user ? ` · ${subWithUser.user.name ?? subWithUser.user.email}` : ""}
                     </p>
                   </div>
                   <span style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: s.color, background: s.bg, padding: "0.2rem 0.6rem", flexShrink: 0 }}>
                     {s.label}
                   </span>
-                  <span style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.2)", flexShrink: 0, minWidth: 80, textAlign: "right" }}>
+                  <span style={{ fontSize: "0.65rem", color: "var(--text-4)", flexShrink: 0, minWidth: 80, textAlign: "right" }}>
                     {new Date(sub.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                   </span>
                 </div>

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const AWARDS_ITEMS = [
   { label: "Winners",     href: "/winners" },
@@ -21,13 +22,6 @@ const INSIGHTS_CATEGORIES = [
   { label: "Economy",                        href: "/insights?category=Economy" },
   { label: "Technology",                     href: "/insights?category=Tech" },
   { label: "ESG",                            href: "/insights?category=ESG" },
-];
-
-const PLAIN_LINKS = [
-  { label: "About",    href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Awards",   href: "/awards" },
-  { label: "Contact",  href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -65,7 +59,6 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -91,7 +84,7 @@ export default function Navbar() {
           zIndex: 50,
           transition: "all 0.5s",
           ...(scrolled
-            ? { background: "rgba(10,10,15,0.95)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.05)", padding: "0.75rem 0" }
+            ? { background: "var(--nav-backdrop)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--border-faint)", padding: "0.75rem 0" }
             : { background: "transparent", padding: "1.25rem 0" }),
         }}
       >
@@ -131,7 +124,7 @@ export default function Navbar() {
                   display: "inline-flex", alignItems: "center", gap: "0.35rem",
                   fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase",
                   fontWeight: 500,
-                  color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.6)",
+                  color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "var(--nav-link)",
                   padding: 0, position: "relative",
                 }}
                 className="navbar-link navbar-awards-btn"
@@ -149,9 +142,9 @@ export default function Navbar() {
                 <div style={{
                   position: "absolute", top: "calc(100% + 1rem)", left: "50%",
                   transform: "translateX(-50%)", minWidth: 200,
-                  background: "rgba(10,10,15,0.98)", border: "1px solid rgba(201,168,76,0.15)",
+                  background: "var(--nav-dropdown)", border: "1px solid rgba(201,168,76,0.15)",
                   borderTop: "2px solid #c9a84c", backdropFilter: "blur(16px)",
-                  padding: "0.5rem 0", zIndex: 60, boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+                  padding: "0.5rem 0", zIndex: 60, boxShadow: "0 16px 40px rgba(0,0,0,0.2)",
                 }}>
                   {AWARDS_ITEMS.map(({ label, href }) => (
                     <Link
@@ -159,7 +152,7 @@ export default function Navbar() {
                       href={href}
                       style={{
                         display: "block", padding: "0.6rem 1rem",
-                        fontSize: "0.73rem", color: "rgba(255,255,255,0.55)",
+                        fontSize: "0.73rem", color: "var(--text-mid)",
                         textDecoration: "none", letterSpacing: "0.03em",
                         transition: "color 0.15s, background 0.15s",
                       }}
@@ -177,74 +170,40 @@ export default function Navbar() {
               <button
                 onClick={() => setInsightsOpen((v) => !v)}
                 style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.35rem",
-                  fontSize: "0.75rem",
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
+                  background: "none", border: "none", cursor: "pointer",
+                  display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                  fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase",
                   fontWeight: 500,
-                  color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.6)",
-                  padding: 0,
-                  position: "relative",
+                  color: isInsightsActive ? "#c9a84c" : "var(--nav-link)",
+                  padding: 0, position: "relative",
                 }}
                 className="navbar-link navbar-insights-btn"
                 aria-expanded={insightsOpen}
               >
                 Insights
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                  style={{ transition: "transform 0.2s", transform: insightsOpen ? "rotate(180deg)" : "none", flexShrink: 0, marginTop: 1 }}
-                >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}
+                  style={{ transition: "transform 0.2s", transform: insightsOpen ? "rotate(180deg)" : "none", flexShrink: 0, marginTop: 1 }}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
                 </svg>
                 <span style={{ position: "absolute", bottom: -4, left: 0, height: 1, width: isInsightsActive ? "100%" : 0, background: "#c9a84c", transition: "width 0.3s" }} className="navbar-link-underline" />
               </button>
 
-              {/* Dropdown panel */}
               {insightsOpen && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 1rem)",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    minWidth: 240,
-                    background: "rgba(10,10,15,0.98)",
-                    border: "1px solid rgba(201,168,76,0.15)",
-                    borderTop: "2px solid #c9a84c",
-                    backdropFilter: "blur(16px)",
-                    padding: "0.5rem 0",
-                    zIndex: 60,
-                    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
-                  }}
-                >
-                  <div style={{ padding: "0.5rem 1rem 0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)", marginBottom: "0.25rem" }}>
+                <div style={{
+                  position: "absolute", top: "calc(100% + 1rem)", left: "50%",
+                  transform: "translateX(-50%)", minWidth: 240,
+                  background: "var(--nav-dropdown)", border: "1px solid rgba(201,168,76,0.15)",
+                  borderTop: "2px solid #c9a84c", backdropFilter: "blur(16px)",
+                  padding: "0.5rem 0", zIndex: 60, boxShadow: "0 16px 40px rgba(0,0,0,0.2)",
+                }}>
+                  <div style={{ padding: "0.5rem 1rem 0.75rem", borderBottom: "1px solid var(--border-faint)", marginBottom: "0.25rem" }}>
                     <Link href="/insights" style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#c9a84c", textDecoration: "none" }}>
                       All Insights →
                     </Link>
                   </div>
                   {INSIGHTS_CATEGORIES.map(({ label, href }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      style={{
-                        display: "block",
-                        padding: "0.6rem 1rem",
-                        fontSize: "0.73rem",
-                        color: "rgba(255,255,255,0.55)",
-                        textDecoration: "none",
-                        letterSpacing: "0.03em",
-                        transition: "color 0.15s, background 0.15s",
-                      }}
+                    <Link key={href} href={href}
+                      style={{ display: "block", padding: "0.6rem 1rem", fontSize: "0.73rem", color: "var(--text-mid)", textDecoration: "none", letterSpacing: "0.03em", transition: "color 0.15s, background 0.15s" }}
                       className="navbar-dropdown-item"
                     >
                       {label}
@@ -261,7 +220,7 @@ export default function Navbar() {
                 <li key={href}>
                   <Link
                     href={href}
-                    style={{ position: "relative", fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500, color: isActive ? "#c9a84c" : "rgba(255,255,255,0.6)", textDecoration: "none", display: "inline-block" }}
+                    style={{ position: "relative", fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500, color: isActive ? "#c9a84c" : "var(--nav-link)", textDecoration: "none", display: "inline-block" }}
                     className="navbar-link"
                   >
                     {label}
@@ -273,7 +232,8 @@ export default function Navbar() {
           </ul>
 
           {/* Desktop action buttons */}
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }} className="navbar-desktop-actions">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }} className="navbar-desktop-actions">
+            <ThemeToggle />
             {session ? (
               <Link
                 href="/dashboard"
@@ -303,9 +263,9 @@ export default function Navbar() {
             style={{ display: "none", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", gap: 6, width: 32, height: 32, background: "none", border: "none", cursor: "pointer", padding: 0, outline: "none", flexShrink: 0 }}
             className="navbar-hamburger"
           >
-            <span style={{ display: "block", width: 24, height: 1, background: "white", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(-45deg) translateY(3px)" : "none" }} />
+            <span style={{ display: "block", width: 24, height: 1, background: "var(--text-hi)", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(-45deg) translateY(3px)" : "none" }} />
             <span style={{ display: "block", width: 16, height: 1, background: "#c9a84c", transition: "opacity 0.3s, width 0.3s", opacity: menuOpen ? 0 : 1 }} />
-            <span style={{ display: "block", width: 24, height: 1, background: "white", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(45deg) translateY(-3px)" : "none" }} />
+            <span style={{ display: "block", width: 24, height: 1, background: "var(--text-hi)", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(45deg) translateY(-3px)" : "none" }} />
           </button>
         </nav>
       </header>
@@ -316,7 +276,7 @@ export default function Navbar() {
         style={{ position: "fixed", inset: 0, zIndex: 40, display: "none", transition: "opacity 0.5s", opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
         className="navbar-mobile-overlay"
       >
-        <div style={{ position: "absolute", inset: 0, background: "rgba(10,10,15,0.98)", backdropFilter: "blur(16px)" }} onClick={() => setMenuOpen(false)} />
+        <div style={{ position: "absolute", inset: 0, background: "var(--mobile-overlay)", backdropFilter: "blur(16px)" }} onClick={() => setMenuOpen(false)} />
 
         <div style={{ position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "5rem 2rem 2rem", maxWidth: 480, margin: "0 auto", overflowY: "auto" }}>
           <div style={{ position: "absolute", top: "25%", right: "2rem", width: 128, height: 128, borderRadius: "50%", background: "rgba(201,168,76,0.05)", filter: "blur(40px)", pointerEvents: "none" }} />
@@ -324,14 +284,14 @@ export default function Navbar() {
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem 0", display: "flex", flexDirection: "column", gap: 0 }}>
             {/* Awards — expandable */}
             <li style={{ transition: `opacity 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-              <div style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+              <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0" }}>
-                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.5)" }}>Awards</span>
+                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "var(--text-lo)" }}>Awards</span>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
                   {AWARDS_ITEMS.map(({ label, href }) => (
                     <Link key={href} href={href}
-                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.08)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
                       className="navbar-mobile-cat"
                     >
                       {label}
@@ -343,14 +303,14 @@ export default function Navbar() {
 
             {/* Insights — expandable */}
             <li style={{ transition: `opacity 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-              <div style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.5)", textDecoration: "none" }} className="navbar-mobile-link">
+              <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "var(--text-lo)", textDecoration: "none" }} className="navbar-mobile-link">
                   <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>Insights</span>
                 </Link>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
                   {INSIGHTS_CATEGORIES.map(({ label, href }) => (
                     <Link key={href} href={href}
-                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.08)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
                       className="navbar-mobile-cat"
                     >
                       {label}
@@ -365,9 +325,9 @@ export default function Navbar() {
               const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
               return (
                 <li key={href} style={{ transition: `opacity 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: `1px solid ${isActive ? "rgba(201,168,76,0.3)" : "rgba(255,255,255,0.05)"}`, color: isActive ? "#c9a84c" : "rgba(255,255,255,0.5)", textDecoration: "none" }} className="navbar-mobile-link">
+                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: `1px solid ${isActive ? "rgba(201,168,76,0.3)" : "var(--border-faint)"}`, color: isActive ? "#c9a84c" : "var(--text-lo)", textDecoration: "none" }} className="navbar-mobile-link">
                     <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>{label}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isActive ? "#c9a84c" : "rgba(255,255,255,0.2)"} strokeWidth={1.5} style={{ flexShrink: 0 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isActive ? "#c9a84c" : "var(--text-4)"} strokeWidth={1.5} style={{ flexShrink: 0 }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
                   </Link>
@@ -376,7 +336,7 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* CTA */}
+          {/* CTA + theme toggle */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", transition: `opacity 0.5s ${menuOpen ? "400ms" : "0ms"}, transform 0.5s ${menuOpen ? "400ms" : "0ms"}`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(16px)" }}>
             {session ? (
               <Link href="/dashboard" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "#0a0a0f", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
@@ -387,9 +347,13 @@ export default function Navbar() {
                 Submit Nomination
               </Link>
             )}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <ThemeToggle />
+              <span style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-4)" }}>Toggle theme</span>
+            </div>
           </div>
 
-          <p style={{ position: "absolute", bottom: "2rem", left: "2rem", color: "rgba(255,255,255,0.2)", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+          <p style={{ position: "absolute", bottom: "2rem", left: "2rem", color: "var(--text-5)", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
             Global FDI & Financial Media
           </p>
         </div>
@@ -408,15 +372,15 @@ export default function Navbar() {
           .navbar-hamburger { display: flex !important; }
           .navbar-mobile-overlay { display: block !important; }
         }
-        .navbar-link:hover { color: white !important; }
+        .navbar-link:hover { color: var(--gold) !important; }
         .navbar-link:hover .navbar-link-underline { width: 100% !important; }
-        .navbar-insights-btn:hover { color: white !important; }
-        .navbar-awards-btn:hover { color: white !important; }
+        .navbar-insights-btn:hover { color: var(--gold) !important; }
+        .navbar-awards-btn:hover { color: var(--gold) !important; }
         .navbar-nominate-btn:hover { background: rgba(201,168,76,0.1) !important; }
-        .navbar-mobile-link:hover { color: white !important; }
-        .navbar-mobile-login:hover { border-color: rgba(255,255,255,0.3) !important; color: white !important; }
-        .navbar-mobile-cat:hover { color: rgba(255,255,255,0.8) !important; border-color: rgba(255,255,255,0.2) !important; }
-        .navbar-dropdown-item:hover { color: #f0ede6 !important; background: rgba(201,168,76,0.06) !important; }
+        .navbar-mobile-link:hover { color: var(--gold) !important; }
+        .navbar-mobile-cat:hover { color: var(--text-mid) !important; border-color: var(--border-hover) !important; }
+        .navbar-dropdown-item:hover { color: var(--text-hi) !important; background: rgba(201,168,76,0.06) !important; }
+        .theme-toggle-btn:hover { background: rgba(201,168,76,0.1) !important; border-color: rgba(201,168,76,0.3) !important; }
       `}</style>
     </>
   );

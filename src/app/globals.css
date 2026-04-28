@@ -49,6 +49,62 @@
   --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
   --ease-inout: cubic-bezier(0.45, 0, 0.55, 1);
   --duration:   0.35s;
+
+  /* ── Extended theme tokens (referenced by inline styles) ── */
+  --surface-page:    #0a0a0f;
+  --surface-card:    #141420;
+  --surface-subtle:  rgba(255, 255, 255, 0.015);
+  --surface-hover:   rgba(255, 255, 255, 0.025);
+  --border-faint:    rgba(255, 255, 255, 0.05);
+  --border-dim:      rgba(255, 255, 255, 0.07);
+  --text-hi:         #f0ede6;
+  --text-mid:        rgba(255, 255, 255, 0.55);
+  --text-lo:         rgba(255, 255, 255, 0.35);
+  --text-4:          rgba(255, 255, 255, 0.25);
+  --text-5:          rgba(255, 255, 255, 0.15);
+  --nav-backdrop:    rgba(10, 10, 15, 0.95);
+  --nav-dropdown:    rgba(10, 10, 15, 0.98);
+  --nav-link:        rgba(255, 255, 255, 0.6);
+  --mobile-overlay:  rgba(10, 10, 15, 0.98);
+}
+
+/* ─────────────────────────────────────────────
+   LIGHT MODE TOKEN OVERRIDES
+───────────────────────────────────────────── */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --dark:           #f8f6f0;
+  --dark-100:       #f0ece3;
+  --dark-200:       #ffffff;
+  --dark-300:       #ede9e0;
+  --dark-400:       #e4dfd4;
+
+  --text-primary:   #1a1420;
+  --text-secondary: #4a4558;
+  --text-muted:     #7a7585;
+  --text-faint:     #a8a3b0;
+
+  --border:         rgba(0, 0, 0, 0.07);
+  --border-hover:   rgba(0, 0, 0, 0.14);
+
+  --surface-page:   #f8f6f0;
+  --surface-card:   #ffffff;
+  --surface-subtle: rgba(0, 0, 0, 0.02);
+  --surface-hover:  rgba(0, 0, 0, 0.03);
+  --border-faint:   rgba(0, 0, 0, 0.05);
+  --border-dim:     rgba(0, 0, 0, 0.09);
+
+  --text-hi:        #1a1420;
+  --text-mid:       rgba(0, 0, 0, 0.62);
+  --text-lo:        rgba(0, 0, 0, 0.48);
+  --text-4:         rgba(0, 0, 0, 0.32);
+  --text-5:         rgba(0, 0, 0, 0.18);
+
+  --nav-backdrop:   rgba(248, 246, 240, 0.95);
+  --nav-dropdown:   rgba(252, 250, 245, 0.98);
+  --nav-link:       rgba(0, 0, 0, 0.6);
+  --mobile-overlay: rgba(248, 246, 240, 0.98);
 }
 
 /* ─────────────────────────────────────────────
@@ -384,7 +440,7 @@ em, i {
   align-items: center;
   justify-content: space-between;
   padding: 0 2.5rem;
-  background: rgba(10, 10, 15, 0.82);
+  background: var(--nav-backdrop);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border);
@@ -484,9 +540,26 @@ em, i {
    SCROLLBAR
 ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-track { background: var(--surface-page); }
 ::-webkit-scrollbar-thumb { background: var(--dark-400); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* ─────────────────────────────────────────────
+   LIGHT MODE — TAILWIND CLASS OVERRIDES
+   (DashboardSidebar uses hardcoded Tailwind values)
+───────────────────────────────────────────── */
+[data-theme="light"] .bg-\[\#0a0a0f\] { background-color: var(--surface-page) !important; }
+[data-theme="light"] .border-white\/5  { border-color: var(--border-faint) !important; }
+[data-theme="light"] .border-white\/\[0\.05\] { border-color: var(--border-faint) !important; }
+[data-theme="light"] .text-white\/35   { color: var(--text-lo) !important; }
+[data-theme="light"] .text-white\/60   { color: var(--text-mid) !important; }
+[data-theme="light"] .text-white\/25   { color: var(--text-4) !important; }
+[data-theme="light"] .text-white\/20   { color: var(--text-4) !important; }
+[data-theme="light"] .text-white\/15   { color: var(--text-5) !important; }
+[data-theme="light"] .bg-white\/\[0\.02\]  { background-color: var(--surface-subtle) !important; }
+[data-theme="light"] .bg-white\/\[0\.03\]  { background-color: var(--surface-hover) !important; }
+[data-theme="light"] .hover\:text-white\/70:hover { color: var(--text-mid) !important; }
+[data-theme="light"] .hover\:bg-white\/\[0\.03\]:hover { background-color: var(--surface-hover) !important; }
 
 /* ─────────────────────────────────────────────
    SELECTION
