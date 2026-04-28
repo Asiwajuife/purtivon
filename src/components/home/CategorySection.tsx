@@ -61,7 +61,7 @@ export default function CategorySection({ category, articles }: CategorySectionP
                   {a.title}
                 </h4>
                 {a.excerpt && (
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: 1.55, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as React.CSSProperties}>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-lo)', lineHeight: 1.55, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as React.CSSProperties}>
                     {a.excerpt}
                   </p>
                 )}
