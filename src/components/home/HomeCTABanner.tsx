@@ -62,7 +62,7 @@ export default function HomeCTABanner() {
         }}
       />
 
-      <div className="container section" style={{ position: "relative", zIndex: 3 }}>
+      <div className="container" style={{ position: "relative", zIndex: 3, paddingTop: "3.5rem", paddingBottom: "3.5rem" }}>
         <ScrollReveal>
           <div
             aria-hidden="true"
@@ -70,7 +70,7 @@ export default function HomeCTABanner() {
               width: 64,
               height: 1,
               background: "linear-gradient(90deg, transparent, var(--gold), transparent)",
-              margin: "0 auto 3rem",
+              margin: "0 auto 1.75rem",
             }}
           />
 
@@ -91,7 +91,7 @@ export default function HomeCTABanner() {
             className="body-lg"
             style={{
               maxWidth: 460,
-              margin: "0 auto 3rem",
+              margin: "0 auto 1.75rem",
               color: "rgba(240,237,230,0.92)",
               textShadow: "0 1px 4px rgba(0,0,0,0.6)",
             }}

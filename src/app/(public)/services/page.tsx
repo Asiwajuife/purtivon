@@ -206,7 +206,7 @@ export default function ServicesPage() {
       {/* ── CTA ── */}
       <section
         className="section"
-        style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', borderTop: '1px solid var(--border)' }}
+        style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', borderTop: '1px solid var(--border)', paddingTop: '3.5rem', paddingBottom: '3.5rem' }}
       >
         {/* Background image */}
         <Image
@@ -229,13 +229,13 @@ export default function ServicesPage() {
                 width: 64,
                 height: 1,
                 background: 'linear-gradient(90deg, transparent, var(--gold), transparent)',
-                margin: '0 auto 3rem',
+                margin: '0 auto 1.75rem',
               }}
             />
             <h2 className="display-lg" style={{ marginBottom: '1.25rem', color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>
               Ready to get <em>started?</em>
             </h2>
-            <p className="body-lg" style={{ maxWidth: 500, margin: '0 auto 3rem', color: 'rgba(240,237,230,0.92)', textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
+            <p className="body-lg" style={{ maxWidth: 500, margin: '0 auto 1.75rem', color: 'rgba(240,237,230,0.92)', textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
               Whether you represent a financial institution, an investment promotion agency, or a
               government body seeking to attract capital, our team will identify which services best
               align with your objectives. Most engagements begin with a complimentary consultation.

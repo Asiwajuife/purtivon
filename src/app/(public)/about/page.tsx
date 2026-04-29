@@ -334,7 +334,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA with globe-routes.jpg ── */}
-      <section style={{ position: 'relative', textAlign: 'center', overflow: 'hidden' }} className="section">
+      <section style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', paddingTop: '3.5rem', paddingBottom: '3.5rem' }} className="section">
         <Image
           src="/images/globe-routes.jpg"
           alt=""
@@ -348,7 +348,7 @@ export default function AboutPage() {
         />
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <ScrollReveal>
-            <div aria-hidden="true" style={{ width: 64, height: 1, background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', margin: '0 auto 3rem' }} />
+            <div aria-hidden="true" style={{ width: 64, height: 1, background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', margin: '0 auto 1.75rem' }} />
             <h2
               className="display-lg"
               style={{ marginBottom: '1.25rem', color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}
@@ -357,7 +357,7 @@ export default function AboutPage() {
             </h2>
             <p
               className="body-lg"
-              style={{ maxWidth: 500, margin: '0 auto 3rem', color: 'rgba(240,237,230,0.92)', textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}
+              style={{ maxWidth: 500, margin: '0 auto 1.75rem', color: 'rgba(240,237,230,0.92)', textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}
             >
               Whether you represent an investment promotion agency, a financial institution, or a
               government body seeking to attract capital, we would be glad to discuss how Purtivon
