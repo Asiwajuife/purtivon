@@ -275,71 +275,77 @@ export default function Navbar() {
       {/* ── Mobile fullscreen menu overlay ── */}
       <div
         aria-hidden={!menuOpen}
-        style={{ position: "fixed", inset: 0, zIndex: 40, display: "none", transition: "opacity 0.5s", opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
+        style={{ position: "fixed", inset: 0, zIndex: 40, display: "none", flexDirection: "column", transition: "opacity 0.5s", opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
         className="navbar-mobile-overlay"
       >
         <div style={{ position: "absolute", inset: 0, background: "rgba(7,7,16,0.98)", backdropFilter: "blur(16px)" }} onClick={() => setMenuOpen(false)} />
 
-        <div style={{ position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "5rem 2rem 2rem", maxWidth: 480, margin: "0 auto", overflowY: "auto" }}>
+        {/* Content wrapper: header (navbar) → scrollArea → stickyFooter */}
+        <div style={{ position: "relative", flex: 1, display: "flex", flexDirection: "column", maxWidth: 480, margin: "0 auto", width: "100%", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: "25%", right: "2rem", width: 128, height: 128, borderRadius: "50%", background: "rgba(201,168,76,0.05)", filter: "blur(40px)", pointerEvents: "none" }} />
 
-          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem 0", display: "flex", flexDirection: "column", gap: 0 }}>
-            {/* Awards — expandable */}
-            <li style={{ transition: `opacity 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-              <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0" }}>
-                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.55)" }}>Awards</span>
+          {/* Scroll area */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "5.5rem 2rem 0" }}>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 0 }}>
+              {/* Awards */}
+              <li style={{ transition: `opacity 0.5s ${menuOpen ? 100 : 0}ms, transform 0.5s ${menuOpen ? 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
+                <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0" }}>
+                    <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.55)" }}>Awards</span>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", paddingBottom: "0.75rem" }}>
+                    {AWARDS_ITEMS.map(({ label, href }) => (
+                      <Link key={href} href={href}
+                        style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                        className="navbar-mobile-cat"
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
-                  {AWARDS_ITEMS.map(({ label, href }) => (
-                    <Link key={href} href={href}
-                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
-                      className="navbar-mobile-cat"
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </li>
+              </li>
 
-            {/* Insights — expandable */}
-            <li style={{ transition: `opacity 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-              <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
-                <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
-                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>Insights</span>
-                </Link>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
-                  {INSIGHTS_CATEGORIES.map(({ label, href }) => (
-                    <Link key={href} href={href}
-                      style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
-                      className="navbar-mobile-cat"
-                    >
-                      {label}
-                    </Link>
-                  ))}
+              {/* Insights */}
+              <li style={{ transition: `opacity 0.5s ${menuOpen ? 160 : 0}ms, transform 0.5s ${menuOpen ? 160 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
+                <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                  <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
+                    <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>Insights</span>
+                  </Link>
+                  <div style={{ paddingBottom: "0.75rem" }}>
+                    <p style={{ margin: "0 0 0.5rem 0", fontSize: "0.58rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>Filter by topic</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                      {INSIGHTS_CATEGORIES.map(({ label, href }) => (
+                        <Link key={href} href={href}
+                          style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                          className="navbar-mobile-cat"
+                        >
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </li>
+              </li>
 
-            {/* About, Services, Contact */}
-            {[{ label: "About", href: "/about" }, { label: "Services", href: "/services" }, { label: "Contact", href: "/contact" }].map(({ label, href }, i) => {
-              const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
-              return (
+              {/* About, Services, Contact — always muted; no active-gold */}
+              {[{ label: "About", href: "/about" }, { label: "Services", href: "/services" }, { label: "Contact", href: "/contact" }].map(({ label, href }, i) => (
                 <li key={href} style={{ transition: `opacity 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: `1px solid ${isActive ? "rgba(201,168,76,0.3)" : "var(--border-faint)"}`, color: isActive ? "#c9a84c" : "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
+                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: "1px solid var(--border-faint)", color: "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
                     <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>{label}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isActive ? "#c9a84c" : "var(--text-4)"} strokeWidth={1.5} style={{ flexShrink: 0 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-4)" strokeWidth={1.5} style={{ flexShrink: 0 }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
                   </Link>
                 </li>
-              );
-            })}
-          </ul>
+              ))}
+            </ul>
+            {/* Spacer so last item clears the sticky footer */}
+            <div style={{ height: "1rem" }} />
+          </div>
 
-          {/* CTA + theme toggle */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", transition: `opacity 0.5s ${menuOpen ? "400ms" : "0ms"}, transform 0.5s ${menuOpen ? "400ms" : "0ms"}`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(16px)" }}>
+          {/* Sticky footer — flexShrink: 0, gold border-top, never scrolls */}
+          <div style={{ flexShrink: 0, borderTop: "1px solid rgba(201,168,76,0.25)", padding: "1.25rem 2rem", background: "rgba(7,7,16,0.95)", transition: `opacity 0.5s ${menuOpen ? "400ms" : "0ms"}, transform 0.5s ${menuOpen ? "400ms" : "0ms"}`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(16px)" }}>
             {session ? (
               <Link href="/dashboard" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", background: "linear-gradient(90deg, #c9a84c, #e8c97a)", color: "var(--surface-page)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderRadius: 2 }}>
                 Go to Dashboard
@@ -349,15 +355,11 @@ export default function Navbar() {
                 Submit Nomination
               </Link>
             )}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem" }}>
               <ThemeToggle />
               <span style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-4)" }}>Toggle theme</span>
             </div>
           </div>
-
-          <p style={{ position: "absolute", bottom: "2rem", left: "2rem", color: "var(--text-5)", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
-            Global FDI & Financial Media
-          </p>
         </div>
       </div>
 
@@ -372,7 +374,7 @@ export default function Navbar() {
           .navbar-desktop-links { display: none !important; }
           .navbar-desktop-actions { display: none !important; }
           .navbar-hamburger { display: flex !important; }
-          .navbar-mobile-overlay { display: block !important; }
+          .navbar-mobile-overlay { display: flex !important; }
         }
         .navbar-link:hover { color: var(--gold) !important; }
         .navbar-link:hover .navbar-link-underline { width: 100% !important; }
