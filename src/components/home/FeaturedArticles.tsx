@@ -33,9 +33,9 @@ export default function FeaturedArticles({ articles }: { articles: HomepageArtic
       style={{ paddingTop: 'var(--space-xl)', paddingBottom: 0 }}
       aria-labelledby="featured-heading"
     >
-      <div className="container">
+      <div>
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2rem', padding: '0 1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div className="eyebrow" style={{ marginBottom: '0.5rem' }}>Latest Intelligence</div>
             <h2 id="featured-heading" className="display-md">
