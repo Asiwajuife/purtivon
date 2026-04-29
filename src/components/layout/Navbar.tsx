@@ -126,7 +126,7 @@ export default function Navbar() {
                   display: "inline-flex", alignItems: "center", gap: "0.35rem",
                   fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase",
                   fontWeight: 500,
-                  color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "var(--nav-link)",
+                  color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.75)",
                   padding: 0, position: "relative",
                 }}
                 className="navbar-link navbar-awards-btn"
@@ -176,7 +176,7 @@ export default function Navbar() {
                   display: "inline-flex", alignItems: "center", gap: "0.35rem",
                   fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase",
                   fontWeight: 500,
-                  color: isInsightsActive ? "#c9a84c" : "var(--nav-link)",
+                  color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.75)",
                   padding: 0, position: "relative",
                 }}
                 className="navbar-link navbar-insights-btn"
@@ -222,7 +222,7 @@ export default function Navbar() {
                 <li key={href}>
                   <Link
                     href={href}
-                    style={{ position: "relative", fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500, color: isActive ? "#c9a84c" : "var(--nav-link)", textDecoration: "none", display: "inline-block" }}
+                    style={{ position: "relative", fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500, color: isActive ? "#c9a84c" : "rgba(255,255,255,0.75)", textDecoration: "none", display: "inline-block" }}
                     className="navbar-link"
                   >
                     {label}
@@ -265,9 +265,9 @@ export default function Navbar() {
             style={{ display: "none", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", gap: 6, width: 32, height: 32, background: "none", border: "none", cursor: "pointer", padding: 0, outline: "none", flexShrink: 0 }}
             className="navbar-hamburger"
           >
-            <span style={{ display: "block", width: 24, height: 1, background: "var(--text-hi)", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(-45deg) translateY(3px)" : "none" }} />
+            <span style={{ display: "block", width: 24, height: 1, background: "rgba(255,255,255,0.9)", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(-45deg) translateY(3px)" : "none" }} />
             <span style={{ display: "block", width: 16, height: 1, background: "#c9a84c", transition: "opacity 0.3s, width 0.3s", opacity: menuOpen ? 0 : 1 }} />
-            <span style={{ display: "block", width: 24, height: 1, background: "var(--text-hi)", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(45deg) translateY(-3px)" : "none" }} />
+            <span style={{ display: "block", width: 24, height: 1, background: "rgba(255,255,255,0.9)", transformOrigin: "right center", transition: "transform 0.3s, width 0.3s", transform: menuOpen ? "rotate(45deg) translateY(-3px)" : "none" }} />
           </button>
         </nav>
       </header>
@@ -278,7 +278,7 @@ export default function Navbar() {
         style={{ position: "fixed", inset: 0, zIndex: 40, display: "none", transition: "opacity 0.5s", opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
         className="navbar-mobile-overlay"
       >
-        <div style={{ position: "absolute", inset: 0, background: "var(--mobile-overlay)", backdropFilter: "blur(16px)" }} onClick={() => setMenuOpen(false)} />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(7,7,16,0.98)", backdropFilter: "blur(16px)" }} onClick={() => setMenuOpen(false)} />
 
         <div style={{ position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "5rem 2rem 2rem", maxWidth: 480, margin: "0 auto", overflowY: "auto" }}>
           <div style={{ position: "absolute", top: "25%", right: "2rem", width: 128, height: 128, borderRadius: "50%", background: "rgba(201,168,76,0.05)", filter: "blur(40px)", pointerEvents: "none" }} />
@@ -288,7 +288,7 @@ export default function Navbar() {
             <li style={{ transition: `opacity 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 0 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
               <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0" }}>
-                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "var(--text-lo)" }}>Awards</span>
+                  <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.55)" }}>Awards</span>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
                   {AWARDS_ITEMS.map(({ label, href }) => (
@@ -306,7 +306,7 @@ export default function Navbar() {
             {/* Insights — expandable */}
             <li style={{ transition: `opacity 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? 1 * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
               <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
-                <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "var(--text-lo)", textDecoration: "none" }} className="navbar-mobile-link">
+                <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
                   <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>Insights</span>
                 </Link>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", paddingBottom: "0.75rem" }}>
@@ -327,7 +327,7 @@ export default function Navbar() {
               const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
               return (
                 <li key={href} style={{ transition: `opacity 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: `1px solid ${isActive ? "rgba(201,168,76,0.3)" : "var(--border-faint)"}`, color: isActive ? "#c9a84c" : "var(--text-lo)", textDecoration: "none" }} className="navbar-mobile-link">
+                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: `1px solid ${isActive ? "rgba(201,168,76,0.3)" : "var(--border-faint)"}`, color: isActive ? "#c9a84c" : "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
                     <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>{label}</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isActive ? "#c9a84c" : "var(--text-4)"} strokeWidth={1.5} style={{ flexShrink: 0 }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
