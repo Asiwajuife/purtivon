@@ -3,10 +3,14 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { ARTICLES } from '@/app/api/articles/route'
-import CategorySection from '@/components/home/CategorySection'
-import HomeHero from '@/components/home/HomeHero'
-import StockTicker from '@/components/home/StockTicker'
+import FeaturedArticles from '@/components/home/FeaturedArticles'
 import type { HomepageArticle } from '@/components/home/FeaturedArticles'
+import CategorySection from '@/components/home/CategorySection'
+import StockTicker from '@/components/home/StockTicker'
+import TestimonialsCarousel from '@/components/home/TestimonialsCarousel'
+import PodcastSection from '@/components/home/PodcastSection'
+import HomeHero from '@/components/home/HomeHero'
+import HomeCTABanner from '@/components/home/HomeCTABanner'
 
 export const metadata: Metadata = {
   title: 'Purtivon — Global FDI & Financial Services Awards',
@@ -15,7 +19,6 @@ export const metadata: Metadata = {
 }
 
 const CATEGORY_ORDER = [
-  'Featured Insight',
   'Awards',
   'Report',
   'News',
@@ -28,12 +31,19 @@ const CATEGORY_ORDER = [
   'ESG',
 ]
 
+const EDITORIAL_CATEGORIES = new Set(['Featured Insight'])
+
 async function getHomepageData(): Promise<{ articles: HomepageArticle[] }> {
   const dbArticles = await prisma.article.findMany({
     where: { status: 'PUBLISHED' },
     select: {
-      id: true, title: true, slug: true, excerpt: true,
-      coverImage: true, createdAt: true, readTime: true,
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      coverImage: true,
+      createdAt: true,
+      readTime: true,
       category: { select: { name: true } },
     },
     orderBy: { createdAt: 'desc' },
@@ -41,19 +51,29 @@ async function getHomepageData(): Promise<{ articles: HomepageArticle[] }> {
   })
 
   const fromDb: HomepageArticle[] = dbArticles.map((a) => ({
-    id: a.id, title: a.title, slug: a.slug, excerpt: a.excerpt,
-    coverImage: a.coverImage, category: a.category?.name ?? 'General',
-    publishedAt: a.createdAt.toISOString(), readTime: a.readTime, featured: false,
+    id: a.id,
+    title: a.title,
+    slug: a.slug,
+    excerpt: a.excerpt,
+    coverImage: a.coverImage,
+    category: a.category?.name ?? 'General',
+    publishedAt: a.createdAt.toISOString(),
+    readTime: a.readTime,
+    featured: false,
   }))
 
   const dbSlugs = new Set(fromDb.map((a) => a.slug))
-  const fromStatic: HomepageArticle[] = ARTICLES
-    .filter((s) => !dbSlugs.has(s.slug))
-    .map((s) => ({
-      id: s.id, title: s.title, slug: s.slug, excerpt: s.excerpt,
-      coverImage: s.coverImage, category: s.category,
-      publishedAt: s.publishedAt, readTime: s.readTime, featured: s.featured,
-    }))
+  const fromStatic: HomepageArticle[] = ARTICLES.filter((s) => !dbSlugs.has(s.slug)).map((s) => ({
+    id: s.id,
+    title: s.title,
+    slug: s.slug,
+    excerpt: s.excerpt,
+    coverImage: s.coverImage,
+    category: s.category,
+    publishedAt: s.publishedAt,
+    readTime: s.readTime,
+    featured: s.featured,
+  }))
 
   const articles = [...fromDb, ...fromStatic].sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
@@ -62,159 +82,65 @@ async function getHomepageData(): Promise<{ articles: HomepageArticle[] }> {
   return { articles }
 }
 
-export default async function HomePage() {
-  const { articles } = await getHomepageData()
-
+function NewsGrid({ articles }: { articles: HomepageArticle[] }) {
   const byCategory = new Map<string, HomepageArticle[]>()
   for (const a of articles) {
+    if (EDITORIAL_CATEGORIES.has(a.category)) continue
     const list = byCategory.get(a.category) ?? []
     list.push(a)
     byCategory.set(a.category, list)
   }
 
   const activeSections = [
-    ...CATEGORY_ORDER.filter((name) => (byCategory.get(name)?.length ?? 0) > 0),
+    ...CATEGORY_ORDER.filter((name) => (byCategory.get(name) ?? []).length > 0),
     ...[...byCategory.keys()]
       .filter((k) => !CATEGORY_ORDER.includes(k))
       .sort(),
   ]
 
+  if (activeSections.length === 0) return null
+
+  return (
+    <section
+      className="section"
+      style={{ paddingTop: '3rem', paddingBottom: 'var(--space-xl)' }}
+      aria-label="News by category"
+    >
+      <div className="container">
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div className="eyebrow" style={{ marginBottom: '0.5rem' }}>News &amp; Analysis</div>
+            <h2 className="display-md">Intelligence by <em>Sector</em></h2>
+          </div>
+          <Link href="/insights" className="btn btn-outline btn-sm">All Insights →</Link>
+        </div>
+
+        {activeSections.map((name) => (
+          <CategorySection
+            key={name}
+            category={name}
+            articles={byCategory.get(name) ?? []}
+          />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+export default async function HomePage() {
+  const { articles } = await getHomepageData()
+
+  const featured = articles.filter((a) => a.category === 'Featured Insight').slice(0, 3)
+
   return (
     <>
-      {/*
-        Full-viewport layout:
-        height: calc(100vh - 36px)  → leaves room for fixed ticker
-        paddingTop: 72px            → clears fixed navbar
-        overflow: hidden            → page never scrolls; inner div scrolls
-      */}
-      <div
-        style={{
-          height: 'calc(100vh - 36px)',
-          paddingTop: 72,
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          background: 'var(--surface-page)',
-        }}
-      >
-        {/* ── Short hero ── */}
-        <HomeHero />
-
-        {/* ── Compact section header (44px) ── */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '0 1.5rem',
-            height: 44,
-            flexShrink: 0,
-            borderBottom: '1px solid var(--border)',
-            background: 'var(--surface-page)',
-          }}
-        >
-          <div>
-            <span
-              style={{
-                display: 'block',
-                fontSize: '0.52rem',
-                fontWeight: 700,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--text-5)',
-                marginBottom: 2,
-              }}
-            >
-              News &amp; Analysis
-            </span>
-            <h1
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: '0.95rem',
-                fontWeight: 300,
-                color: 'var(--text-primary)',
-                margin: 0,
-                lineHeight: 1,
-              }}
-            >
-              Intelligence by <em>Sector</em>
-            </h1>
-          </div>
-          <Link href="/insights" className="btn btn-outline btn-sm">
-            All Insights →
-          </Link>
-        </div>
-
-        {/* ── Scrollable categories area ── */}
-        <div
-          className="news-grid-scroll"
-          style={{
-            flex: 1,
-            minHeight: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            overflowY: 'auto',
-          }}
-        >
-          {activeSections.length > 0 ? (
-            activeSections.map((name) => (
-              <CategorySection
-                key={name}
-                category={name}
-                articles={byCategory.get(name) ?? []}
-              />
-            ))
-          ) : (
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '1rem',
-              }}
-            >
-              <p
-                style={{
-                  fontSize: '0.72rem',
-                  color: 'var(--text-4)',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                No insights published yet
-              </p>
-              <Link
-                href="/insights"
-                style={{ fontSize: '0.72rem', color: 'var(--gold)', textDecoration: 'none' }}
-              >
-                Browse all categories →
-              </Link>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Fixed market ticker — always at bottom */}
+      <HomeHero />
+      <FeaturedArticles articles={featured} />
+      <NewsGrid articles={articles} />
+      <PodcastSection />
+      <TestimonialsCarousel />
+      <HomeCTABanner />
       <StockTicker />
-
-      <style>{`
-        .news-grid-scroll {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(201,168,76,0.3) transparent;
-        }
-        .news-grid-scroll::-webkit-scrollbar { width: 4px; }
-        .news-grid-scroll::-webkit-scrollbar-track { background: transparent; }
-        .news-grid-scroll::-webkit-scrollbar-thumb {
-          background: rgba(201,168,76,0.3);
-          border-radius: 2px;
-        }
-        .news-grid-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(201,168,76,0.5);
-        }
-      `}</style>
     </>
   )
 }
