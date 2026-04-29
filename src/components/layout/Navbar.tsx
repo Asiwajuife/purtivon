@@ -82,10 +82,12 @@ export default function Navbar() {
           position: "fixed",
           top: 0, left: 0, right: 0,
           zIndex: 50,
-          transition: "all 0.5s",
-          ...(scrolled
-            ? { background: "var(--nav-backdrop)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--border-faint)", padding: "0.75rem 0" }
-            : { background: "transparent", padding: "1.25rem 0" }),
+          transition: "background 0.3s ease, box-shadow 0.3s ease",
+          background: scrolled ? "rgba(7,7,16,1)" : "rgba(7,7,16,0.95)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(201,168,76,0.15)",
+          boxShadow: scrolled ? "0 2px 20px rgba(0,0,0,0.5)" : "none",
+          padding: "0.75rem 0",
         }}
       >
         <nav style={{ maxWidth: 1280, margin: "0 auto", padding: "0 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>

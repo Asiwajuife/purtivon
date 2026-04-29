@@ -148,6 +148,7 @@ export default function HomeHero() {
         alignItems: "center",
         overflow: "hidden",
         background: "#070710",
+        paddingTop: "64px",
       }}
     >
       <FDIIllustration />
