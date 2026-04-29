@@ -37,7 +37,7 @@ async function getHomepageData(): Promise<{ articles: HomepageArticle[] }> {
       category: { select: { name: true } },
     },
     orderBy: { createdAt: 'desc' },
-    take: 100,
+    take: 80,
   })
 
   const fromDb: HomepageArticle[] = dbArticles.map((a) => ({
@@ -62,35 +62,6 @@ async function getHomepageData(): Promise<{ articles: HomepageArticle[] }> {
   return { articles }
 }
 
-function AdBannerPlaceholder() {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: 72,
-        background: 'linear-gradient(90deg, #0c0c14 0%, #0f0f1a 50%, #0c0c14 100%)',
-        border: '1px solid var(--border)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: '2.5rem 0',
-      }}
-    >
-      <span
-        style={{
-          fontSize: '0.48rem',
-          fontWeight: 700,
-          letterSpacing: '0.3em',
-          textTransform: 'uppercase',
-          color: 'rgba(201,168,76,0.18)',
-        }}
-      >
-        Advertisement
-      </span>
-    </div>
-  )
-}
-
 export default async function HomePage() {
   const { articles } = await getHomepageData()
 
@@ -110,27 +81,35 @@ export default async function HomePage() {
 
   return (
     <>
+      {/*
+        Full-viewport layout:
+        height: calc(100vh - 36px)  → leaves room for fixed ticker
+        paddingTop: 72px            → clears fixed navbar
+        overflow: hidden            → page never scrolls; inner div scrolls
+      */}
       <div
         style={{
+          height: 'calc(100vh - 36px)',
           paddingTop: 72,
-          paddingBottom: 52,
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
           background: 'var(--surface-page)',
         }}
       >
-        {/* ── Hero ── */}
+        {/* ── Short hero ── */}
         <HomeHero />
 
-        {/* ── Compact header bar — sticky below navbar ── */}
+        {/* ── Compact section header (44px) ── */}
         <div
           style={{
-            position: 'sticky',
-            top: 72,
-            zIndex: 5,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '0 1.5rem',
             height: 44,
+            flexShrink: 0,
             borderBottom: '1px solid var(--border)',
             background: 'var(--surface-page)',
           }}
@@ -167,29 +146,34 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {/* ── Category sections ── */}
-        <div style={{ padding: '3rem 1.5rem 0' }}>
+        {/* ── Scrollable categories area ── */}
+        <div
+          className="news-grid-scroll"
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            overflowY: 'auto',
+          }}
+        >
           {activeSections.length > 0 ? (
-            activeSections.flatMap((name, idx) => {
-              const section = (
-                <CategorySection
-                  key={name}
-                  category={name}
-                  articles={byCategory.get(name) ?? []}
-                />
-              )
-              if (idx === 0) return [section]
-              return [<AdBannerPlaceholder key={`ad-${idx}`} />, section]
-            })
+            activeSections.map((name) => (
+              <CategorySection
+                key={name}
+                category={name}
+                articles={byCategory.get(name) ?? []}
+              />
+            ))
           ) : (
             <div
               style={{
+                flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '1rem',
-                padding: '6rem 0',
               }}
             >
               <p
@@ -215,6 +199,22 @@ export default async function HomePage() {
 
       {/* Fixed market ticker — always at bottom */}
       <StockTicker />
+
+      <style>{`
+        .news-grid-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(201,168,76,0.3) transparent;
+        }
+        .news-grid-scroll::-webkit-scrollbar { width: 4px; }
+        .news-grid-scroll::-webkit-scrollbar-track { background: transparent; }
+        .news-grid-scroll::-webkit-scrollbar-thumb {
+          background: rgba(201,168,76,0.3);
+          border-radius: 2px;
+        }
+        .news-grid-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(201,168,76,0.5);
+        }
+      `}</style>
     </>
   )
 }
