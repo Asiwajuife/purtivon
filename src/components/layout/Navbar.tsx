@@ -81,7 +81,7 @@ export default function Navbar() {
         style={{
           position: "fixed",
           top: 0, left: 0, right: 0,
-          zIndex: 50,
+          zIndex: 102,
           transition: "background 0.3s ease, box-shadow 0.3s ease",
           background: scrolled ? "rgba(7,7,16,1)" : "rgba(7,7,16,0.95)",
           backdropFilter: "blur(12px)",
@@ -275,7 +275,7 @@ export default function Navbar() {
       {/* ── Mobile fullscreen menu overlay ── */}
       <div
         aria-hidden={!menuOpen}
-        style={{ position: "fixed", inset: 0, zIndex: 40, display: "none", flexDirection: "column", transition: "opacity 0.5s", opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
+        style={{ position: "fixed", inset: 0, zIndex: 101, display: "none", flexDirection: "column", transition: "opacity 0.5s", opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
         className="navbar-mobile-overlay"
       >
         <div style={{ position: "absolute", inset: 0, background: "rgba(7,7,16,0.98)", backdropFilter: "blur(16px)" }} onClick={() => setMenuOpen(false)} />
@@ -289,14 +289,14 @@ export default function Navbar() {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 0 }}>
               {/* Awards */}
               <li style={{ transition: `opacity 0.5s ${menuOpen ? 100 : 0}ms, transform 0.5s ${menuOpen ? 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-                <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                <div style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0" }}>
                     <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em", color: (pathname.startsWith("/awards") || pathname.startsWith("/winners")) ? "#c9a84c" : "rgba(255,255,255,0.55)" }}>Awards</span>
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", paddingBottom: "0.75rem" }}>
                     {AWARDS_ITEMS.map(({ label, href }) => (
                       <Link key={href} href={href}
-                        style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                        style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.42)", border: "1px solid rgba(255,255,255,0.12)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
                         className="navbar-mobile-cat"
                       >
                         {label}
@@ -308,7 +308,7 @@ export default function Navbar() {
 
               {/* Insights */}
               <li style={{ transition: `opacity 0.5s ${menuOpen ? 160 : 0}ms, transform 0.5s ${menuOpen ? 160 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-                <div style={{ borderBottom: "1px solid var(--border-faint)" }}>
+                <div style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
                   <Link href="/insights" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", color: isInsightsActive ? "#c9a84c" : "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
                     <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>Insights</span>
                   </Link>
@@ -317,7 +317,7 @@ export default function Navbar() {
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                       {INSIGHTS_CATEGORIES.map(({ label, href }) => (
                         <Link key={href} href={href}
-                          style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-4)", border: "1px solid var(--border-dim)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
+                          style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.42)", border: "1px solid rgba(255,255,255,0.12)", padding: "0.3rem 0.65rem", textDecoration: "none", borderRadius: 2 }}
                           className="navbar-mobile-cat"
                         >
                           {label}
@@ -331,9 +331,9 @@ export default function Navbar() {
               {/* About, Services, Contact — always muted; no active-gold */}
               {[{ label: "About", href: "/about" }, { label: "Services", href: "/services" }, { label: "Contact", href: "/contact" }].map(({ label, href }, i) => (
                 <li key={href} style={{ transition: `opacity 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms, transform 0.5s ${menuOpen ? (i + 2) * 60 + 100 : 0}ms`, opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateX(0)" : "translateX(-16px)" }}>
-                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: "1px solid var(--border-faint)", color: "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
+                  <Link href={href} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 0", borderBottom: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.55)", textDecoration: "none" }} className="navbar-mobile-link">
                     <span style={{ fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif", fontSize: "1.75rem", fontWeight: 300, letterSpacing: "0.03em" }}>{label}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-4)" strokeWidth={1.5} style={{ flexShrink: 0 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth={1.5} style={{ flexShrink: 0 }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
                   </Link>
@@ -357,7 +357,7 @@ export default function Navbar() {
             )}
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem" }}>
               <ThemeToggle />
-              <span style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-4)" }}>Toggle theme</span>
+              <span style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.42)" }}>Toggle theme</span>
             </div>
           </div>
         </div>
@@ -382,7 +382,7 @@ export default function Navbar() {
         .navbar-awards-btn:hover { color: var(--gold) !important; }
         .navbar-nominate-btn:hover { background: rgba(201,168,76,0.1) !important; }
         .navbar-mobile-link:hover { color: var(--gold) !important; }
-        .navbar-mobile-cat:hover { color: var(--text-mid) !important; border-color: var(--border-hover) !important; }
+        .navbar-mobile-cat:hover { color: rgba(255,255,255,0.8) !important; border-color: rgba(255,255,255,0.25) !important; }
         .navbar-dropdown-item:hover { color: var(--text-hi) !important; background: rgba(201,168,76,0.06) !important; }
         .theme-toggle-btn:hover { background: rgba(201,168,76,0.1) !important; border-color: rgba(201,168,76,0.3) !important; }
       `}</style>
