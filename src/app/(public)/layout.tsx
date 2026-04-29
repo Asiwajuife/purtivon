@@ -2,6 +2,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import PageTransition from '@/components/PageTransition'
 import SessionProvider from '@/components/providers/SessionProvider'
+import BackHomeButtons from '@/components/ui/BackHomeButtons'
 
 export default function PublicLayout({
   children,
@@ -16,6 +17,7 @@ export default function PublicLayout({
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />
+      <BackHomeButtons variant="floating" />
     </SessionProvider>
   )
 }
