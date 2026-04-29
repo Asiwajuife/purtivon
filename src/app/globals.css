@@ -24,9 +24,9 @@
 
   /* Text */
   --text-primary:   #f0ede6;
-  --text-secondary: #9a9490;
-  --text-muted:     #56535c;
-  --text-faint:     #2e2c34;
+  --text-secondary: #c0bcca;
+  --text-muted:     #948f9e;
+  --text-faint:     #5e5a68;
 
   /* Borders */
   --border:         rgba(255, 255, 255, 0.06);
@@ -58,13 +58,13 @@
   --border-faint:    rgba(255, 255, 255, 0.05);
   --border-dim:      rgba(255, 255, 255, 0.07);
   --text-hi:         #f0ede6;
-  --text-mid:        rgba(255, 255, 255, 0.55);
-  --text-lo:         rgba(255, 255, 255, 0.35);
-  --text-4:          rgba(255, 255, 255, 0.25);
-  --text-5:          rgba(255, 255, 255, 0.15);
+  --text-mid:        rgba(255, 255, 255, 0.72);
+  --text-lo:         rgba(255, 255, 255, 0.55);
+  --text-4:          rgba(255, 255, 255, 0.42);
+  --text-5:          rgba(255, 255, 255, 0.30);
   --nav-backdrop:    rgba(10, 10, 15, 0.95);
   --nav-dropdown:    rgba(10, 10, 15, 0.98);
-  --nav-link:        rgba(255, 255, 255, 0.6);
+  --nav-link:        rgba(255, 255, 255, 0.75);
   --mobile-overlay:  rgba(10, 10, 15, 0.98);
 }
 
@@ -81,9 +81,9 @@
   --dark-400:       #e4dfd4;
 
   --text-primary:   #1a1420;
-  --text-secondary: #4a4558;
-  --text-muted:     #7a7585;
-  --text-faint:     #a8a3b0;
+  --text-secondary: #2e2a3c;
+  --text-muted:     #4a4558;
+  --text-faint:     #6a6478;
 
   --border:         rgba(0, 0, 0, 0.07);
   --border-hover:   rgba(0, 0, 0, 0.14);
@@ -96,10 +96,10 @@
   --border-dim:     rgba(0, 0, 0, 0.09);
 
   --text-hi:        #1a1420;
-  --text-mid:       rgba(0, 0, 0, 0.62);
-  --text-lo:        rgba(0, 0, 0, 0.48);
-  --text-4:         rgba(0, 0, 0, 0.32);
-  --text-5:         rgba(0, 0, 0, 0.18);
+  --text-mid:       rgba(0, 0, 0, 0.75);
+  --text-lo:        rgba(0, 0, 0, 0.62);
+  --text-4:         rgba(0, 0, 0, 0.52);
+  --text-5:         rgba(0, 0, 0, 0.40);
 
   --nav-backdrop:   rgba(248, 246, 240, 0.95);
   --nav-dropdown:   rgba(252, 250, 245, 0.98);
