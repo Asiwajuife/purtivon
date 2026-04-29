@@ -334,7 +334,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA with globe-routes.jpg ── */}
-      <section style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', paddingTop: '3.5rem', paddingBottom: '3.5rem' }} className="section">
+      <section style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', paddingTop: '1.75rem', paddingBottom: '1.75rem' }}>
         <Image
           src="/images/globe-routes.jpg"
           alt=""

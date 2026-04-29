@@ -62,7 +62,7 @@ export default function HomeCTABanner() {
         }}
       />
 
-      <div className="container" style={{ position: "relative", zIndex: 3, paddingTop: "3.5rem", paddingBottom: "3.5rem" }}>
+      <div className="container" style={{ position: "relative", zIndex: 3, paddingTop: "1.75rem", paddingBottom: "1.75rem" }}>
         <ScrollReveal>
           <div
             aria-hidden="true"

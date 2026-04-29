@@ -205,8 +205,7 @@ export default function ServicesPage() {
 
       {/* ── CTA ── */}
       <section
-        className="section"
-        style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', borderTop: '1px solid var(--border)', paddingTop: '3.5rem', paddingBottom: '3.5rem' }}
+        style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', borderTop: '1px solid var(--border)', paddingTop: '1.75rem', paddingBottom: '1.75rem' }}
       >
         {/* Background image */}
         <Image
