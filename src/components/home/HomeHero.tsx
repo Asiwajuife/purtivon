@@ -151,7 +151,7 @@ export default function HomeHero() {
     <section
       style={{
         position: "relative",
-        minHeight: "55vh",
+        minHeight: "28vh",
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
@@ -179,7 +179,7 @@ export default function HomeHero() {
           width: "100%",
           maxWidth: 1160,
           margin: "0 auto",
-          padding: "5rem 2.5rem",
+          padding: "1.75rem 2.5rem",
           textAlign: "center",
         }}
       >
@@ -190,7 +190,7 @@ export default function HomeHero() {
           transition={{ duration: 0.5, delay: 0.1 }}
           style={{
             display: "flex", alignItems: "center", justifyContent: "center",
-            gap: "1rem", marginBottom: "1.75rem",
+            gap: "1rem", marginBottom: "0.75rem",
             textShadow: "0 1px 4px rgba(0,0,0,0.9)",
           }}
         >
@@ -204,7 +204,7 @@ export default function HomeHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ marginBottom: "1.4rem", color: "#fff", textShadow: "0 2px 14px rgba(0,0,0,0.85)" }}
+          style={{ marginBottom: "0.65rem", color: "#fff", textShadow: "0 2px 14px rgba(0,0,0,0.85)" }}
         >
           Recognising the World&apos;s
           <br />
@@ -216,8 +216,8 @@ export default function HomeHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           style={{
-            maxWidth: 500, margin: "0 auto 2.5rem",
-            fontSize: "1.05rem", lineHeight: 1.8, fontWeight: 300,
+            maxWidth: 500, margin: "0 auto 1.1rem",
+            fontSize: "0.9rem", lineHeight: 1.7, fontWeight: 300,
             color: "rgba(255,255,255,0.88)",
             textShadow: "0 1px 6px rgba(0,0,0,0.8)",
           }}
@@ -246,7 +246,7 @@ export default function HomeHero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           style={{
             display: "flex", justifyContent: "center", gap: "2.5rem",
-            marginTop: "3rem", paddingTop: "2rem",
+            marginTop: "1.25rem", paddingTop: "1rem",
             borderTop: "1px solid rgba(255,255,255,0.1)",
             flexWrap: "wrap",
           }}

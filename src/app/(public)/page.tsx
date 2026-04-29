@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { ARTICLES } from '@/app/api/articles/route'
 import CategorySection from '@/components/home/CategorySection'
+import HomeHero from '@/components/home/HomeHero'
 import StockTicker from '@/components/home/StockTicker'
 import type { HomepageArticle } from '@/components/home/FeaturedArticles'
 
@@ -116,6 +117,9 @@ export default async function HomePage() {
           background: 'var(--surface-page)',
         }}
       >
+        {/* ── Hero ── */}
+        <HomeHero />
+
         {/* ── Compact header bar — sticky below navbar ── */}
         <div
           style={{
