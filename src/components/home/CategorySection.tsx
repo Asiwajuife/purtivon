@@ -11,67 +11,323 @@ function fmtShort(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 
-const CARDS_PER_ROW = 4
-
-function PlaceholderCard() {
+function Badge({ label }: { label: string }) {
   return (
-    <div
+    <span
       style={{
-        background: 'var(--dark-100)',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        overflow: 'hidden',
+        display: 'inline-block',
+        fontSize: '0.5rem',
+        fontWeight: 700,
+        letterSpacing: '0.16em',
+        textTransform: 'uppercase',
+        color: 'var(--gold)',
+        border: '1px solid var(--border-gold)',
+        background: 'rgba(201,168,76,0.08)',
+        padding: '0.2rem 0.5rem',
+        marginBottom: '0.65rem',
+        flexShrink: 0,
       }}
     >
-      {/* Subtle patterned image area */}
+      {label}
+    </span>
+  )
+}
+
+function HeroCard({ article, category }: { article: HomepageArticle; category: string }) {
+  return (
+    <Link href={`/insights/${article.slug}`} className="ec-hero-link" style={{ textDecoration: 'none', display: 'block' }}>
       <div
+        className="ec-hero-grid"
         style={{
-          flex: 1,
-          minHeight: 0,
-          background: 'linear-gradient(135deg, #0e0e18 0%, #111120 100%)',
-          position: 'relative',
+          display: 'grid',
+          gridTemplateColumns: '55% 45%',
+          height: 380,
+          border: '1px solid var(--border)',
+          overflow: 'hidden',
         }}
       >
+        {/* Image pane */}
+        <div className="ec-hero-img-pane" style={{ position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #0e0e18, #111120)' }}>
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage:
+                  'repeating-linear-gradient(45deg, rgba(201,168,76,0.025) 0px, rgba(201,168,76,0.025) 1px, transparent 1px, transparent 14px)',
+              }}
+            />
+          </div>
+          {article.coverImage && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={article.coverImage}
+              alt={article.title}
+              className="ec-hero-img"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                transition: 'transform 0.6s ease',
+              }}
+              loading="eager"
+            />
+          )}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to right, transparent 65%, rgba(10,10,15,0.7) 100%)',
+            }}
+          />
+        </div>
+
+        {/* Text pane */}
         <div
-          aria-hidden="true"
           style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage:
-              'repeating-linear-gradient(45deg, rgba(201,168,76,0.025) 0px, rgba(201,168,76,0.025) 1px, transparent 1px, transparent 14px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '2rem 2rem 2rem 1.75rem',
+            borderLeft: '1px solid var(--border)',
+            background: 'var(--dark-100)',
           }}
-        />
+        >
+          <Badge label={category} />
+          <h2
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: '1.4rem',
+              fontWeight: 400,
+              lineHeight: 1.28,
+              color: 'var(--text-primary)',
+              margin: '0 0 0.9rem',
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            } as React.CSSProperties}
+          >
+            {article.title}
+          </h2>
+          {article.excerpt && (
+            <p
+              style={{
+                fontSize: '0.72rem',
+                lineHeight: 1.7,
+                color: 'var(--text-muted)',
+                margin: '0 0 1.5rem',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              } as React.CSSProperties}
+            >
+              {article.excerpt}
+            </p>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: 'auto' }}>
+            <span style={{ fontSize: '0.58rem', color: 'var(--text-4)' }}>{fmtShort(article.publishedAt)}</span>
+            {article.readTime && (
+              <span style={{ fontSize: '0.58rem', color: 'var(--gold-dim)' }}>{article.readTime} min</span>
+            )}
+            <span
+              style={{
+                marginLeft: 'auto',
+                fontSize: '0.58rem',
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--gold)',
+              }}
+            >
+              Read More →
+            </span>
+          </div>
+        </div>
       </div>
-      {/* Skeleton content bar */}
+    </Link>
+  )
+}
+
+function FeatureCard({ article, category }: { article: HomepageArticle; category: string }) {
+  return (
+    <Link href={`/insights/${article.slug}`} className="ec-feat-link" style={{ textDecoration: 'none', display: 'flex' }}>
       <div
         style={{
-          padding: '0.5rem 0.75rem',
-          flexShrink: 0,
-          borderTop: '1px solid var(--border)',
           background: 'var(--dark-100)',
+          border: '1px solid var(--border)',
+          borderTop: 'none',
+          overflow: 'hidden',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <div
-          style={{
-            height: 7,
-            width: '68%',
-            background: 'var(--border)',
-            borderRadius: 2,
-            marginBottom: '0.35rem',
-          }}
-        />
-        <div
-          style={{
-            height: 6,
-            width: '42%',
-            background: 'var(--border)',
-            borderRadius: 2,
-            opacity: 0.55,
-          }}
-        />
+        <div style={{ position: 'relative', height: 200, flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #0e0e18, #111120)' }}>
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage:
+                  'repeating-linear-gradient(45deg, rgba(201,168,76,0.025) 0px, rgba(201,168,76,0.025) 1px, transparent 1px, transparent 14px)',
+              }}
+            />
+          </div>
+          {article.coverImage && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={article.coverImage}
+              alt={article.title}
+              className="ec-feat-img"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                transition: 'transform 0.5s ease',
+              }}
+              loading="lazy"
+            />
+          )}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(10,10,15,0.5) 0%, transparent 60%)',
+            }}
+          />
+        </div>
+        <div style={{ padding: '1rem 1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <Badge label={category} />
+          <h3
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: '0.95rem',
+              fontWeight: 400,
+              lineHeight: 1.4,
+              color: 'var(--text-primary)',
+              margin: '0 0 auto',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            } as React.CSSProperties}
+          >
+            {article.title}
+          </h3>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '0.85rem' }}>
+            <span style={{ fontSize: '0.56rem', color: 'var(--text-4)' }}>{fmtShort(article.publishedAt)}</span>
+            {article.readTime && (
+              <span style={{ fontSize: '0.56rem', color: 'var(--gold-dim)' }}>{article.readTime} min</span>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </Link>
+  )
+}
+
+function ArchiveCard({ article, category }: { article: HomepageArticle; category: string }) {
+  return (
+    <Link href={`/insights/${article.slug}`} className="ec-arc-link" style={{ textDecoration: 'none', display: 'flex' }}>
+      <div
+        className="ec-arc-card"
+        style={{
+          background: 'var(--dark-100)',
+          border: '1px solid var(--border)',
+          borderLeft: '3px solid transparent',
+          overflow: 'hidden',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          transition: 'border-left-color 0.2s ease',
+        }}
+      >
+        <div style={{ position: 'relative', height: 120, flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #0e0e18, #111120)' }}>
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage:
+                  'repeating-linear-gradient(45deg, rgba(201,168,76,0.025) 0px, rgba(201,168,76,0.025) 1px, transparent 1px, transparent 14px)',
+              }}
+            />
+          </div>
+          {article.coverImage && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={article.coverImage}
+              alt={article.title}
+              className="ec-arc-img"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                transition: 'transform 0.5s ease',
+              }}
+              loading="lazy"
+            />
+          )}
+        </div>
+        <div style={{ padding: '0.85rem 1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <Badge label={category} />
+          <h4
+            className="ec-arc-headline"
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: '0.8rem',
+              fontWeight: 400,
+              lineHeight: 1.4,
+              color: 'var(--text-primary)',
+              margin: '0 0 0.45rem',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              transition: 'color 0.2s ease',
+            } as React.CSSProperties}
+          >
+            {article.title}
+          </h4>
+          {article.excerpt && (
+            <p
+              style={{
+                fontSize: '0.63rem',
+                lineHeight: 1.65,
+                color: 'var(--text-muted)',
+                margin: '0 0 0.65rem',
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              } as React.CSSProperties}
+            >
+              {article.excerpt}
+            </p>
+          )}
+          <div style={{ marginTop: 'auto', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.55rem', color: 'var(--text-4)' }}>{fmtShort(article.publishedAt)}</span>
+            {article.readTime && (
+              <span style={{ fontSize: '0.55rem', color: 'var(--gold-dim)' }}>{article.readTime} min</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </Link>
   )
 }
 
@@ -79,203 +335,109 @@ export default function CategorySection({ category, articles }: CategorySectionP
   if (articles.length === 0) return null
 
   const viewAllHref = `/insights?category=${encodeURIComponent(category)}`
-
-  // Pad to CARDS_PER_ROW with nulls so every row is always full
-  const filledArticles = articles.slice(0, CARDS_PER_ROW)
-  const placeholderCount = Math.max(0, CARDS_PER_ROW - filledArticles.length)
-  const filled: (HomepageArticle | null)[] = [
-    ...filledArticles,
-    ...Array.from<null>({ length: placeholderCount }).fill(null),
-  ]
+  const [hero, ...rest] = articles
+  const featureArticles = rest.slice(0, 2)
+  const archiveArticles = rest.slice(2, 6)
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        minHeight: 0,
-        borderBottom: '1px solid var(--border)',
-      }}
-    >
-      {/* ── Compact category header (32px) ── */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 1rem',
-          height: 32,
-          flexShrink: 0,
-          borderBottom: '1px solid var(--border)',
-          background: 'var(--surface-page)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span
-            style={{
-              width: 2,
-              height: 12,
-              background: 'var(--gold)',
-              display: 'block',
-              flexShrink: 0,
-            }}
-            aria-hidden="true"
-          />
-          <h3
-            style={{
-              fontSize: '0.6rem',
-              fontWeight: 700,
-              letterSpacing: '0.16em',
-              textTransform: 'uppercase',
-              color: 'var(--text-primary)',
-              margin: 0,
-            }}
-          >
-            {category}
-          </h3>
-        </div>
-        <Link
-          href={viewAllHref}
+    <section>
+      <HeroCard article={hero} category={category} />
+
+      {featureArticles.length > 0 && (
+        <div
+          className="ec-feat-row"
           style={{
-            fontSize: '0.55rem',
-            fontWeight: 600,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--gold-dim)',
-            textDecoration: 'none',
-            whiteSpace: 'nowrap',
+            display: 'grid',
+            gridTemplateColumns: featureArticles.length === 1 ? '1fr' : '1fr 1fr',
+            gap: '1px',
+            background: 'var(--border)',
           }}
         >
-          More →
-        </Link>
-      </div>
+          {featureArticles.map((a) => (
+            <FeatureCard key={a.id} article={a} category={category} />
+          ))}
+        </div>
+      )}
 
-      {/* ── Card grid — fills remaining height ── */}
-      <div
-        className="cat-grid"
-        style={{
-          flex: 1,
-          minHeight: 0,
-          display: 'grid',
-          gridTemplateColumns: `repeat(${CARDS_PER_ROW}, 1fr)`,
-          gap: '1px',
-          background: 'var(--border)',
-          border: '1px solid var(--border)',
-          borderTop: 'none',
-        }}
-      >
-        {filled.map((a, i) =>
-          a ? (
-            <Link
-              key={a.id}
-              href={`/insights/${a.slug}`}
-              className="cat-card-link"
-              style={{ display: 'flex', height: '100%' }}
+      {archiveArticles.length > 0 ? (
+        <>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0.7rem 0',
+              borderTop: '1px solid var(--border)',
+              borderBottom: '1px solid var(--border)',
+              margin: '1.5rem 0 1.25rem',
+            }}
+          >
+            <span
+              style={{
+                fontSize: '0.5rem',
+                fontWeight: 700,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'var(--gold)',
+              }}
             >
-              <article
-                style={{
-                  background: 'var(--dark-100)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: '100%',
-                  height: '100%',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Image — fills all available vertical space */}
-                <div
-                  style={{
-                    flex: 1,
-                    minHeight: 0,
-                    position: 'relative',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(135deg, #111118, #1a1a24)',
-                    }}
-                  />
-                  {a.coverImage && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={a.coverImage}
-                      alt={a.title}
-                      className="cat-card-img"
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center',
-                        transition: 'transform 0.5s ease',
-                      }}
-                      loading="lazy"
-                    />
-                  )}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background:
-                        'linear-gradient(to top, rgba(10,10,15,0.55) 0%, rgba(10,10,15,0.08) 55%, transparent 100%)',
-                    }}
-                  />
-                </div>
-
-                {/* Compact content bar at bottom */}
-                <div
-                  style={{
-                    padding: '0.5rem 0.75rem',
-                    flexShrink: 0,
-                    borderTop: '1px solid var(--border)',
-                    background: 'var(--dark-100)',
-                  }}
-                >
-                  <h4
-                    style={{
-                      fontFamily: 'var(--font-serif)',
-                      fontSize: '0.78rem',
-                      fontWeight: 400,
-                      lineHeight: 1.35,
-                      color: 'var(--text-primary)',
-                      margin: '0 0 0.3rem',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    } as React.CSSProperties}
-                  >
-                    {a.title}
-                  </h4>
-                  <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.58rem', color: 'var(--text-4)' }}>
-                      {fmtShort(a.publishedAt)}
-                    </span>
-                    {a.readTime && (
-                      <span style={{ fontSize: '0.58rem', color: 'var(--gold-dim)' }}>
-                        {a.readTime} min
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </article>
+              More from {category}
+            </span>
+            <Link
+              href={viewAllHref}
+              style={{
+                fontSize: '0.5rem',
+                fontWeight: 600,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--gold-dim)',
+                textDecoration: 'none',
+              }}
+            >
+              View All →
             </Link>
-          ) : (
-            <PlaceholderCard key={`ph-${i}`} />
-          )
-        )}
-      </div>
+          </div>
+          <div className="ec-arc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+            {archiveArticles.map((a) => (
+              <ArchiveCard key={a.id} article={a} category={category} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '0.6rem 0',
+            borderTop: '1px solid var(--border)',
+          }}
+        >
+          <Link
+            href={viewAllHref}
+            style={{
+              fontSize: '0.5rem',
+              fontWeight: 600,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--gold-dim)',
+              textDecoration: 'none',
+            }}
+          >
+            View All →
+          </Link>
+        </div>
+      )}
 
       <style>{`
-        .cat-card-link:hover .cat-card-img { transform: scale(1.06); }
-        @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 560px)  { .cat-grid { grid-template-columns: 1fr !important; } }
+        .ec-hero-link:hover .ec-hero-img   { transform: scale(1.04); }
+        .ec-feat-link:hover .ec-feat-img   { transform: scale(1.06); }
+        .ec-arc-link:hover .ec-arc-card    { border-left-color: var(--gold) !important; }
+        .ec-arc-link:hover .ec-arc-headline { color: var(--gold) !important; }
+        .ec-arc-link:hover .ec-arc-img     { transform: scale(1.06); }
+        @media (max-width: 1024px) { .ec-arc-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 768px)  { .ec-hero-grid { grid-template-columns: 1fr !important; height: auto !important; } .ec-hero-img-pane { height: 240px; } }
+        @media (max-width: 640px)  { .ec-arc-grid { grid-template-columns: 1fr !important; } .ec-feat-row { grid-template-columns: 1fr !important; } }
       `}</style>
-    </div>
+    </section>
   )
 }
