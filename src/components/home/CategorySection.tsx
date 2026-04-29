@@ -19,7 +19,7 @@ export default function CategorySection({ category, articles }: CategorySectionP
   return (
     <div style={{ marginBottom: '3.5rem' }}>
       {/* Category header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)', flexWrap: 'wrap', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', padding: '0 1.5rem 0.75rem', borderBottom: '1px solid var(--border)', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span style={{ width: 3, height: 18, background: 'var(--gold)', display: 'block', flexShrink: 0 }} aria-hidden="true" />
           <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 400, color: 'var(--text-primary)', margin: 0 }}>

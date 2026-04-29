@@ -106,23 +106,21 @@ function NewsGrid({ articles }: { articles: HomepageArticle[] }) {
       style={{ paddingTop: '3rem', paddingBottom: 'var(--space-xl)' }}
       aria-label="News by category"
     >
-      <div className="container">
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <div className="eyebrow" style={{ marginBottom: '0.5rem' }}>News &amp; Analysis</div>
-            <h2 className="display-md">Intelligence by <em>Sector</em></h2>
-          </div>
-          <Link href="/insights" className="btn btn-outline btn-sm">All Insights →</Link>
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2.5rem', padding: '0 1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <div className="eyebrow" style={{ marginBottom: '0.5rem' }}>News &amp; Analysis</div>
+          <h2 className="display-md">Intelligence by <em>Sector</em></h2>
         </div>
-
-        {activeSections.map((name) => (
-          <CategorySection
-            key={name}
-            category={name}
-            articles={byCategory.get(name) ?? []}
-          />
-        ))}
+        <Link href="/insights" className="btn btn-outline btn-sm">All Insights →</Link>
       </div>
+
+      {activeSections.map((name) => (
+        <CategorySection
+          key={name}
+          category={name}
+          articles={byCategory.get(name) ?? []}
+        />
+      ))}
     </section>
   )
 }
