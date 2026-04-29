@@ -70,7 +70,7 @@ export default async function AwardsPage() {
       {/* Hero header */}
       <div style={{
         borderBottom: "1px solid var(--border-faint)",
-        padding: "5rem 2.5rem 3.5rem",
+        padding: "3rem 2.5rem 2.5rem",
         maxWidth: 1160,
         margin: "0 auto",
       }}>

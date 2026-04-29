@@ -170,7 +170,7 @@ export default async function WinnersPage() {
         position: 'relative',
         overflow: 'hidden',
         borderBottom: '1px solid var(--border-faint)',
-        padding: '7rem 2.5rem 5rem',
+        padding: '4rem 2.5rem 3rem',
         textAlign: 'center',
       }}>
         {/* Background image */}

@@ -72,7 +72,7 @@ export default function AboutPage() {
       <section
         style={{
           position: 'relative',
-          minHeight: '60vh',
+          minHeight: '40vh',
           display: 'flex',
           alignItems: 'center',
           overflow: 'hidden',
@@ -95,7 +95,7 @@ export default function AboutPage() {
             background: 'linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.2) 100%)',
           }}
         />
-        <div style={{ position: 'relative', zIndex: 1, padding: '5rem 2.5rem 4rem', maxWidth: 1280, margin: '0 auto', width: '100%' }}>
+        <div style={{ position: 'relative', zIndex: 1, padding: '3rem 2.5rem 2.5rem', maxWidth: 1280, margin: '0 auto', width: '100%' }}>
           <div style={{ maxWidth: 720 }}>
             <div
               className="eyebrow"

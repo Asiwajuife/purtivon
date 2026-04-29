@@ -51,7 +51,7 @@ export default function ServicesPage() {
       <section
         style={{
           position: 'relative',
-          minHeight: '60vh',
+          minHeight: '40vh',
           display: 'flex',
           alignItems: 'center',
           overflow: 'hidden',
@@ -79,7 +79,7 @@ export default function ServicesPage() {
           style={{
             position: 'relative',
             zIndex: 1,
-            padding: '5rem 2.5rem 4rem',
+            padding: '3rem 2.5rem 2.5rem',
             maxWidth: 1280,
             margin: '0 auto',
             width: '100%',

@@ -57,7 +57,7 @@ const SECTIONS = [
 export default function TermsPage() {
   return (
     <div className="flex-1 pt-24">
-      <div style={{ maxWidth: 780, margin: '0 auto', padding: '5rem 2.5rem 8rem' }}>
+      <div style={{ maxWidth: 780, margin: '0 auto', padding: '3rem 2.5rem 8rem' }}>
         <div className="eyebrow" style={{ marginBottom: '1.25rem' }}>Legal</div>
         <h1 className="display-lg" style={{ marginBottom: '1rem' }}>Terms of Service</h1>
         <p className="body-sm" style={{ marginBottom: '3rem', color: 'var(--text-muted)' }}>

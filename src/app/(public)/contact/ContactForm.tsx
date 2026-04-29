@@ -44,7 +44,7 @@ export default function ContactPage() {
 
   return (
     <div className="flex-1 pt-24">
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '5rem 2.5rem 6rem' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '3rem 2.5rem 5rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6rem', alignItems: 'start' }} className="contact-split">
           {/* Left */}
           <div>

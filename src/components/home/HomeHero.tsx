@@ -151,7 +151,7 @@ export default function HomeHero() {
     <section
       style={{
         position: "relative",
-        minHeight: "72vh",
+        minHeight: "55vh",
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
