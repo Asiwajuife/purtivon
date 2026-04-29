@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 }
 
 const CATEGORY_ORDER = [
+  'Featured Insight',
   'Awards',
   'Report',
   'News',
@@ -30,8 +31,6 @@ const CATEGORY_ORDER = [
   'Tech',
   'ESG',
 ]
-
-const EDITORIAL_CATEGORIES = new Set(['Featured Insight'])
 
 async function getHomepageData(): Promise<{ articles: HomepageArticle[] }> {
   const dbArticles = await prisma.article.findMany({
@@ -85,7 +84,6 @@ async function getHomepageData(): Promise<{ articles: HomepageArticle[] }> {
 function NewsGrid({ articles }: { articles: HomepageArticle[] }) {
   const byCategory = new Map<string, HomepageArticle[]>()
   for (const a of articles) {
-    if (EDITORIAL_CATEGORIES.has(a.category)) continue
     const list = byCategory.get(a.category) ?? []
     list.push(a)
     byCategory.set(a.category, list)
