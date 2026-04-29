@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import DashboardRecentClient from "./DashboardRecentClient";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -44,11 +45,6 @@ function StatCard({ label, value, sub, icon, accent }: {
   );
 }
 
-const STATUS_STYLES: Record<string, { color: string; bg: string; label: string }> = {
-  PENDING:  { color: "#f59e0b", bg: "rgba(245,158,11,0.1)",  label: "Pending"  },
-  APPROVED: { color: "#34d399", bg: "rgba(52,211,153,0.1)",  label: "Approved" },
-  REJECTED: { color: "#f87171", bg: "rgba(248,113,113,0.1)", label: "Rejected" },
-};
 
 async function getDashboardData(userId: string, isAdmin: boolean) {
   const submissionWhere = isAdmin ? {} : { userId };
@@ -58,6 +54,7 @@ async function getDashboardData(userId: string, isAdmin: boolean) {
     approvedSubmissions,
     totalArticles,
     recentSubmissions,
+    recentMessages,
   ] = await Promise.all([
     prisma.submission.count({ where: submissionWhere }),
     prisma.submission.count({ where: { ...submissionWhere, status: "PENDING" } }),
@@ -73,9 +70,16 @@ async function getDashboardData(userId: string, isAdmin: boolean) {
         ...(isAdmin ? { user: { select: { name: true, email: true } } } : {}),
       },
     }),
+    isAdmin
+      ? prisma.contactMessage.findMany({
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: { id: true, name: true, email: true, subject: true, createdAt: true },
+        })
+      : Promise.resolve([]),
   ]);
 
-  return { totalSubmissions, pendingSubmissions, approvedSubmissions, totalArticles, recentSubmissions };
+  return { totalSubmissions, pendingSubmissions, approvedSubmissions, totalArticles, recentSubmissions, recentMessages };
 }
 
 const QUICK_ACTIONS = [
@@ -256,51 +260,18 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* Recent Submissions */}
-      {data.recentSubmissions.length > 0 && (
-        <div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--text-4)", flexShrink: 0 }}>Recent Submissions</span>
-              <div style={{ width: 120, height: 1, background: "var(--border-faint)" }} />
-            </div>
-            <Link href="/dashboard/submissions" style={{ fontSize: "0.7rem", color: "#c9a84c", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>
-              View All →
-            </Link>
-          </div>
-          <div style={{ border: "1px solid var(--border-faint)", background: "var(--surface-subtle)" }}>
-            {data.recentSubmissions.map((sub, i) => {
-              const s = STATUS_STYLES[sub.status] ?? STATUS_STYLES.PENDING;
-              const subWithUser = sub as typeof sub & { user?: { name: string | null; email: string } };
-              return (
-                <div
-                  key={sub.id}
-                  style={{
-                    display: "flex", alignItems: "center", gap: "1rem",
-                    padding: "0.85rem 1.25rem",
-                    borderTop: i > 0 ? "1px solid var(--border-faint)" : "none",
-                  }}
-                >
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: "0.78rem", fontWeight: 500, color: "var(--text-mid)", marginBottom: "0.2rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {sub.companyName}
-                    </p>
-                    <p style={{ fontSize: "0.65rem", color: "var(--text-4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {sub.award.title}{isAdmin && subWithUser.user ? ` · ${subWithUser.user.name ?? subWithUser.user.email}` : ""}
-                    </p>
-                  </div>
-                  <span style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: s.color, background: s.bg, padding: "0.2rem 0.6rem", flexShrink: 0 }}>
-                    {s.label}
-                  </span>
-                  <span style={{ fontSize: "0.65rem", color: "var(--text-4)", flexShrink: 0, minWidth: 80, textAlign: "right" }}>
-                    {new Date(sub.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      <DashboardRecentClient
+        initialSubmissions={data.recentSubmissions.map(s => ({
+          ...s,
+          createdAt: s.createdAt.toISOString(),
+          user: s.user ? { name: s.user.name, email: s.user.email } : undefined,
+        }))}
+        initialMessages={data.recentMessages.map(m => ({
+          ...m,
+          createdAt: m.createdAt.toISOString(),
+        }))}
+        isAdmin={isAdmin}
+      />
 
       <style>{`
         @media (max-width: 700px) { .dash-stats { grid-template-columns: 1fr 1fr !important; } }
