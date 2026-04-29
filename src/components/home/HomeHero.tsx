@@ -1,13 +1,5 @@
 "use client";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import AnimatedCounter from "@/components/AnimatedCounter";
-
-const STATS = [
-  { value: "48",   label: "Countries Covered" },
-  { value: "500+", label: "Institutions Featured" },
-  { value: "5",    label: "Years of Excellence" },
-] as const;
 
 function FDIIllustration() {
   return (
@@ -216,7 +208,7 @@ export default function HomeHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           style={{
-            maxWidth: 500, margin: "0 auto 1.1rem",
+            maxWidth: 500, margin: "0 auto",
             fontSize: "0.9rem", lineHeight: 1.7, fontWeight: 300,
             color: "rgba(255,255,255,0.88)",
             textShadow: "0 1px 6px rgba(0,0,0,0.8)",
@@ -226,50 +218,6 @@ export default function HomeHero() {
           connecting excellence, capital, and ambition across 48 countries.
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}
-        >
-          <Link href="/awards" className="btn btn-primary btn-lg hero-cta-glow">
-            Submit a Nomination
-          </Link>
-          <Link href="/insights" className="btn btn-outline-white btn-lg">
-            Latest Intelligence
-          </Link>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          style={{
-            display: "flex", justifyContent: "center", gap: "2.5rem",
-            marginTop: "1.25rem", paddingTop: "1rem",
-            borderTop: "1px solid rgba(255,255,255,0.1)",
-            flexWrap: "wrap",
-          }}
-        >
-          {STATS.map(({ value, label }) => (
-            <AnimatedCounter
-              key={label}
-              value={value}
-              label={label}
-              style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: "2rem", fontWeight: 300,
-                color: "var(--gold)", lineHeight: 1, marginBottom: "0.4rem",
-                textShadow: "0 1px 6px rgba(0,0,0,0.7)",
-              }}
-              labelStyle={{
-                color: "rgba(255,255,255,0.65)",
-                textShadow: "0 1px 4px rgba(0,0,0,0.6)",
-                fontSize: "0.72rem", letterSpacing: "0.1em",
-              }}
-            />
-          ))}
-        </motion.div>
       </div>
     </section>
   );
