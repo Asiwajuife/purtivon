@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 
 const TESTIMONIALS = [
   {
@@ -68,14 +67,17 @@ export default function TestimonialsCarousel() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <Image
-        src="/images/testimonial-bg.jpg"
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9iLPnoZIEwwGt_76XUGyq5mzC6g0KgGBHhw&s"
         alt=""
-        fill
-        sizes="100vw"
-        style={{ objectFit: "cover", objectPosition: "center top" }}
+        aria-hidden="true"
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: 0 }}
       />
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.78)", zIndex: 1 }} />
+      {/* Base scrim */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(7,7,16,0.72)", zIndex: 1 }} />
+      {/* Edge vignette to keep header text crisp */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(7,7,16,0.55) 0%, rgba(7,7,16,0.1) 30%, rgba(7,7,16,0.1) 70%, rgba(7,7,16,0.55) 100%)", zIndex: 1 }} />
 
       <div style={{ position: "relative", zIndex: 2, padding: "3rem 0 2.5rem" }}>
         {/* Header */}
