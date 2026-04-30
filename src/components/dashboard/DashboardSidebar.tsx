@@ -173,7 +173,7 @@ function SidebarNavLink({
           : "hover:text-white/70 hover:bg-white/[0.03] border border-transparent"
       }`}
     >
-      <span style={{ color: isActive ? "#c9a84c" : "rgba(255,255,255,0.25)" }}>
+      <span style={{ color: isActive ? "#c9a84c" : "rgba(255,255,255,0.5)", display: "flex", alignItems: "center", flexShrink: 0 }}>
         {item.icon}
       </span>
       {item.label}
