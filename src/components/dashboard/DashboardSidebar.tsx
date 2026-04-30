@@ -209,7 +209,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       <Link
         href={item.href}
         onClick={() => setMobileOpen(false)}
-        style={isActive ? {} : { color: "var(--text-lo)" }}
+        style={isActive ? {} : { color: "rgba(255,255,255,0.25)" }}
         className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 ${
           isActive
             ? "bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/15"
@@ -226,7 +226,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   function SidebarContent() {
     return (
       <div className="flex flex-col h-full">
-        <div className="flex items-center gap-2 px-4 h-11 border-b border-white/5 shrink-0" style={{ borderBottomColor: "var(--border-faint)" }}>
+        <div className="flex items-center gap-2 px-4 h-11 border-b border-white/5 shrink-0" style={{ borderBottomColor: "rgba(255,255,255,0.06)" }}>
           <span
             className="font-light uppercase text-xs"
             style={{
@@ -248,7 +248,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
           </ul>
           {isAdmin && (
             <div className="mt-6">
-              <p className="px-3 mb-2 text-[9px] font-semibold tracking-[0.25em] uppercase text-white/15" style={{ color: "var(--text-5)" }}>
+              <p className="px-3 mb-2 text-[9px] font-semibold tracking-[0.25em] uppercase" style={{ color: "rgba(255,255,255,0.15)" }}>
                 Admin
               </p>
               <ul className="flex flex-col gap-0.5">
@@ -261,18 +261,18 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
             </div>
           )}
         </nav>
-        <div className="px-3 py-4 border-t border-white/5 shrink-0" style={{ borderTopColor: "var(--border-faint)" }}>
-          <div className="flex items-center gap-3 px-3 py-3 rounded-sm bg-white/[0.02] border border-white/5 mb-2" style={{ background: "var(--surface-subtle)", borderColor: "var(--border-faint)" }}>
+        <div className="px-3 py-4 border-t border-white/5 shrink-0" style={{ borderTopColor: "rgba(255,255,255,0.06)", background: "#0a0a0f" }}>
+          <div className="flex items-center gap-3 px-3 py-3 rounded-sm border mb-2" style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.06)" }}>
             <div className="w-7 h-7 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center shrink-0">
               <span className="text-[#c9a84c] text-[11px] font-semibold uppercase">
                 {user.name?.charAt(0) ?? "U"}
               </span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-white/60 text-xs font-medium truncate" style={{ color: "var(--text-mid)" }}>
+              <p className="text-xs font-medium truncate" style={{ color: "rgba(255,255,255,0.6)" }}>
                 {user.name ?? "User"}
               </p>
-              <p className="text-white/20 text-[10px] truncate" style={{ color: "var(--text-5)" }}>{user.email}</p>
+              <p className="text-[10px] truncate" style={{ color: "rgba(255,255,255,0.2)" }}>{user.email}</p>
             </div>
             {isAdmin && (
               <span className="shrink-0 text-[9px] tracking-widest uppercase font-semibold text-[#c9a84c] bg-[#c9a84c]/10 px-1.5 py-0.5 rounded-sm">
@@ -316,7 +316,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   }
   return (
     <>
-      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col bg-[#0a0a0f] border-r border-white/5 z-40" style={{ width: 200, background: "var(--surface-page)", borderRightColor: "var(--border-faint)" }}>
+      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col z-40" style={{ width: 200, background: "#0a0a0f", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
         <SidebarContent />
       </aside>
       {/* Mobile hamburger — hidden once drawer is open */}
@@ -325,7 +325,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
           onClick={() => setMobileOpen(true)}
           aria-label="Open navigation"
           className="md:hidden fixed top-0 left-0 z-[35] flex items-center justify-center"
-          style={{ width: 48, height: 44, color: 'var(--text-4)', background: 'var(--nav-backdrop)', border: 'none', cursor: 'pointer', borderRight: '1px solid var(--border-faint)' }}
+          style={{ width: 48, height: 44, color: 'rgba(255,255,255,0.45)', background: 'rgba(10,10,15,0.9)', border: 'none', cursor: 'pointer', borderRight: '1px solid rgba(255,255,255,0.06)' }}
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -344,7 +344,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
         className={`md:hidden fixed inset-y-0 left-0 z-50 w-[280px] flex flex-col overflow-hidden transition-transform duration-300 ease-in-out border-r ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ background: "var(--surface-page)", borderRightColor: "var(--border-faint)" }}
+        style={{ background: "#0a0a0f", borderRight: "1px solid rgba(255,255,255,0.06)" }}
       >
         <button
           onClick={() => setMobileOpen(false)}
