@@ -139,7 +139,7 @@ export default async function DashboardPage() {
   const today = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: 900 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
 
       {/* Header */}
       <div style={{ paddingBottom: "1rem", borderBottom: "1px solid var(--border-faint)" }}>
