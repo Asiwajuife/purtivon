@@ -316,36 +316,30 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
           </svg>
         </button>
       )}
-      {mobileOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex">
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      {/* Mobile overlay — always rendered so CSS transitions work in both directions */}
+      <div
+        className={`md:hidden fixed inset-0 z-50 flex ${mobileOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+      >
+        <div
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${mobileOpen ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setMobileOpen(false)}
+        />
+        <aside
+          className={`relative w-[280px] flex flex-col h-full transition-transform duration-300 ease-in-out border-r ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}
+          style={{ background: "var(--surface-page)", borderRightColor: "var(--border-faint)" }}
+        >
+          <button
             onClick={() => setMobileOpen(false)}
-          />
-          <aside className="relative w-72 bg-[#0a0a0f] border-r border-white/5 flex flex-col h-full" style={{ background: "var(--surface-page)", borderRightColor: "var(--border-faint)" }}>
-            <button
-              onClick={() => setMobileOpen(false)}
-              aria-label="Close sidebar"
-              className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center text-white/30 hover:text-white/60 transition-colors z-10"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18 18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            <SidebarContent />
-          </aside>
-        </div>
-      )}
+            aria-label="Close sidebar"
+            className="absolute top-[10px] right-3 w-7 h-7 flex items-center justify-center text-white/30 hover:text-white/60 transition-colors z-10"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <SidebarContent />
+        </aside>
+      </div>
     </>
   );
 }
