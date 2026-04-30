@@ -290,6 +290,19 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [confirmSignOut, setConfirmSignOut] = useState(false);
+  // JS-controlled breakpoint: avoids relying on Tailwind md: for desktop/mobile switching
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      setIsDesktop(e.matches);
+      if (e.matches) setMobileOpen(false); // close drawer when resizing to desktop
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => { setMobileOpen(false); setConfirmSignOut(false); }, [pathname]);
   useEffect(() => { if (!mobileOpen) setConfirmSignOut(false); }, [mobileOpen]);
@@ -307,45 +320,63 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
 
   return (
     <>
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — visible on ≥768px, controlled by matchMedia not Tailwind */}
       <aside
-        className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col z-40"
-        style={{ width: 200, background: "#0a0a0f", borderRight: "1px solid rgba(255,255,255,0.06)" }}
+        suppressHydrationWarning
+        className="fixed left-0 top-0 bottom-0 z-40"
+        style={{
+          width: 200,
+          background: "#0a0a0f",
+          borderRight: "1px solid rgba(255,255,255,0.06)",
+          display: isDesktop ? "flex" : "none",
+          flexDirection: "column",
+        }}
       >
         <SidebarContent {...contentProps} />
       </aside>
 
-      {/* Mobile hamburger — only shown when drawer is closed */}
-      {!mobileOpen && (
-        <button
-          type="button"
-          onClick={() => setMobileOpen(true)}
-          aria-label="Open navigation"
-          className="md:hidden fixed top-0 left-0 z-[35] flex items-center justify-center"
-          style={{ width: 48, height: 44, color: "rgba(255,255,255,0.45)", background: "rgba(10,10,15,0.9)", border: "none", borderRight: "1px solid rgba(255,255,255,0.06)", cursor: "pointer" }}
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-        </button>
-      )}
+      {/* Mobile hamburger — shown on mobile only, when drawer is closed */}
+      <button
+        suppressHydrationWarning
+        type="button"
+        onClick={() => setMobileOpen(true)}
+        aria-label="Open navigation"
+        className="fixed top-0 left-0 z-[35] flex items-center justify-center"
+        style={{
+          width: 48, height: 44,
+          color: "rgba(255,255,255,0.45)",
+          background: "rgba(10,10,15,0.9)",
+          border: "none", borderRight: "1px solid rgba(255,255,255,0.06)", cursor: "pointer",
+          display: !isDesktop && !mobileOpen ? "flex" : "none",
+        }}
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
 
-      {/* Backdrop — z-40, fades in/out */}
+      {/* Backdrop — mobile only, z-40, fades in/out */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
+        suppressHydrationWarning
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
+        style={{ display: !isDesktop ? "block" : "none" }}
         onClick={() => setMobileOpen(false)}
       />
 
-      {/* Mobile sidebar — z-50, slides in from left */}
+      {/* Mobile sidebar — z-50, slides in from left, mobile only */}
       <aside
-        className={`md:hidden fixed inset-y-0 left-0 z-50 w-[280px] flex flex-col overflow-hidden transition-transform duration-300 ease-in-out ${
+        suppressHydrationWarning
+        className={`fixed inset-y-0 left-0 z-50 w-[280px] flex flex-col overflow-hidden transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ background: "#0a0a0f", borderRight: "1px solid rgba(255,255,255,0.06)" }}
+        style={{
+          background: "#0a0a0f",
+          borderRight: "1px solid rgba(255,255,255,0.06)",
+          display: !isDesktop ? "flex" : "none",
+        }}
       >
-        {/* Close button */}
         <button
           type="button"
           onClick={() => setMobileOpen(false)}
