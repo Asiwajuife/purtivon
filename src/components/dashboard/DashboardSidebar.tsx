@@ -192,8 +192,11 @@ const NAV_ITEMS: NavItem[] = [
 export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  // BUG 3: close on any route change (covers programmatic navigation, not just link clicks)
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
+  // Close sidebar and reset confirmation on route change
+  useEffect(() => { setMobileOpen(false); setConfirmSignOut(false); }, [pathname]);
+  // Reset confirmation whenever the drawer closes
+  useEffect(() => { if (!mobileOpen) setConfirmSignOut(false); }, [mobileOpen]);
   const isAdmin = user.role === "ADMIN";
   const mainItems = NAV_ITEMS.filter((i) => !i.adminOnly);
   const adminItems = NAV_ITEMS.filter((i) => i.adminOnly);
@@ -277,25 +280,36 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
               </span>
             )}
           </div>
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-sm text-white/25 hover:text-red-400/70 hover:bg-red-400/5 text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 border border-transparent hover:border-red-400/10"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
+          {!confirmSignOut ? (
+            <button
+              onClick={() => setConfirmSignOut(true)}
+              className="flex items-center gap-2.5 w-full px-3 rounded-sm text-white/25 hover:text-red-400/70 hover:bg-red-400/5 text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 border border-transparent hover:border-red-400/10"
+              style={{ minHeight: 44 }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-              />
-            </svg>
-            Sign Out
-          </button>
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+              </svg>
+              Sign Out
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 px-1" style={{ minHeight: 44 }}>
+              <span className="text-[11px] text-white/35 flex-1 pl-2">Sign out?</span>
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                className="px-3 text-[11px] font-semibold tracking-wide text-red-400 bg-red-400/10 rounded-sm border border-red-400/20 hover:bg-red-400/20 transition-colors"
+                style={{ minHeight: 44 }}
+              >
+                Yes
+              </button>
+              <button
+                onClick={() => setConfirmSignOut(false)}
+                className="px-3 text-[11px] font-semibold tracking-wide text-white/30 hover:text-white/60 rounded-sm border border-white/10 hover:bg-white/5 transition-colors"
+                style={{ minHeight: 44 }}
+              >
+                No
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
