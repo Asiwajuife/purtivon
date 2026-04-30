@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardShell from "@/components/dashboard/DashboardShell";
+import SessionProvider from "@/components/providers/SessionProvider";
 
 export default async function DashboardLayout({
   children,
@@ -18,11 +19,13 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--surface-page)", display: "flex" }}>
-      <DashboardSidebar user={session.user} />
-      <DashboardShell user={session.user}>
-        {children}
-      </DashboardShell>
-    </div>
+    <SessionProvider session={session}>
+      <div style={{ minHeight: "100vh", background: "var(--surface-page)", display: "flex" }}>
+        <DashboardSidebar user={session.user} />
+        <DashboardShell user={session.user}>
+          {children}
+        </DashboardShell>
+      </div>
+    </SessionProvider>
   );
 }

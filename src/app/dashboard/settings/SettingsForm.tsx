@@ -1,5 +1,5 @@
 ﻿"use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 const PALETTE = {
@@ -25,7 +25,8 @@ const labelStyle: React.CSSProperties = {
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
-  const [name, setName] = useState(session?.user?.name ?? "");
+  const [name, setName] = useState("");
+  useEffect(() => { if (session?.user?.name) setName(session.user.name); }, [session?.user?.name]);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

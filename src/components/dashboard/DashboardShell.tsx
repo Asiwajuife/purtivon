@@ -31,7 +31,8 @@ export default function DashboardShell({ children, user }: DashboardShellProps) 
           paddingLeft: isDesktop ? "1.25rem" : "3.5rem",
           paddingRight: "1.25rem",
           position: "sticky", top: 0, zIndex: 30, height: 44,
-          borderBottom: "1px solid var(--border-faint)",
+          borderBottom: "1px solid rgba(201,168,76,0.1)",
+          boxShadow: "0 1px 20px rgba(0,0,0,0.2)",
           background: "var(--nav-backdrop)", backdropFilter: "blur(16px)",
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}

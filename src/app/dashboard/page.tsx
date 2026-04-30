@@ -17,15 +17,18 @@ function StatCard({ label, value, sub, icon, accent }: {
       border: `1px solid ${accent ? "rgba(201,168,76,0.18)" : "var(--border-faint)"}`,
       background: accent ? "rgba(201,168,76,0.04)" : "var(--surface-subtle)",
       display: "flex", flexDirection: "column", gap: "1rem",
+      borderTop: `2px solid ${accent ? "#c9a84c" : "rgba(255,255,255,0.08)"}`,
+      overflow: "hidden",
     }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <p style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: accent ? "rgba(201,168,76,0.6)" : "var(--text-4)" }}>
           {label}
         </p>
         <span style={{
-          width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
+          width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
           background: accent ? "rgba(201,168,76,0.12)" : "var(--border-faint)",
-          color: accent ? "#c9a84c" : "var(--text-4)",
+          color: accent ? "#c9a84c" : "rgba(255,255,255,0.45)",
+          borderRadius: 4,
         }}>
           {icon}
         </span>
@@ -33,7 +36,7 @@ function StatCard({ label, value, sub, icon, accent }: {
       <div>
         <p style={{
           fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "1.75rem", fontWeight: 300, lineHeight: 1,
+          fontSize: "2.4rem", fontWeight: 300, lineHeight: 1,
           color: accent ? "#c9a84c" : "var(--text-hi)",
           marginBottom: sub ? "0.4rem" : 0,
         }}>
@@ -184,8 +187,8 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-          <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--text-4)", flexShrink: 0 }}>Quick Actions</span>
-          <div style={{ flex: 1, height: 1, background: "var(--border-faint)" }} />
+          <span style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "#c9a84c", flexShrink: 0 }}>Quick Actions</span>
+          <div style={{ flex: 1, height: 1, background: "#c9a84c", opacity: 0.2 }} />
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.5rem" }}>
           {QUICK_ACTIONS.map(({ label, href, description, icon }) => (
@@ -203,8 +206,9 @@ export default async function DashboardPage() {
               className="dash-action"
             >
               <span style={{
-                width: 30, height: 30, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                width: 36, height: 36, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center",
                 background: "rgba(201,168,76,0.07)", border: "1px solid rgba(201,168,76,0.14)", color: "#c9a84c",
+                borderRadius: 4,
               }}>
                 {icon}
               </span>
@@ -224,8 +228,8 @@ export default async function DashboardPage() {
       {isAdmin && (
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-            <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(201,168,76,0.5)", flexShrink: 0 }}>Admin Tools</span>
-            <div style={{ flex: 1, height: 1, background: "rgba(201,168,76,0.08)" }} />
+            <span style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "#c9a84c", flexShrink: 0 }}>Admin Tools</span>
+            <div style={{ flex: 1, height: 1, background: "#c9a84c", opacity: 0.2 }} />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.5rem" }} className="dash-admin">
             {ADMIN_ACTIONS.map(({ label, href, description, icon }) => (

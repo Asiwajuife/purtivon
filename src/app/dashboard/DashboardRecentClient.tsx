@@ -100,16 +100,19 @@ export default function DashboardRecentClient({ initialSubmissions, initialMessa
               View All →
             </Link>
           </div>
-          <div style={{ border: "1px solid var(--border-faint)", background: "var(--surface-subtle)" }}>
+          <div style={{ border: "1px solid var(--border-faint)", background: "var(--surface-subtle)", borderRadius: 2 }}>
             {submissions.map((sub, i) => {
               const s = STATUS_STYLES[sub.status] ?? STATUS_STYLES.PENDING;
               return (
                 <div
                   key={sub.id}
+                  className="recent-row"
                   style={{
                     display: "flex", alignItems: "center", gap: "1rem",
-                    padding: "0.85rem 1.25rem",
+                    padding: "0.75rem 1.25rem 0.75rem 1rem",
                     borderTop: i > 0 ? "1px solid var(--border-faint)" : "none",
+                    borderLeft: `3px solid ${s.color}`,
+                    paddingLeft: "1rem",
                   }}
                 >
                   <div style={{ flex: 1, minWidth: 0 }}>
@@ -148,14 +151,17 @@ export default function DashboardRecentClient({ initialSubmissions, initialMessa
               View All →
             </Link>
           </div>
-          <div style={{ border: "1px solid var(--border-faint)", background: "var(--surface-subtle)" }}>
+          <div style={{ border: "1px solid var(--border-faint)", background: "var(--surface-subtle)", borderRadius: 2 }}>
             {messages.map((msg, i) => (
               <div
                 key={msg.id}
+                className="recent-row"
                 style={{
                   display: "flex", alignItems: "center", gap: "1rem",
-                  padding: "0.85rem 1.25rem",
+                  padding: "0.75rem 1.25rem 0.75rem 1rem",
                   borderTop: i > 0 ? "1px solid var(--border-faint)" : "none",
+                  borderLeft: "3px solid rgba(201,168,76,0.3)",
+                  paddingLeft: "1rem",
                 }}
               >
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -175,6 +181,7 @@ export default function DashboardRecentClient({ initialSubmissions, initialMessa
           </div>
         </div>
       )}
+      <style>{`.recent-row:hover { background: rgba(255,255,255,0.015) !important; }`}</style>
     </>
   );
 }

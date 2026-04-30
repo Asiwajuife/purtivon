@@ -166,14 +166,17 @@ function SidebarNavLink({
     <Link
       href={item.href}
       onClick={onNavigate}
-      style={{ color: isActive ? "#c9a84c" : "rgba(255,255,255,0.35)" }}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 ${
-        isActive
-          ? "bg-[#c9a84c]/10 border border-[#c9a84c]/15"
-          : "hover:text-white/70 hover:bg-white/[0.03] border border-transparent"
-      }`}
+      className="sidebar-nav-link text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200"
+      style={{
+        display: "flex", alignItems: "center", gap: "0.65rem",
+        padding: "9px 12px 9px 10px",
+        borderLeft: `2px solid ${isActive ? "#c9a84c" : "transparent"}`,
+        background: isActive ? "rgba(201,168,76,0.07)" : "transparent",
+        color: isActive ? "#c9a84c" : "rgba(255,255,255,0.5)",
+        textDecoration: "none",
+      }}
     >
-      <span style={{ color: isActive ? "#c9a84c" : "rgba(255,255,255,0.5)", display: "flex", alignItems: "center", flexShrink: 0 }}>
+      <span style={{ color: isActive ? "#c9a84c" : "rgba(255,255,255,0.4)", display: "flex", alignItems: "center", flexShrink: 0 }}>
         {item.icon}
       </span>
       {item.label}
@@ -196,6 +199,7 @@ function SidebarContent({
     <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "#0a0a0f" }}>
       {/* Logo */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", height: 44, borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
+        <div style={{ width: 5, height: 5, background: "#c9a84c", transform: "rotate(45deg)", flexShrink: 0 }} />
         <span style={{ fontFamily: "'Cormorant Garamond','Didot','Georgia',serif", letterSpacing: "0.28em", fontSize: "0.75rem", fontWeight: 300, textTransform: "uppercase", color: "#d4a843" }}>
           Purtivon
         </span>
@@ -282,6 +286,7 @@ function SidebarContent({
           </div>
         )}
       </div>
+      <style>{`.sidebar-nav-link:hover { background: rgba(255,255,255,0.03) !important; color: rgba(255,255,255,0.72) !important; }`}</style>
     </div>
   );
 }
