@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+
 interface NavItem {
   label: string;
   href: string;
@@ -16,23 +17,24 @@ interface DashboardSidebarProps {
     role?: string | null;
   };
 }
+interface SidebarContentProps {
+  user: DashboardSidebarProps["user"];
+  isAdmin: boolean;
+  mainItems: NavItem[];
+  adminItems: NavItem[];
+  pathname: string;
+  onNavigate: () => void;
+  confirmSignOut: boolean;
+  setConfirmSignOut: (v: boolean) => void;
+}
+
 const NAV_ITEMS: NavItem[] = [
   {
     label: "Overview",
     href: "/dashboard",
     icon: (
-      <svg
-        className="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
-        />
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
       </svg>
     ),
   },
@@ -40,18 +42,8 @@ const NAV_ITEMS: NavItem[] = [
     label: "Submissions",
     href: "/dashboard/submissions",
     icon: (
-      <svg
-        className="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-        />
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
       </svg>
     ),
   },
@@ -59,18 +51,8 @@ const NAV_ITEMS: NavItem[] = [
     label: "Reports",
     href: "/dashboard/reports",
     icon: (
-      <svg
-        className="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
-        />
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
       </svg>
     ),
   },
@@ -78,18 +60,8 @@ const NAV_ITEMS: NavItem[] = [
     label: "Billing",
     href: "/dashboard/billing",
     icon: (
-      <svg
-        className="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-        />
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
       </svg>
     ),
   },
@@ -97,23 +69,9 @@ const NAV_ITEMS: NavItem[] = [
     label: "Settings",
     href: "/dashboard/settings",
     icon: (
-      <svg
-        className="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
-        />
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-        />
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
       </svg>
     ),
   },
@@ -189,173 +147,217 @@ const NAV_ITEMS: NavItem[] = [
     ),
   },
 ];
+
+// Defined at module level — stable reference, no remount on parent re-render
+function SidebarNavLink({
+  item,
+  pathname,
+  onNavigate,
+}: {
+  item: NavItem;
+  pathname: string;
+  onNavigate: () => void;
+}) {
+  const isActive =
+    item.href === "/dashboard"
+      ? pathname === "/dashboard"
+      : pathname.startsWith(item.href);
+  return (
+    <Link
+      href={item.href}
+      onClick={onNavigate}
+      style={{ color: isActive ? "#c9a84c" : "rgba(255,255,255,0.35)" }}
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 ${
+        isActive
+          ? "bg-[#c9a84c]/10 border border-[#c9a84c]/15"
+          : "hover:text-white/70 hover:bg-white/[0.03] border border-transparent"
+      }`}
+    >
+      <span style={{ color: isActive ? "#c9a84c" : "rgba(255,255,255,0.25)" }}>
+        {item.icon}
+      </span>
+      {item.label}
+    </Link>
+  );
+}
+
+// Defined at module level — stable reference, no remount on parent re-render
+function SidebarContent({
+  user,
+  isAdmin,
+  mainItems,
+  adminItems,
+  pathname,
+  onNavigate,
+  confirmSignOut,
+  setConfirmSignOut,
+}: SidebarContentProps) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "#0a0a0f" }}>
+      {/* Logo */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", height: 44, borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
+        <span style={{ fontFamily: "'Cormorant Garamond','Didot','Georgia',serif", letterSpacing: "0.28em", fontSize: "0.75rem", fontWeight: 300, textTransform: "uppercase", color: "#d4a843" }}>
+          Purtivon
+        </span>
+      </div>
+
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: "12px 8px", overflowY: "auto" }}>
+        <ul style={{ display: "flex", flexDirection: "column", gap: 2, listStyle: "none", margin: 0, padding: 0 }}>
+          {mainItems.map((item) => (
+            <li key={item.href}>
+              <SidebarNavLink item={item} pathname={pathname} onNavigate={onNavigate} />
+            </li>
+          ))}
+        </ul>
+        {isAdmin && (
+          <div style={{ marginTop: 24 }}>
+            <p style={{ padding: "0 12px", marginBottom: 8, fontSize: "9px", fontWeight: 600, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.15)" }}>
+              Admin
+            </p>
+            <ul style={{ display: "flex", flexDirection: "column", gap: 2, listStyle: "none", margin: 0, padding: 0 }}>
+              {adminItems.map((item) => (
+                <li key={item.href}>
+                  <SidebarNavLink item={item} pathname={pathname} onNavigate={onNavigate} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </nav>
+
+      {/* Footer */}
+      <div style={{ padding: "16px 12px", borderTop: "1px solid rgba(255,255,255,0.06)", flexShrink: 0, background: "#0a0a0f" }}>
+        {/* User card */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px", borderRadius: 2, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", marginBottom: 8 }}>
+          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <span style={{ color: "#c9a84c", fontSize: 11, fontWeight: 600, textTransform: "uppercase" }}>
+              {user.name?.charAt(0) ?? "U"}
+            </span>
+          </div>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 500, color: "rgba(255,255,255,0.6)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {user.name ?? "User"}
+            </p>
+            <p style={{ fontSize: "0.625rem", color: "rgba(255,255,255,0.2)", margin: "2px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {user.email}
+            </p>
+          </div>
+          {isAdmin && (
+            <span style={{ flexShrink: 0, fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 600, color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "2px 6px", borderRadius: 2 }}>
+              Admin
+            </span>
+          )}
+        </div>
+
+        {/* Sign-out — inline confirmation, all inline styles so no CSS cascade can break it */}
+        {!confirmSignOut ? (
+          <button
+            type="button"
+            onClick={() => setConfirmSignOut(true)}
+            style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", minHeight: 44, padding: "0 12px", borderRadius: 2, background: "transparent", border: "1px solid transparent", cursor: "pointer", color: "rgba(255,255,255,0.3)", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase" }}
+          >
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} style={{ flexShrink: 0, color: "rgba(255,255,255,0.3)" }}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+            </svg>
+            Sign Out
+          </button>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 4px", minHeight: 44 }}>
+            <span style={{ flex: 1, paddingLeft: 8, fontSize: 11, color: "rgba(255,255,255,0.35)" }}>Sign out?</span>
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              style={{ padding: "0 12px", minHeight: 44, fontSize: 11, fontWeight: 600, letterSpacing: "0.05em", color: "#f87171", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 2, cursor: "pointer" }}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirmSignOut(false)}
+              style={{ padding: "0 12px", minHeight: 44, fontSize: 11, fontWeight: 600, letterSpacing: "0.05em", color: "rgba(255,255,255,0.3)", background: "transparent", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 2, cursor: "pointer" }}
+            >
+              No
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [confirmSignOut, setConfirmSignOut] = useState(false);
-  // Close sidebar and reset confirmation on route change
+
   useEffect(() => { setMobileOpen(false); setConfirmSignOut(false); }, [pathname]);
-  // Reset confirmation whenever the drawer closes
   useEffect(() => { if (!mobileOpen) setConfirmSignOut(false); }, [mobileOpen]);
+
   const isAdmin = user.role === "ADMIN";
   const mainItems = NAV_ITEMS.filter((i) => !i.adminOnly);
   const adminItems = NAV_ITEMS.filter((i) => i.adminOnly);
-  function NavLink({ item }: { item: NavItem }) {
-    const isActive =
-      item.href === "/dashboard"
-        ? pathname === "/dashboard"
-        : pathname.startsWith(item.href);
-    return (
-      <Link
-        href={item.href}
-        onClick={() => setMobileOpen(false)}
-        style={isActive ? {} : { color: "rgba(255,255,255,0.25)" }}
-        className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 ${
-          isActive
-            ? "bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/15"
-            : "text-white/35 hover:text-white/70 hover:bg-white/[0.03] border border-transparent"
-        }`}
-      >
-        <span className={isActive ? "text-[#c9a84c]" : "text-white/25"}>
-          {item.icon}
-        </span>
-        {item.label}
-      </Link>
-    );
-  }
-  function SidebarContent() {
-    return (
-      <div className="flex flex-col h-full">
-        <div className="flex items-center gap-2 px-4 h-11 border-b border-white/5 shrink-0" style={{ borderBottomColor: "rgba(255,255,255,0.06)" }}>
-          <span
-            className="font-light uppercase text-xs"
-            style={{
-              fontFamily: "'Cormorant Garamond', 'Didot', 'Georgia', serif",
-              letterSpacing: "0.28em",
-              color: "#d4a843",
-            }}
-          >
-            Purtivon
-          </span>
-        </div>
-        <nav className="flex-1 px-2 py-3 overflow-y-auto">
-          <ul className="flex flex-col gap-0.5">
-            {mainItems.map((item) => (
-              <li key={item.href}>
-                <NavLink item={item} />
-              </li>
-            ))}
-          </ul>
-          {isAdmin && (
-            <div className="mt-6">
-              <p className="px-3 mb-2 text-[9px] font-semibold tracking-[0.25em] uppercase" style={{ color: "rgba(255,255,255,0.15)" }}>
-                Admin
-              </p>
-              <ul className="flex flex-col gap-0.5">
-                {adminItems.map((item) => (
-                  <li key={item.href}>
-                    <NavLink item={item} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </nav>
-        <div className="px-3 py-4 border-t border-white/5 shrink-0" style={{ borderTopColor: "rgba(255,255,255,0.06)", background: "#0a0a0f" }}>
-          <div className="flex items-center gap-3 px-3 py-3 rounded-sm border mb-2" style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.06)" }}>
-            <div className="w-7 h-7 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center shrink-0">
-              <span className="text-[#c9a84c] text-[11px] font-semibold uppercase">
-                {user.name?.charAt(0) ?? "U"}
-              </span>
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium truncate" style={{ color: "rgba(255,255,255,0.6)" }}>
-                {user.name ?? "User"}
-              </p>
-              <p className="text-[10px] truncate" style={{ color: "rgba(255,255,255,0.2)" }}>{user.email}</p>
-            </div>
-            {isAdmin && (
-              <span className="shrink-0 text-[9px] tracking-widest uppercase font-semibold text-[#c9a84c] bg-[#c9a84c]/10 px-1.5 py-0.5 rounded-sm">
-                Admin
-              </span>
-            )}
-          </div>
-          {!confirmSignOut ? (
-            <button
-              onClick={() => setConfirmSignOut(true)}
-              className="flex items-center gap-2.5 w-full px-3 rounded-sm text-white/25 hover:text-red-400/70 hover:bg-red-400/5 text-xs tracking-[0.12em] uppercase font-medium transition-all duration-200 border border-transparent hover:border-red-400/10"
-              style={{ minHeight: 44 }}
-            >
-              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-              </svg>
-              Sign Out
-            </button>
-          ) : (
-            <div className="flex items-center gap-2 px-1" style={{ minHeight: 44 }}>
-              <span className="text-[11px] text-white/35 flex-1 pl-2">Sign out?</span>
-              <button
-                onClick={() => signOut({ callbackUrl: "/login" })}
-                className="px-3 text-[11px] font-semibold tracking-wide text-red-400 bg-red-400/10 rounded-sm border border-red-400/20 hover:bg-red-400/20 transition-colors"
-                style={{ minHeight: 44 }}
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setConfirmSignOut(false)}
-                className="px-3 text-[11px] font-semibold tracking-wide text-white/30 hover:text-white/60 rounded-sm border border-white/10 hover:bg-white/5 transition-colors"
-                style={{ minHeight: 44 }}
-              >
-                No
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
+  const handleNavigate = () => setMobileOpen(false);
+
+  const contentProps: SidebarContentProps = {
+    user, isAdmin, mainItems, adminItems, pathname,
+    onNavigate: handleNavigate,
+    confirmSignOut, setConfirmSignOut,
+  };
+
   return (
     <>
-      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col z-40" style={{ width: 200, background: "#0a0a0f", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-        <SidebarContent />
+      {/* Desktop sidebar */}
+      <aside
+        className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col z-40"
+        style={{ width: 200, background: "#0a0a0f", borderRight: "1px solid rgba(255,255,255,0.06)" }}
+      >
+        <SidebarContent {...contentProps} />
       </aside>
-      {/* Mobile hamburger — hidden once drawer is open */}
+
+      {/* Mobile hamburger — only shown when drawer is closed */}
       {!mobileOpen && (
         <button
+          type="button"
           onClick={() => setMobileOpen(true)}
           aria-label="Open navigation"
           className="md:hidden fixed top-0 left-0 z-[35] flex items-center justify-center"
-          style={{ width: 48, height: 44, color: 'rgba(255,255,255,0.45)', background: 'rgba(10,10,15,0.9)', border: 'none', cursor: 'pointer', borderRight: '1px solid rgba(255,255,255,0.06)' }}
+          style={{ width: 48, height: 44, color: "rgba(255,255,255,0.45)", background: "rgba(10,10,15,0.9)", border: "none", borderRight: "1px solid rgba(255,255,255,0.06)", cursor: "pointer" }}
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
       )}
-      {/* BUG 1 + 4: Backdrop — fixed at z-40, separate from sidebar */}
+
+      {/* Backdrop — z-40, fades in/out */}
       <div
         className={`md:hidden fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setMobileOpen(false)}
       />
-      {/* BUG 2 + 4: Sidebar — fixed at z-50, overflow-hidden constrains footer/content */}
+
+      {/* Mobile sidebar — z-50, slides in from left */}
       <aside
-        className={`md:hidden fixed inset-y-0 left-0 z-50 w-[280px] flex flex-col overflow-hidden transition-transform duration-300 ease-in-out border-r ${
+        className={`md:hidden fixed inset-y-0 left-0 z-50 w-[280px] flex flex-col overflow-hidden transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{ background: "#0a0a0f", borderRight: "1px solid rgba(255,255,255,0.06)" }}
       >
+        {/* Close button */}
         <button
+          type="button"
           onClick={() => setMobileOpen(false)}
           aria-label="Close sidebar"
-          className="absolute top-[10px] right-3 w-7 h-7 flex items-center justify-center text-white/30 hover:text-white/60 transition-colors z-[60]"
+          className="absolute top-[10px] right-3 w-7 h-7 flex items-center justify-center z-[60]"
+          style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)" }}
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
           </svg>
         </button>
-        <SidebarContent />
+        <SidebarContent {...contentProps} />
       </aside>
     </>
   );
