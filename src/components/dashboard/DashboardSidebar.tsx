@@ -303,17 +303,19 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       <aside className="hidden md:flex fixed left-0 top-0 bottom-0 flex-col bg-[#0a0a0f] border-r border-white/5 z-40" style={{ width: 200, background: "var(--surface-page)", borderRightColor: "var(--border-faint)" }}>
         <SidebarContent />
       </aside>
-      {/* Mobile hamburger — fixed top-left, sits inside the header row */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        aria-label="Open navigation"
-        className="md:hidden fixed top-0 left-0 z-[35] flex items-center justify-center"
-        style={{ width: 48, height: 44, color: 'var(--text-4)', background: 'none', border: 'none', cursor: 'pointer' }}
-      >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-      </button>
+      {/* Mobile hamburger — hidden once drawer is open */}
+      {!mobileOpen && (
+        <button
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open navigation"
+          className="md:hidden fixed top-0 left-0 z-[35] flex items-center justify-center"
+          style={{ width: 48, height: 44, color: 'var(--text-4)', background: 'var(--nav-backdrop)', border: 'none', cursor: 'pointer', borderRight: '1px solid var(--border-faint)' }}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      )}
       {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-50 flex">
           <div

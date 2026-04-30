@@ -22,15 +22,15 @@ export default async function DashboardLayout({
     <div style={{ minHeight: '100vh', background: 'var(--surface-page)', display: 'flex' }}>
       <DashboardSidebar user={session.user} />
 
-      <div className="dash-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      {/* md:ml-[200px] matches sidebar width; pl-14 on mobile clears the 48px hamburger */}
+      <div className="flex-1 flex flex-col min-w-0 md:ml-[200px]">
         <header
-          className="dash-header"
+          className="pl-14 md:pl-5 pr-5"
           style={{
             position: 'sticky', top: 0, zIndex: 30, height: 44,
             borderBottom: '1px solid var(--border-faint)',
             background: 'var(--nav-backdrop)', backdropFilter: 'blur(16px)',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '0 1.25rem',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -47,15 +47,6 @@ export default async function DashboardLayout({
 
         <main style={{ flex: 1, padding: '1.25rem' }}>{children}</main>
       </div>
-
-      <style>{`
-        .dash-main   { margin-left: 200px; }
-        .dash-header { padding-left: 1.25rem; }
-        @media (max-width: 767px) {
-          .dash-main   { margin-left: 0; }
-          .dash-header { padding-left: 56px; }
-        }
-      `}</style>
     </div>
   );
 }
