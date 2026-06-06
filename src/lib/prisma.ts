@@ -12,9 +12,9 @@ function getPrismaClient(): PrismaClient {
         ? ["query", "error", "warn"]
         : ["error"],
   });
-  if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.prisma = client;
-  }
+  // Always cache — without this, production creates a new client (and connection
+  // pool) on every request, exhausting the DB connection limit after a few navigations.
+  globalForPrisma.prisma = client;
   return client;
 }
 

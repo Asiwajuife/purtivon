@@ -37,7 +37,7 @@ function FeaturedWinnerCard({ winner }: { winner: Winner }) {
         display: 'flex',
         flexDirection: 'column',
         gap: '1rem',
-        cursor: winner.link ? 'pointer' : 'default',
+        cursor: (winner.link || winner.slug) ? 'pointer' : 'default',
         transition: 'border-color 0.25s, background 0.25s, transform 0.25s',
         position: 'relative',
         overflow: 'hidden',
@@ -56,8 +56,14 @@ function FeaturedWinnerCard({ winner }: { winner: Winner }) {
         background: 'rgba(201,168,76,0.12)',
         border: '1px solid rgba(201,168,76,0.3)',
         padding: '0.2rem 0.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.3rem',
       }}>
-        ★ Featured
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        Featured
       </div>
 
       {/* Avatar + name */}
@@ -133,7 +139,7 @@ function WinnerCard({ winner }: { winner: Winner }) {
         display: 'flex',
         flexDirection: 'column',
         gap: '0.75rem',
-        cursor: winner.link ? 'pointer' : 'default',
+        cursor: (winner.link || winner.slug) ? 'pointer' : 'default',
         transition: 'border-color 0.25s, background 0.25s',
         height: '100%',
       }}
@@ -226,8 +232,11 @@ export default function AwardWinners({ winners }: { winners: Winner[] }) {
         {/* Featured winners row */}
         {featured.length > 0 && (
           <div style={{ marginBottom: '2rem' }}>
-            <p style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.6)', marginBottom: '1rem' }}>
-              ★ Featured Winners
+            <p style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.6)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Featured Winners
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }} className="featured-winners-grid">
               {featured.map((w) => (
@@ -272,6 +281,10 @@ export default function AwardWinners({ winners }: { winners: Winner[] }) {
         .winner-link:hover .winner-card {
           border-color: rgba(201,168,76,0.35) !important;
           background: rgba(201,168,76,0.04) !important;
+        }
+        .winner-link:hover .winner-card p:last-child,
+        .featured-winner-link:hover .featured-winner-card p:last-child {
+          color: var(--gold) !important;
         }
         @media (max-width: 1024px) {
           .featured-winners-grid { grid-template-columns: repeat(2, 1fr) !important; }

@@ -1,4 +1,4 @@
-﻿export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -7,8 +7,6 @@ import { prisma } from "@/lib/prisma";
 import WinnersClient from "./WinnersClient";
 
 export const metadata: Metadata = { title: "Award Winners" };
-
-const P = { gold: "#c9a84c", textPrimary: "var(--text-hi)", textMuted: "var(--text-lo)" } as const;
 
 export default async function WinnersPage() {
   const session = await getServerSession(authOptions);
@@ -44,26 +42,34 @@ export default async function WinnersPage() {
     profile:  w.profile != null ? String(w.profile) : null,
   }));
 
+  const featured = winners.filter(w => w.featured).length;
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", maxWidth: 1140 }}>
-      <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid var(--border-faint)", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", maxWidth: 1200 }}>
+      {/* Page header */}
+      <div style={{
+        display: "flex", alignItems: "flex-end", justifyContent: "space-between",
+        gap: "1rem", flexWrap: "wrap",
+        paddingBottom: "0.85rem",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}>
         <div>
-          <span style={{ display: "block", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: P.gold, marginBottom: "0.3rem" }}>
+          <span style={{ display: "block", fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "#c9a84c", marginBottom: "0.3rem" }}>
             Awards
           </span>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.4rem", fontWeight: 300, color: P.textPrimary, letterSpacing: "0.01em", margin: 0 }}>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 300, color: "var(--text-hi)", letterSpacing: "0.01em", margin: 0, lineHeight: 1.1 }}>
             Award Winners
           </h1>
-          <p style={{ fontSize: "0.65rem", color: P.textMuted, marginTop: 4 }}>
+          <p style={{ fontSize: "0.64rem", color: "rgba(255,255,255,0.32)", marginTop: "0.3rem", marginBottom: 0 }}>
             Manage recipients displayed on the public homepage.
           </p>
         </div>
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-          <span style={{ fontSize: "0.62rem", color: P.textMuted, background: "var(--surface-card)", border: "1px solid var(--border-dim)", borderRadius: 3, padding: "0.3rem 0.7rem" }}>
-            {winners.filter((w) => w.featured).length} featured
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+          <span style={{ fontSize: "0.6rem", color: "#c9a84c", background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.18)", borderRadius: 4, padding: "0.3rem 0.7rem", whiteSpace: "nowrap" }}>
+            {featured} featured
           </span>
-          <span style={{ fontSize: "0.62rem", color: P.textMuted, background: "var(--surface-card)", border: "1px solid var(--border-dim)", borderRadius: 3, padding: "0.3rem 0.7rem" }}>
-            {winners.length} {winners.length === 1 ? "winner" : "winners"} total
+          <span style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.38)", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "0.3rem 0.7rem", whiteSpace: "nowrap" }}>
+            {winners.length} total
           </span>
         </div>
       </div>

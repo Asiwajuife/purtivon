@@ -1,5 +1,5 @@
-﻿"use client";
-import { useEffect, useRef, useState } from "react";
+"use client";
+import { useState } from "react";
 
 interface Ticker {
   symbol: string;
@@ -11,82 +11,90 @@ interface Ticker {
 }
 
 const TICKERS: Ticker[] = [
-  { symbol: "SPX",    name: "S&P 500",        price: "5,218.19", change: "+34.12", pct: "+0.66%", up: true  },
-  { symbol: "NDX",    name: "NASDAQ 100",      price: "18,139.44",change: "+97.53", pct: "+0.54%", up: true  },
-  { symbol: "DJI",    name: "Dow Jones",       price: "38,904.04",change: "-28.60", pct: "-0.07%", up: false },
-  { symbol: "FTSE",   name: "FTSE 100",        price: "8,147.03", change: "+41.22", pct: "+0.51%", up: true  },
-  { symbol: "DAX",    name: "DAX",             price: "18,384.35",change: "+76.88", pct: "+0.42%", up: true  },
-  { symbol: "NIKKEI", name: "Nikkei 225",      price: "38,236.07",change: "-312.52",pct: "-0.81%", up: false },
-  { symbol: "HSI",    name: "Hang Seng",       price: "16,828.45",change: "+124.16",pct: "+0.74%", up: true  },
-  { symbol: "XAUUSD", name: "Gold",            price: "2,341.60", change: "+18.40", pct: "+0.79%", up: true  },
-  { symbol: "XBRUSD", name: "Brent Crude",     price: "88.34",    change: "-0.62",  pct: "-0.70%", up: false },
-  { symbol: "EURUSD", name: "EUR/USD",         price: "1.0834",   change: "+0.0012",pct: "+0.11%", up: true  },
-  { symbol: "GBPUSD", name: "GBP/USD",         price: "1.2714",   change: "-0.0028",pct: "-0.22%", up: false },
-  { symbol: "USDJPY", name: "USD/JPY",         price: "151.82",   change: "+0.44",  pct: "+0.29%", up: true  },
-  { symbol: "BTC",    name: "Bitcoin",         price: "67,284.00",change: "+1,204", pct: "+1.82%", up: true  },
-  { symbol: "ETH",    name: "Ethereum",        price: "3,412.55", change: "-42.10", pct: "-1.22%", up: false },
-  { symbol: "MSFT",   name: "Microsoft",       price: "420.21",   change: "+5.88",  pct: "+1.42%", up: true  },
-  { symbol: "AAPL",   name: "Apple",           price: "171.48",   change: "-1.12",  pct: "-0.65%", up: false },
-  { symbol: "JPM",    name: "JPMorgan",        price: "197.45",   change: "+2.34",  pct: "+1.20%", up: true  },
-  { symbol: "GS",     name: "Goldman Sachs",   price: "461.88",   change: "+7.62",  pct: "+1.68%", up: true  },
+  { symbol: "SPX",    name: "S&P 500",       price: "5,218.19",  change: "+34.12",  pct: "+0.66%", up: true  },
+  { symbol: "NDX",    name: "NASDAQ 100",    price: "18,139.44", change: "+97.53",  pct: "+0.54%", up: true  },
+  { symbol: "DJI",    name: "Dow Jones",     price: "38,904.04", change: "-28.60",  pct: "-0.07%", up: false },
+  { symbol: "FTSE",   name: "FTSE 100",      price: "8,147.03",  change: "+41.22",  pct: "+0.51%", up: true  },
+  { symbol: "DAX",    name: "DAX",           price: "18,384.35", change: "+76.88",  pct: "+0.42%", up: true  },
+  { symbol: "NIKKEI", name: "Nikkei 225",    price: "38,236.07", change: "-312.52", pct: "-0.81%", up: false },
+  { symbol: "HSI",    name: "Hang Seng",     price: "16,828.45", change: "+124.16", pct: "+0.74%", up: true  },
+  { symbol: "XAUUSD", name: "Gold",          price: "2,341.60",  change: "+18.40",  pct: "+0.79%", up: true  },
+  { symbol: "XBRUSD", name: "Brent Crude",   price: "88.34",     change: "-0.62",   pct: "-0.70%", up: false },
+  { symbol: "EURUSD", name: "EUR/USD",       price: "1.0834",    change: "+0.0012", pct: "+0.11%", up: true  },
+  { symbol: "GBPUSD", name: "GBP/USD",       price: "1.2714",    change: "-0.0028", pct: "-0.22%", up: false },
+  { symbol: "USDJPY", name: "USD/JPY",       price: "151.82",    change: "+0.44",   pct: "+0.29%", up: true  },
+  { symbol: "BTC",    name: "Bitcoin",       price: "67,284.00", change: "+1,204",  pct: "+1.82%", up: true  },
+  { symbol: "ETH",    name: "Ethereum",      price: "3,412.55",  change: "-42.10",  pct: "-1.22%", up: false },
+  { symbol: "MSFT",   name: "Microsoft",     price: "420.21",    change: "+5.88",   pct: "+1.42%", up: true  },
+  { symbol: "AAPL",   name: "Apple",         price: "171.48",    change: "-1.12",   pct: "-0.65%", up: false },
+  { symbol: "JPM",    name: "JPMorgan",      price: "197.45",    change: "+2.34",   pct: "+1.20%", up: true  },
+  { symbol: "GS",     name: "Goldman Sachs", price: "461.88",    change: "+7.62",   pct: "+1.68%", up: true  },
 ];
 
-// Duplicate for seamless loop
 const ITEMS = [...TICKERS, ...TICKERS];
 
 export default function StockTicker() {
-  const trackRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
 
-  // CSS animation — no JS scroll loop needed
   return (
     <div
+      aria-label="Market data ticker"
       style={{
         position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        background: "rgba(6,6,10,0.97)",
+        bottom: 0, left: 0, right: 0,
+        zIndex: 98,
+        background: "rgba(4, 5, 14, 0.96)",
         borderTop: "1px solid rgba(201,168,76,0.18)",
-        backdropFilter: "blur(12px)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
         overflow: "hidden",
-        height: 36,
+        height: 34,
         display: "flex",
         alignItems: "center",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Time stamp on the left */}
+      {/* Scan-line texture */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px)",
+        zIndex: 1,
+      }} />
+
+      {/* Left edge fade */}
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 52, bottom: 0, width: 40, background: "linear-gradient(90deg, rgba(4,5,14,0.96), transparent)", pointerEvents: "none", zIndex: 2 }} />
+      {/* Right edge fade */}
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 40, background: "linear-gradient(-90deg, rgba(4,5,14,0.96), transparent)", pointerEvents: "none", zIndex: 2 }} />
+
+      {/* "Markets" label */}
       <div style={{
         flexShrink: 0,
         padding: "0 0.85rem",
-        fontSize: "0.58rem",
-        fontWeight: 700,
-        letterSpacing: "0.15em",
-        color: "rgba(201,168,76,0.7)",
-        textTransform: "uppercase",
-        borderRight: "1px solid var(--border-dim)",
-        whiteSpace: "nowrap",
         height: "100%",
-        display: "flex",
-        alignItems: "center",
+        display: "flex", alignItems: "center",
+        borderRight: "1px solid rgba(201,168,76,0.15)",
+        background: "rgba(201,168,76,0.06)",
+        zIndex: 3, position: "relative",
       }}>
-        Markets
+        <span style={{
+          fontFamily: "'DM Sans', system-ui, sans-serif",
+          fontSize: "0.56rem",
+          fontWeight: 700,
+          letterSpacing: "0.24em",
+          textTransform: "uppercase",
+          color: "rgba(201,168,76,0.85)",
+          whiteSpace: "nowrap",
+        }}>
+          Markets
+        </span>
       </div>
 
       {/* Scrolling track */}
-      <div style={{ overflow: "hidden", flex: 1, position: "relative" }}>
+      <div style={{ overflow: "hidden", flex: 1, position: "relative", zIndex: 1 }}>
         <div
-          ref={trackRef}
-          className={paused ? "ticker-track ticker-paused" : "ticker-track"}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0,
-            whiteSpace: "nowrap",
-          }}
+          className={paused ? "tkr-track tkr-paused" : "tkr-track"}
+          style={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}
         >
           {ITEMS.map((t, i) => (
             <div
@@ -94,32 +102,56 @@ export default function StockTicker() {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "0.4rem",
-                padding: "0 1.25rem",
-                borderRight: "1px solid var(--border-faint)",
-                height: 36,
+                gap: "0.38rem",
+                padding: "0 1.1rem",
+                borderRight: "1px solid rgba(255,255,255,0.05)",
+                height: 34,
+                flexShrink: 0,
               }}
             >
-              <span style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--text-hi)" }}>
+              {/* Up/down triangle */}
+              <span aria-hidden="true" style={{
+                fontSize: "0.5rem",
+                color: t.up ? "#4ADE80" : "#F87171",
+                lineHeight: 1,
+              }}>
+                {t.up ? "▲" : "▼"}
+              </span>
+
+              <span style={{
+                fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+                fontSize: "0.6rem",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                color: t.up ? "#C9A84C" : "rgba(255,255,255,0.8)",
+              }}>
                 {t.symbol}
               </span>
-              <span style={{ fontSize: "0.58rem", color: "var(--text-lo)", letterSpacing: "0.04em" }}>
+
+              <span style={{
+                fontFamily: "'DM Sans', system-ui, sans-serif",
+                fontSize: "0.57rem",
+                color: "rgba(255,255,255,0.38)",
+                letterSpacing: "0.03em",
+              }}>
                 {t.name}
               </span>
-              <span style={{ fontSize: "0.62rem", fontWeight: 600, color: "var(--text-hi)", letterSpacing: "0.04em" }}>
-                {t.price}
-              </span>
+
               <span style={{
-                fontSize: "0.58rem",
-                fontWeight: 600,
-                color: t.up ? "#4ade80" : "#f87171",
+                fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+                fontSize: "0.6rem",
+                fontWeight: 500,
+                color: "rgba(255,255,255,0.88)",
                 letterSpacing: "0.04em",
               }}>
-                {t.change}
+                {t.price}
               </span>
+
               <span style={{
-                fontSize: "0.55rem",
-                color: t.up ? "rgba(74,222,128,0.65)" : "rgba(248,113,113,0.65)",
+                fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+                fontSize: "0.58rem",
+                fontWeight: 600,
+                color: t.up ? "#4ADE80" : "#F87171",
               }}>
                 {t.pct}
               </span>
@@ -129,13 +161,13 @@ export default function StockTicker() {
       </div>
 
       <style>{`
-        .ticker-track {
-          animation: ticker-scroll 60s linear infinite;
+        .tkr-track {
+          animation: tkr-scroll 65s linear infinite;
         }
-        .ticker-paused {
-          animation-play-state: paused;
+        .tkr-paused {
+          animation-play-state: paused !important;
         }
-        @keyframes ticker-scroll {
+        @keyframes tkr-scroll {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }

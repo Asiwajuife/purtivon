@@ -28,5 +28,29 @@ export default async function PodcastsDashboardPage() {
     publishedAt: p.publishedAt instanceof Date ? p.publishedAt.toISOString() : String(p.publishedAt),
   }))
 
-  return <PodcastsClient initialPodcasts={podcasts} />
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', maxWidth: 900 }}>
+      {/* Page header */}
+      <div style={{
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+        gap: '1rem', flexWrap: 'wrap',
+        paddingBottom: '0.85rem',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        <div>
+          <span style={{ display: 'block', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#c9a84c', marginBottom: '0.3rem' }}>
+            Media
+          </span>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.5rem', fontWeight: 300, color: 'var(--text-hi)', letterSpacing: '0.01em', margin: 0, lineHeight: 1.1 }}>
+            Podcasts
+          </h1>
+        </div>
+        <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.38)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 4, padding: '0.3rem 0.7rem', whiteSpace: 'nowrap' }}>
+          {podcasts.length} {podcasts.length === 1 ? 'episode' : 'episodes'}
+        </span>
+      </div>
+
+      <PodcastsClient initialPodcasts={podcasts} />
+    </div>
+  )
 }

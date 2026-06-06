@@ -98,11 +98,13 @@ export default function AdminLoginPage() {
                 required
                 autoComplete="email"
                 placeholder="you@example.com"
+                className="login-input"
                 style={{
                   width: '100%', background: 'var(--surface-hover)',
                   border: '1px solid var(--border-dim)', color: 'var(--text-hi)',
-                  fontSize: '0.8rem', padding: '0.55rem 0.75rem', outline: 'none',
-                  borderRadius: 3, boxSizing: 'border-box',
+                  fontSize: '0.8rem', padding: '0.55rem 0.75rem',
+                  borderRadius: 3, boxSizing: 'border-box', outline: 'none',
+                  transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s',
                 }}
               />
             </div>
@@ -120,11 +122,13 @@ export default function AdminLoginPage() {
                 required
                 autoComplete="current-password"
                 placeholder="••••••••"
+                className="login-input"
                 style={{
                   width: '100%', background: 'var(--surface-hover)',
                   border: '1px solid var(--border-dim)', color: 'var(--text-hi)',
-                  fontSize: '0.8rem', padding: '0.55rem 0.75rem', outline: 'none',
-                  borderRadius: 3, boxSizing: 'border-box',
+                  fontSize: '0.8rem', padding: '0.55rem 0.75rem',
+                  borderRadius: 3, boxSizing: 'border-box', outline: 'none',
+                  transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s',
                 }}
               />
             </div>
@@ -156,6 +160,14 @@ export default function AdminLoginPage() {
           Access is by invitation only
         </p>
       </div>
+      <style>{`
+        .login-input:focus {
+          outline: none;
+          border-color: rgba(201,168,76,0.5) !important;
+          background: rgba(255,255,255,0.04) !important;
+          box-shadow: 0 0 0 3px rgba(201,168,76,0.08) !important;
+        }
+      `}</style>
     </div>
   );
 }

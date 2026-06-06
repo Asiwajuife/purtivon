@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const TESTIMONIALS = [
   {
@@ -8,6 +8,7 @@ const TESTIMONIALS = [
     role: "Director General, West Africa Investment Authority",
     initials: "AO",
     region: "West Africa",
+    color: "#C9A84C",
   },
   {
     quote: "The media coverage Purtivon orchestrated following our award win reached over forty financial publications across three continents. The ROI on our sponsorship was extraordinary.",
@@ -15,6 +16,7 @@ const TESTIMONIALS = [
     role: "Head of Investor Relations, Nordic Capital Partners",
     initials: "HB",
     region: "Nordics",
+    color: "#3B82F6",
   },
   {
     quote: "Their FDI intelligence reports are required reading for our investment committee. The depth of analysis on Southeast Asian markets is genuinely world-class.",
@@ -22,6 +24,7 @@ const TESTIMONIALS = [
     role: "Chief Investment Officer, Meridian Asset Management",
     initials: "PS",
     region: "Singapore",
+    color: "#C9A84C",
   },
   {
     quote: "The Purtivon Global Awards gave our brand the credibility to enter new markets with confidence. Within six months of our win we had signed three new institutional mandates.",
@@ -29,6 +32,7 @@ const TESTIMONIALS = [
     role: "Managing Director, Ibero-American Infrastructure Fund",
     initials: "CY",
     region: "Latin America",
+    color: "#3B82F6",
   },
   {
     quote: "In a noisy market, Purtivon's recognition stands out as genuinely independent. Our clients and prospects take it seriously — it has materially strengthened our pitch book.",
@@ -36,6 +40,7 @@ const TESTIMONIALS = [
     role: "CEO, Levant Capital Advisory",
     initials: "AK",
     region: "Middle East",
+    color: "#C9A84C",
   },
   {
     quote: "The nomination process itself was insightful — it forced us to articulate our impact in ways that now inform our investor communications year-round.",
@@ -43,78 +48,95 @@ const TESTIMONIALS = [
     role: "CFO, Pan-African Development Bank",
     initials: "JO",
     region: "East Africa",
+    color: "#3B82F6",
   },
 ];
 
-const CARD_W = 290;
-const GAP    = 16;
+const CARD_W = 300;
+const GAP    = 20;
 const ITEMS  = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS];
 
 export default function TestimonialsCarousel() {
-  const trackRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => setActive((a) => (a + 1) % TESTIMONIALS.length), 5000);
+    const t = setInterval(() => setActive(a => (a + 1) % TESTIMONIALS.length), 5000);
     return () => clearInterval(t);
   }, [paused]);
 
   return (
     <section
-      style={{ overflow: "hidden", position: "relative" }}
+      style={{ overflow: "hidden", position: "relative", background: "#06080E" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      aria-label="Client testimonials"
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9iLPnoZIEwwGt_76XUGyq5mzC6g0KgGBHhw&s"
-        alt=""
-        aria-hidden="true"
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: 0 }}
-      />
-      {/* Base scrim */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(7,7,16,0.72)", zIndex: 1 }} />
-      {/* Edge vignette to keep header text crisp */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(7,7,16,0.55) 0%, rgba(7,7,16,0.1) 30%, rgba(7,7,16,0.1) 70%, rgba(7,7,16,0.55) 100%)", zIndex: 1 }} />
+      {/* Gradient mesh background */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0,
+        background: [
+          "radial-gradient(ellipse 70% 60% at 10% 30%, rgba(59,130,246,0.07) 0%, transparent 55%)",
+          "radial-gradient(ellipse 60% 50% at 90% 70%, rgba(201,168,76,0.06) 0%, transparent 55%)",
+          "rgba(6,8,14,1)",
+        ].join(","),
+      }} />
 
-      <div style={{ position: "relative", zIndex: 2, padding: "3rem 0 2.5rem" }}>
+      {/* Dot matrix */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0,
+        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)",
+        backgroundSize: "24px 24px",
+        pointerEvents: "none",
+      }} />
+
+      <div style={{ position: "relative", zIndex: 2, padding: "4.5rem 0 3.5rem" }}>
         {/* Header */}
-        <div className="container" style={{ marginBottom: "1.5rem" }}>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem" }}>
+        <div className="container" style={{ marginBottom: "3rem" }}>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
             <div>
-              <div className="eyebrow" style={{ marginBottom: "0.35rem", textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}>
+              <div className="eyebrow" style={{ marginBottom: "0.6rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <span style={{ width: 28, height: 1, background: "var(--gold-dim)", display: "block" }} />
                 Client Voices
               </div>
-              <h2 className="display-md" style={{ color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.6)", fontSize: "clamp(1.2rem,2vw,1.8rem)" }}>
+              <h2 className="display-md">
                 Trusted by those who <em>lead</em>
               </h2>
             </div>
-            <div style={{ display: "flex", gap: "0.35rem", alignItems: "center", paddingBottom: "0.25rem" }}>
+
+            {/* Dot pagination */}
+            <div style={{ display: "flex", gap: "0.4rem", alignItems: "center", paddingBottom: "0.2rem" }}>
               {TESTIMONIALS.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  style={{
-                    width: i === active ? 18 : 5, height: 5, borderRadius: 3,
-                    background: i === active ? "#c9a84c" : "rgba(255,255,255,0.25)",
-                    border: "none", cursor: "pointer", padding: 0,
-                    transition: "width 0.3s, background 0.3s",
-                  }}
                   aria-label={`Go to testimonial ${i + 1}`}
+                  style={{
+                    width: i === active ? 20 : 5,
+                    height: 5,
+                    borderRadius: 3,
+                    background: i === active ? "var(--gold)" : "rgba(255,255,255,0.2)",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    transition: "width 0.35s var(--ease-out), background 0.3s",
+                  }}
                 />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Scrolling track */}
+        {/* Scrolling marquee track */}
         <div style={{ position: "relative", overflow: "hidden" }}>
+          {/* Edge fades */}
+          <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: 80, background: "linear-gradient(90deg, rgba(6,8,14,1), transparent)", pointerEvents: "none", zIndex: 2 }} />
+          <div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 80, background: "linear-gradient(-90deg, rgba(6,8,14,1), transparent)", pointerEvents: "none", zIndex: 2 }} />
+
           <div
-            ref={trackRef}
             className={paused ? "testi-track testi-paused" : "testi-track"}
-            style={{ display: "flex", gap: `${GAP}px`, padding: "0.25rem 0 1rem" }}
+            style={{ display: "flex", gap: `${GAP}px`, padding: "0.5rem 0 1.5rem" }}
           >
             {ITEMS.map((t, i) => (
               <blockquote
@@ -123,64 +145,110 @@ export default function TestimonialsCarousel() {
                 style={{
                   flexShrink: 0,
                   width: CARD_W,
-                  background: "rgba(10,10,15,0.78)",
-                  border: "1px solid rgba(201,168,76,0.18)",
-                  borderTop: "2px solid rgba(201,168,76,0.45)",
-                  padding: "1.1rem 1.2rem",
+                  background: "rgba(10, 12, 22, 0.80)",
+                  backdropFilter: "blur(16px)",
+                  WebkitBackdropFilter: "blur(16px)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderTop: `2px solid ${t.color === "#C9A84C" ? "rgba(201,168,76,0.55)" : "rgba(59,130,246,0.45)"}`,
+                  padding: "1.35rem 1.4rem",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "0.75rem",
+                  gap: "0.85rem",
                   margin: 0,
-                  backdropFilter: "blur(10px)",
-                  transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                  cursor: "default",
+                  transition: "transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out), border-color 0.28s",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
                 }}
               >
-                <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.9rem", color: "rgba(201,168,76,0.35)", lineHeight: 0.8, userSelect: "none", margin: 0 }} aria-hidden="true">
+                {/* Opening quotation mark */}
+                <p aria-hidden="true" style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "2.4rem",
+                  color: `${t.color}30`,
+                  lineHeight: 0.7,
+                  userSelect: "none",
+                  margin: 0,
+                }}>
                   &ldquo;
                 </p>
-                <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.85rem", fontStyle: "italic", fontWeight: 300, lineHeight: 1.6, color: "#f0ede6", flex: 1, margin: 0, textShadow: "0 1px 3px rgba(0,0,0,0.4)" }}>
+
+                {/* Quote text */}
+                <p style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "0.87rem",
+                  fontStyle: "italic",
+                  fontWeight: 300,
+                  lineHeight: 1.65,
+                  color: "rgba(240,237,230,0.88)",
+                  flex: 1,
+                  margin: 0,
+                }}>
                   {t.quote}
                 </p>
-                <footer style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+
+                {/* Author row */}
+                <footer style={{ display: "flex", alignItems: "center", gap: "0.7rem", paddingTop: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                  {/* Avatar */}
                   <div style={{
-                    width: 28, height: 28, borderRadius: "50%",
-                    background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)",
+                    width: 32, height: 32,
+                    borderRadius: "50%",
+                    background: `${t.color}18`,
+                    border: `1px solid ${t.color}40`,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "0.58rem", fontWeight: 700, color: "var(--gold)", flexShrink: 0,
+                    fontSize: "0.6rem", fontWeight: 700,
+                    color: t.color,
+                    flexShrink: 0,
+                    letterSpacing: "0.05em",
                   }}>
                     {t.initials}
                   </div>
-                  <div style={{ minWidth: 0 }}>
+
+                  <div style={{ minWidth: 0, flex: 1 }}>
                     <p style={{ fontSize: "0.72rem", fontWeight: 500, color: "#fff", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {t.name}
                     </p>
-                    <p style={{ fontSize: "0.6rem", color: "rgba(240,237,230,0.6)", margin: "0.1rem 0 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <p style={{ fontSize: "0.6rem", color: "rgba(240,237,230,0.45)", margin: "0.1rem 0 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {t.role}
                     </p>
                   </div>
-                  <span style={{ marginLeft: "auto", fontSize: "0.54rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(201,168,76,0.65)", whiteSpace: "nowrap", flexShrink: 0 }}>
+
+                  {/* Region tag */}
+                  <span style={{
+                    fontSize: "0.52rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: `${t.color}80`,
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                    border: `1px solid ${t.color}25`,
+                    padding: "0.2rem 0.5rem",
+                    borderRadius: 2,
+                  }}>
                     {t.region}
                   </span>
                 </footer>
               </blockquote>
             ))}
           </div>
-
-          <div style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: 64, background: "linear-gradient(90deg, rgba(0,0,0,0.5), transparent)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 64, background: "linear-gradient(-90deg, rgba(0,0,0,0.5), transparent)", pointerEvents: "none" }} />
         </div>
       </div>
 
       <style>{`
-        .testi-track { animation: testi-scroll 38s linear infinite; }
-        .testi-paused { animation-play-state: paused !important; }
+        .testi-track {
+          animation: testi-scroll 42s linear infinite;
+        }
+        .testi-paused {
+          animation-play-state: paused !important;
+        }
         @keyframes testi-scroll {
           0%   { transform: translateX(0); }
           100% { transform: translateX(calc(-${CARD_W}px * ${TESTIMONIALS.length} - ${GAP}px * ${TESTIMONIALS.length})); }
         }
         .testi-card:hover {
-          transform: translateY(-3px) !important;
-          box-shadow: 0 8px 28px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.3) !important;
+          transform: translateY(-5px) !important;
+          box-shadow: 0 16px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.25) !important;
+          border-color: rgba(201,168,76,0.28) !important;
         }
       `}</style>
     </section>
