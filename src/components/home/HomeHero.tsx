@@ -307,6 +307,7 @@ export default function HomeHero({ articles = [] }: HomeHeroProps) {
               initial={prefersReducedMotion ? false : { opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.9, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
+              className="hero-right-col"
               style={{
                 padding: "3rem 0 3rem 3rem",
                 display: "flex", flexDirection: "column", gap: "0.85rem",
@@ -574,8 +575,10 @@ export default function HomeHero({ articles = [] }: HomeHeroProps) {
           .hero-grid           { grid-template-columns: 1fr !important; }
           .hero-edition-strip  { padding: 0.55rem 1.5rem !important; }
           .hero-topics-strip   { padding: 0.65rem 1.5rem !important; }
+          .hero-right-col      { border-left: none !important; border-top: 1px solid rgba(201,168,76,0.12) !important; padding: 2rem 0 !important; }
         }
         @media (max-width: 600px) {
+          .hero-grid         { padding: 0 1.25rem !important; }
           .hero-left-col     { padding: 2rem 0 !important; }
           .hero-topics-strip { display: none !important; }
         }

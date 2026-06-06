@@ -67,7 +67,7 @@ export default async function AwardsPage() {
     <div style={{ paddingTop: 68 }}>
 
       {/* ── Dramatic hero ── */}
-      <div style={{
+      <div className="awards-hero-section" style={{
         position: "relative",
         overflow: "hidden",
         background: "linear-gradient(180deg, #03050f 0%, #050810 60%, var(--dark) 100%)",
@@ -164,7 +164,7 @@ export default async function AwardsPage() {
       </div>
 
       {/* ── Main content: awards list + nomination form ── */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "4rem 2.5rem 3rem" }}>
+      <div className="awards-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "4rem 2.5rem 3rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "4rem", alignItems: "start" }} className="awards-layout">
 
           {/* Awards list */}
@@ -239,6 +239,10 @@ export default async function AwardsPage() {
           .awards-layout { grid-template-columns: 1fr !important; gap: 3rem !important; }
           .awards-layout > div:last-child { position: static !important; top: auto !important; }
           .awards-header-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 640px) {
+          .awards-hero-section { padding: 3rem 0 2.5rem !important; }
+          .awards-content { padding: 2.5rem 1.25rem 2rem !important; }
         }
       `}</style>
     </div>

@@ -54,6 +54,8 @@ export default function StockTicker() {
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
     >
       {/* Scan-line texture */}
       <div aria-hidden="true" style={{
@@ -163,6 +165,8 @@ export default function StockTicker() {
       <style>{`
         .tkr-track {
           animation: tkr-scroll 65s linear infinite;
+          will-change: transform;
+          transform: translateZ(0);
         }
         .tkr-paused {
           animation-play-state: paused !important;

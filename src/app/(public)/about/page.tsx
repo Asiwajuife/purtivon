@@ -85,7 +85,7 @@ export default function AboutPage() {
         {/* Dot matrix */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '28px 28px', pointerEvents: 'none' }} />
 
-        <div style={{ position: 'relative', zIndex: 1, padding: '5rem 2.5rem 4rem', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+        <div className="about-hero-inner" style={{ position: 'relative', zIndex: 1, padding: '5rem 2.5rem 4rem', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
           <div style={{ maxWidth: 720 }}>
             <div className="eyebrow" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <span style={{ width: 32, height: 1, background: 'var(--gold-dim)', display: 'block' }} />
@@ -107,7 +107,7 @@ export default function AboutPage() {
           </div>
 
           {/* Animated stat counters */}
-          <div style={{
+          <div className="about-hero-stats" style={{
             display: 'flex', gap: '3.5rem', marginTop: '5rem',
             paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)',
             flexWrap: 'wrap',
@@ -185,7 +185,13 @@ export default function AboutPage() {
             </ScrollReveal>
           </div>
         </div>
-        <style>{`@media (max-width: 900px) { .about-split { grid-template-columns: 1fr !important; gap: 3rem !important; } }`}</style>
+        <style>{`
+          @media (max-width: 900px) { .about-split { grid-template-columns: 1fr !important; gap: 3rem !important; } }
+          @media (max-width: 640px) {
+            .about-hero-inner { padding: 3rem 1.25rem 2.5rem !important; }
+            .about-hero-stats { margin-top: 2.5rem !important; gap: 2rem !important; }
+          }
+        `}</style>
       </section>
 
       {/* ── Values — glassmorphism card grid ── */}

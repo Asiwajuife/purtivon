@@ -97,7 +97,7 @@ export default function ServicesPage() {
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(4,6,18,0.9) 0%, transparent 50%)' }} />
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '28px 28px', pointerEvents: 'none' }} />
 
-        <div style={{ position: 'relative', zIndex: 1, padding: '5rem 2.5rem 4rem', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+        <div className="svc-hero-inner" style={{ position: 'relative', zIndex: 1, padding: '5rem 2.5rem 4rem', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
           <div style={{ maxWidth: 700 }}>
             <div className="eyebrow" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <span style={{ width: 32, height: 1, background: 'var(--gold-dim)', display: 'block' }} />
@@ -187,7 +187,10 @@ export default function ServicesPage() {
           .svc-card:hover { border-left-color: var(--gold) !important; box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.12) !important; transform: translateY(-2px); }
           .svc-card:hover .svc-icon { border-color: rgba(201,168,76,0.5) !important; background: rgba(201,168,76,0.12) !important; box-shadow: 0 0 20px rgba(201,168,76,0.2) !important; }
           .svc-card:hover .svc-num { color: rgba(201,168,76,0.55) !important; }
-          @media (max-width: 640px) { .svc-card { grid-template-columns: 1fr !important; gap: 1.25rem !important; } }
+          @media (max-width: 640px) {
+            .svc-card { grid-template-columns: 1fr !important; gap: 1.25rem !important; }
+            .svc-hero-inner { padding: 3rem 1.25rem 2.5rem !important; }
+          }
         `}</style>
       </section>
 

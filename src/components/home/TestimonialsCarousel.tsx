@@ -131,8 +131,8 @@ export default function TestimonialsCarousel() {
         {/* Scrolling marquee track */}
         <div style={{ position: "relative", overflow: "hidden" }}>
           {/* Edge fades */}
-          <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: 80, background: "linear-gradient(90deg, rgba(6,8,14,1), transparent)", pointerEvents: "none", zIndex: 2 }} />
-          <div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 80, background: "linear-gradient(-90deg, rgba(6,8,14,1), transparent)", pointerEvents: "none", zIndex: 2 }} />
+          <div aria-hidden="true" className="testi-fade-left" style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: 80, background: "linear-gradient(90deg, rgba(6,8,14,1), transparent)", pointerEvents: "none", zIndex: 2 }} />
+          <div aria-hidden="true" className="testi-fade-right" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 80, background: "linear-gradient(-90deg, rgba(6,8,14,1), transparent)", pointerEvents: "none", zIndex: 2 }} />
 
           <div
             className={paused ? "testi-track testi-paused" : "testi-track"}
@@ -249,6 +249,9 @@ export default function TestimonialsCarousel() {
           transform: translateY(-5px) !important;
           box-shadow: 0 16px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.25) !important;
           border-color: rgba(201,168,76,0.28) !important;
+        }
+        @media (max-width: 640px) {
+          .testi-fade-left, .testi-fade-right { width: 28px !important; }
         }
       `}</style>
     </section>

@@ -256,6 +256,9 @@ export default function FeaturedArticles({ articles }: { articles: HomepageArtic
           .feat-grid .feat-sec-link:last-child { display: block !important; }
           .feat-grid article { height: 420px !important; }
         }
+        @media (max-width: 480px) {
+          .feat-grid article { height: 340px !important; }
+        }
       `}</style>
     </section>
   )

@@ -238,7 +238,7 @@ export default function Footer() {
       <div style={{ height: 1, background: "rgba(255,255,255,0.05)", margin: "0 2.5rem" }} />
 
       {/* Bottom bar */}
-      <div style={{
+      <div className="footer-bottom-bar" style={{
         position: "relative", zIndex: 1,
         maxWidth: 1200,
         margin: "0 auto",
@@ -279,7 +279,8 @@ export default function Footer() {
           .footer-main-grid { grid-template-columns: 1fr 1fr 1fr !important; }
         }
         @media (max-width: 640px) {
-          .footer-main-grid { grid-template-columns: 1fr 1fr !important; gap: 2rem !important; }
+          .footer-main-grid { grid-template-columns: 1fr 1fr !important; gap: 2rem !important; padding: 2.5rem 1.25rem 2rem !important; }
+          .footer-bottom-bar { padding: 1rem 1.25rem !important; }
         }
         @media (max-width: 400px) {
           .footer-main-grid { grid-template-columns: 1fr !important; }

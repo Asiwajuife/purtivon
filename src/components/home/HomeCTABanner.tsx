@@ -94,7 +94,7 @@ export default function HomeCTABanner() {
       <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent)", zIndex: 2 }} />
       <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent)", zIndex: 2 }} />
 
-      <div className="container" style={{ position: "relative", zIndex: 3, paddingTop: "4.5rem", paddingBottom: "4.5rem" }}>
+      <div className="container cta-inner" style={{ position: "relative", zIndex: 3, paddingTop: "4.5rem", paddingBottom: "4.5rem" }}>
         {/* Gold decorative line */}
         <motion.div
           aria-hidden="true"
@@ -197,6 +197,9 @@ export default function HomeCTABanner() {
         @keyframes spin-slow {
           from { transform: translate(-50%, -50%) rotate(0deg); }
           to   { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @media (max-width: 640px) {
+          .cta-inner { padding-top: 3rem !important; padding-bottom: 3rem !important; }
         }
       `}</style>
     </section>

@@ -182,7 +182,7 @@ export default async function InsightsPage({
         </div>
       )}
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2.5rem 2.5rem 2rem" }}>
+      <div className="ins-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "2.5rem 2.5rem 2rem" }}>
         {articles.length === 0 ? (
           <div style={{
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -386,6 +386,8 @@ export default async function InsightsPage({
         }
         @media (max-width: 560px) {
           .ins-grid { grid-template-columns: 1fr !important; }
+          .ins-content { padding: 1.5rem 1.25rem !important; }
+          .ins-featured-card { min-height: 280px !important; }
         }
       `}</style>
     </div>

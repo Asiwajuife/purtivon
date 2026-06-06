@@ -108,7 +108,7 @@ export default function ContactPage() {
     <div style={{ paddingTop: 68 }}>
 
       {/* ── Page header ── */}
-      <div style={{
+      <div className="contact-header" style={{
         position: "relative",
         overflow: "hidden",
         background: "linear-gradient(to bottom, #060812, var(--dark))",
@@ -136,7 +136,7 @@ export default function ContactPage() {
       </div>
 
       {/* ── Two-column layout ── */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "4rem 2.5rem 6rem" }}>
+      <div className="contact-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "4rem 2.5rem 6rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1.45fr", gap: "4rem", alignItems: "start" }} className="contact-split">
 
           {/* ── Left: info panel ── */}
@@ -391,6 +391,10 @@ export default function ContactPage() {
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @media (max-width: 960px) {
           .contact-split { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+        }
+        @media (max-width: 640px) {
+          .contact-header { padding: 3rem 0 2rem !important; }
+          .contact-content { padding: 2.5rem 1.25rem 4rem !important; }
         }
         @media (max-width: 560px) {
           .contact-row-2 { grid-template-columns: 1fr !important; }
