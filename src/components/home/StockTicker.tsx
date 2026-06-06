@@ -166,14 +166,15 @@ export default function StockTicker() {
         .tkr-track {
           animation: tkr-scroll 65s linear infinite;
           will-change: transform;
-          transform: translateZ(0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
         .tkr-paused {
           animation-play-state: paused !important;
         }
         @keyframes tkr-scroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0%   { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
       `}</style>
     </div>
