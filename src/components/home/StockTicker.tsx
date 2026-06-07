@@ -165,12 +165,17 @@ export default function StockTicker() {
       <style>{`
         .tkr-track {
           animation: tkr-scroll 65s linear infinite;
-          will-change: transform;
+          -webkit-animation: tkr-scroll 65s linear infinite;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
         }
         .tkr-paused {
           animation-play-state: paused !important;
+          -webkit-animation-play-state: paused !important;
+        }
+        @-webkit-keyframes tkr-scroll {
+          0%   { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+          100% { -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); }
         }
         @keyframes tkr-scroll {
           0%   { transform: translate3d(0, 0, 0); }
