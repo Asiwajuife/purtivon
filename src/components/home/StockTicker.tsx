@@ -31,43 +31,63 @@ const TICKERS: Ticker[] = [
   { symbol: "GS",     name: "Goldman Sachs", price: "461.88",    change: "+7.62",   pct: "+1.68%", up: true  },
 ];
 
-// Duplicate for seamless infinite loop: scroll -50% then jump back to 0
+// Two identical copies so we can loop: scroll -halfWidth then jump back to 0
 const ITEMS = [...TICKERS, ...TICKERS];
 
-// px moved per 16 ms frame (≈60 fps) — matches the previous 65 s CSS animation speed
-const SPEED = 0.72;
+// Target scroll speed in pixels per second (matches the old 65 s CSS animation)
+const PX_PER_SEC = 44;
 
 export default function StockTicker() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const posRef   = useRef(0);
-  const rafRef   = useRef<number>(0);
-  // Pause flag lives in a ref so hover/unhover never triggers a re-render
+  const trackRef  = useRef<HTMLDivElement>(null);
+  const posRef    = useRef(0);
+  const rafRef    = useRef<number>(0);
+  // Ref-based pause flag — zero re-renders on hover/unhover
   const pausedRef = useRef(false);
 
   useEffect(() => {
-    // Honour prefers-reduced-motion
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const track = trackRef.current;
     if (!track) return;
 
-    // halfWidth is measured lazily inside the loop so fonts/layout are settled
     let halfWidth = 0;
+    let lastTs    = 0;
 
-    const tick = () => {
-      // Measure once we have a real laid-out width
-      if (halfWidth === 0 && track.scrollWidth > 0) {
-        halfWidth = track.scrollWidth / 2;
+    // Sum offsetWidth of the FIRST copy of tickers (first TICKERS.length children).
+    // We use offsetWidth per-child rather than track.scrollWidth because Safari/WebKit
+    // reports scrollWidth as clientWidth for display:flex containers where items
+    // overflow via flexShrink:0 — offsetWidth is always correct on every browser.
+    const measureHalf = (): number => {
+      let w = 0;
+      const n = Math.min(TICKERS.length, track.children.length);
+      for (let i = 0; i < n; i++) {
+        w += (track.children[i] as HTMLElement).offsetWidth;
+      }
+      return w;
+    };
+
+    const tick = (ts: number) => {
+      // Lazy measurement: try every frame until we get a non-zero value
+      // (covers the edge case where fonts haven't settled on the first frame)
+      if (halfWidth === 0) {
+        halfWidth = measureHalf();
       }
 
-      if (!pausedRef.current && halfWidth > 0) {
-        posRef.current -= SPEED;
-        // Seamless loop: jump back exactly one copy when we've scrolled half the track
-        if (posRef.current <= -halfWidth) {
-          posRef.current += halfWidth;
+      if (halfWidth > 0) {
+        if (!pausedRef.current) {
+          const elapsed = lastTs > 0
+            ? Math.min(ts - lastTs, 100) // cap at 100 ms so tab-switch doesn't cause a jump
+            : 16;
+          posRef.current -= (PX_PER_SEC / 1000) * elapsed;
+
+          // Seamless loop: jump back exactly one copy when we've scrolled past it
+          if (posRef.current <= -halfWidth) {
+            posRef.current += halfWidth;
+          }
+
+          track.style.transform = `translate3d(${posRef.current}px, 0, 0)`;
         }
-        // Direct style mutation — no React re-render, no compositing conflicts
-        track.style.transform = `translate3d(${posRef.current}px, 0, 0)`;
+        lastTs = ts;
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -93,9 +113,10 @@ export default function StockTicker() {
         display: "flex",
         alignItems: "center",
       }}
-      // Pause on desktop hover only — touch events intentionally omitted
-      // because touchstart fires on iOS when users scroll near the bottom,
-      // which would freeze the ticker mid-scroll.
+      // Hover-pause for desktop only.
+      // Touch handlers intentionally omitted — they caused iOS page-scroll to
+      // freeze the ticker because touchstart fires on fixed elements at the
+      // bottom of the viewport even when the user is scrolling the page.
       onMouseEnter={() => { pausedRef.current = true;  }}
       onMouseLeave={() => { pausedRef.current = false; }}
     >
@@ -107,9 +128,17 @@ export default function StockTicker() {
       }} />
 
       {/* Left edge fade */}
-      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 52, bottom: 0, width: 40, background: "linear-gradient(90deg, rgba(4,5,14,0.96), transparent)", pointerEvents: "none", zIndex: 2 }} />
+      <div aria-hidden="true" style={{
+        position: "absolute", top: 0, left: 52, bottom: 0, width: 40,
+        background: "linear-gradient(90deg, rgba(4,5,14,0.96), transparent)",
+        pointerEvents: "none", zIndex: 2,
+      }} />
       {/* Right edge fade */}
-      <div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 40, background: "linear-gradient(-90deg, rgba(4,5,14,0.96), transparent)", pointerEvents: "none", zIndex: 2 }} />
+      <div aria-hidden="true" style={{
+        position: "absolute", top: 0, right: 0, bottom: 0, width: 40,
+        background: "linear-gradient(-90deg, rgba(4,5,14,0.96), transparent)",
+        pointerEvents: "none", zIndex: 2,
+      }} />
 
       {/* "Markets" label */}
       <div style={{
@@ -134,11 +163,18 @@ export default function StockTicker() {
         </span>
       </div>
 
-      {/* Scrolling track wrapper — overflow:hidden clips the moving track */}
+      {/* Scrolling track wrapper */}
       <div style={{ overflow: "hidden", flex: 1 }}>
         <div
           ref={trackRef}
-          style={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            whiteSpace: "nowrap",
+            // Pre-promote to GPU compositing layer so the JS transform is
+            // rendered on the compositor thread, not the main thread
+            willChange: "transform",
+          }}
         >
           {ITEMS.map((t, i) => (
             <div
@@ -153,7 +189,6 @@ export default function StockTicker() {
                 flexShrink: 0,
               }}
             >
-              {/* Up/down triangle */}
               <span aria-hidden="true" style={{
                 fontSize: "0.5rem",
                 color: t.up ? "#4ADE80" : "#F87171",
