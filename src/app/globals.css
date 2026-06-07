@@ -1099,7 +1099,6 @@ em, i {
   .animate-spin-slow       { animation: none; }
   .testi-track             { animation: none !important; }
   .ticker-track            { animation: none !important; }
-  .tkr-track               { animation: none !important; }
   .skeleton-shimmer        { animation: none !important; }
 }
 

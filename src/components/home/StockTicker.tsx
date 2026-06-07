@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface Ticker {
   symbol: string;
@@ -31,10 +31,51 @@ const TICKERS: Ticker[] = [
   { symbol: "GS",     name: "Goldman Sachs", price: "461.88",    change: "+7.62",   pct: "+1.68%", up: true  },
 ];
 
+// Duplicate for seamless infinite loop: scroll -50% then jump back to 0
 const ITEMS = [...TICKERS, ...TICKERS];
 
+// px moved per 16 ms frame (≈60 fps) — matches the previous 65 s CSS animation speed
+const SPEED = 0.72;
+
 export default function StockTicker() {
-  const [paused, setPaused] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const posRef   = useRef(0);
+  const rafRef   = useRef<number>(0);
+  // Pause flag lives in a ref so hover/unhover never triggers a re-render
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    // Honour prefers-reduced-motion
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const track = trackRef.current;
+    if (!track) return;
+
+    // halfWidth is measured lazily inside the loop so fonts/layout are settled
+    let halfWidth = 0;
+
+    const tick = () => {
+      // Measure once we have a real laid-out width
+      if (halfWidth === 0 && track.scrollWidth > 0) {
+        halfWidth = track.scrollWidth / 2;
+      }
+
+      if (!pausedRef.current && halfWidth > 0) {
+        posRef.current -= SPEED;
+        // Seamless loop: jump back exactly one copy when we've scrolled half the track
+        if (posRef.current <= -halfWidth) {
+          posRef.current += halfWidth;
+        }
+        // Direct style mutation — no React re-render, no compositing conflicts
+        track.style.transform = `translate3d(${posRef.current}px, 0, 0)`;
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
 
   return (
     <div
@@ -52,10 +93,11 @@ export default function StockTicker() {
         display: "flex",
         alignItems: "center",
       }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
+      // Pause on desktop hover only — touch events intentionally omitted
+      // because touchstart fires on iOS when users scroll near the bottom,
+      // which would freeze the ticker mid-scroll.
+      onMouseEnter={() => { pausedRef.current = true;  }}
+      onMouseLeave={() => { pausedRef.current = false; }}
     >
       {/* Scan-line texture */}
       <div aria-hidden="true" style={{
@@ -92,10 +134,10 @@ export default function StockTicker() {
         </span>
       </div>
 
-      {/* Scrolling track */}
-      <div style={{ overflow: "hidden", flex: 1, position: "relative", zIndex: 1 }}>
+      {/* Scrolling track wrapper — overflow:hidden clips the moving track */}
+      <div style={{ overflow: "hidden", flex: 1 }}>
         <div
-          className={paused ? "tkr-track tkr-paused" : "tkr-track"}
+          ref={trackRef}
           style={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}
         >
           {ITEMS.map((t, i) => (
@@ -161,27 +203,6 @@ export default function StockTicker() {
           ))}
         </div>
       </div>
-
-      <style>{`
-        .tkr-track {
-          animation: tkr-scroll 65s linear infinite;
-          -webkit-animation: tkr-scroll 65s linear infinite;
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-        }
-        .tkr-paused {
-          animation-play-state: paused !important;
-          -webkit-animation-play-state: paused !important;
-        }
-        @-webkit-keyframes tkr-scroll {
-          0%   { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
-          100% { -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); }
-        }
-        @keyframes tkr-scroll {
-          0%   { transform: translate3d(0, 0, 0); }
-          100% { transform: translate3d(-50%, 0, 0); }
-        }
-      `}</style>
     </div>
   );
 }
