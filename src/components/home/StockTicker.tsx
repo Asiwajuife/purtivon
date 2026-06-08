@@ -36,7 +36,7 @@ const ITEMS = [...TICKERS, ...TICKERS];
 
 // Target speed in px/sec. Used only to compute animation-duration at mount time so
 // the perceived scroll speed stays consistent across screen widths.
-const PX_PER_SEC = 44;
+const PX_PER_SEC = 70;
 
 export default function StockTicker() {
   const trackRef = useRef<HTMLDivElement>(null);
