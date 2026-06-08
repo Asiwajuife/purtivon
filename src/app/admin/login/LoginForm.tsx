@@ -31,14 +31,21 @@ export default function AdminLoginPage() {
         return;
       }
       if (result.error) {
-        setError("Invalid email or password.");
+        // auth.ts prefixes lockout errors with "ACCOUNT_LOCKED:" so we can
+        // surface a useful message without leaking internal error details.
+        if (result.error.startsWith("ACCOUNT_LOCKED:")) {
+          setError(result.error.replace("ACCOUNT_LOCKED:", ""));
+        } else {
+          setError("Invalid email or password.");
+        }
         setLoading(false);
         return;
       }
       router.push("/dashboard");
       router.refresh();
-    } catch (err) {
-      setError(`Unexpected error: ${err instanceof Error ? err.message : String(err)}`);
+    } catch {
+      // Never expose raw exception messages to the UI
+      setError("An unexpected error occurred. Please try again.");
       setLoading(false);
     }
   }
