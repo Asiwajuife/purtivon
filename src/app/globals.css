@@ -1107,12 +1107,9 @@ em, i {
   .testi-track             { animation: none !important; }
   .ticker-track            { animation: none !important; }
   .skeleton-shimmer        { animation: none !important; }
-  /* Ticker must keep scrolling so all market prices are reachable — slow it
-     instead of stopping. Class specificity (0-1-0) beats * (0-0-0) on !important. */
-  .tkr-track {
-    animation-duration:        260s !important;
-    animation-iteration-count: infinite !important;
-  }
+  /* .tkr-track is intentionally excluded — JS sets animation-duration and
+     animation-iteration-count with !important inline to keep the ticker scrolling
+     at normal speed (it is data, not decorative motion). */
 }
 
 /* ─────────────────────────────────────────────

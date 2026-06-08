@@ -55,7 +55,14 @@ export default function StockTicker() {
       let w = 0;
       const n = Math.min(TICKERS.length, track.children.length);
       for (let i = 0; i < n; i++) w += (track.children[i] as HTMLElement).offsetWidth;
-      if (w > 0) track.style.animationDuration = `${(w / PX_PER_SEC).toFixed(1)}s`;
+      const duration = w > 0 ? `${(w / PX_PER_SEC).toFixed(1)}s` : "65s";
+      // setProperty with 'important' makes these inline !important declarations.
+      // Inline !important has higher specificity than any stylesheet !important
+      // (inline = [1,0,0,0] vs universal selector = [0,0,0,0]), so this survives
+      // the global prefers-reduced-motion rule that sets animation-duration:0.01ms
+      // and animation-iteration-count:1 on every element.
+      track.style.setProperty("animation-duration", duration, "important");
+      track.style.setProperty("animation-iteration-count", "infinite", "important");
     });
     return () => cancelAnimationFrame(id);
   }, []);
