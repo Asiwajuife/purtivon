@@ -31,63 +31,43 @@ const TICKERS: Ticker[] = [
   { symbol: "GS",     name: "Goldman Sachs", price: "461.88",    change: "+7.62",   pct: "+1.68%", up: true  },
 ];
 
+// Two identical copies — the CSS animation translates -50% (= -halfWidth) for a seamless loop.
 const ITEMS = [...TICKERS, ...TICKERS];
+
+// Target speed in px/sec. Used only to compute animation-duration at mount time so
+// the perceived scroll speed stays consistent across screen widths.
 const PX_PER_SEC = 44;
 
 export default function StockTicker() {
-  const trackRef  = useRef<HTMLDivElement>(null);
-  const posRef    = useRef(0);
-  const rafRef    = useRef<number>(0);
-  const pausedRef = useRef(false);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
     const track = trackRef.current;
     if (!track) return;
 
-    let halfWidth = 0;
-    let lastTs    = 0;
-
-    // offsetWidth per-child — Safari/WebKit reports scrollWidth as clientWidth
-    // for display:flex containers with flexShrink:0 overflow, so scrollWidth/2 is wrong.
-    const measureHalf = (): number => {
+    // One-time measurement: set animation-duration so speed is constant regardless
+    // of how wide the items render on this device. Falls back to the CSS default (65s)
+    // if the layout hasn't settled yet (offsetWidth still 0).
+    // Note: no prefers-reduced-motion guard here — globals.css handles reduced-motion
+    // users by slowing the animation to 260s rather than stopping it entirely, because
+    // a frozen ticker never shows all market prices.
+    const id = requestAnimationFrame(() => {
       let w = 0;
       const n = Math.min(TICKERS.length, track.children.length);
-      for (let i = 0; i < n; i++) {
-        w += (track.children[i] as HTMLElement).offsetWidth;
-      }
-      return w;
-    };
-
-    const tick = (ts: number) => {
-      if (halfWidth === 0) halfWidth = measureHalf();
-
-      if (halfWidth > 0) {
-        if (!pausedRef.current) {
-          const elapsed = lastTs > 0 ? Math.min(ts - lastTs, 100) : 16;
-          posRef.current -= (PX_PER_SEC / 1000) * elapsed;
-          if (posRef.current <= -halfWidth) posRef.current += halfWidth;
-          // translateX (not translate3d) avoids forced GPU layer promotion on WebKit,
-          // which conflicts with the backdrop-filter compositing layer on the sibling element.
-          track.style.transform = `translateX(${posRef.current}px)`;
-        }
-        lastTs = ts;
-      }
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
+      for (let i = 0; i < n; i++) w += (track.children[i] as HTMLElement).offsetWidth;
+      if (w > 0) track.style.animationDuration = `${(w / PX_PER_SEC).toFixed(1)}s`;
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   return (
     <>
       {/*
-        Layer 1 — backdrop only. No children, no animation.
-        Keeping backdrop-filter isolated here prevents iOS Safari from compositing
-        the animated track (Layer 2) onto the wrong GPU layer, which made it appear frozen.
+        Layer 1 — backdrop only, no children.
+        iOS Safari composites children of position:fixed+backdrop-filter onto the
+        wrong GPU layer, freezing any transform animation applied to them. Isolating
+        the blur here means the content layer (Layer 2) has no backdrop-filter
+        ancestor, so CSS animations on the track run correctly on every browser.
       */}
       <div
         aria-hidden="true"
@@ -102,7 +82,7 @@ export default function StockTicker() {
         }}
       />
 
-      {/* Layer 2 — content. No backdrop-filter ancestor, so transforms render correctly on iOS. */}
+      {/* Layer 2 — content. No backdrop-filter in the ancestor chain. */}
       <div
         aria-label="Market data ticker"
         style={{
@@ -115,8 +95,11 @@ export default function StockTicker() {
           display: "flex",
           alignItems: "center",
         }}
-        onMouseEnter={() => { pausedRef.current = true;  }}
-        onMouseLeave={() => { pausedRef.current = false; }}
+        // Hover-pause: directly set animationPlayState on the track element.
+        // No state update → no re-render. Touch intentionally omitted — touchstart
+        // on a fixed bottom element intercepts iOS page scroll.
+        onMouseEnter={() => { if (trackRef.current) trackRef.current.style.animationPlayState = "paused"; }}
+        onMouseLeave={() => { if (trackRef.current) trackRef.current.style.animationPlayState = "running"; }}
       >
         {/* Scan-line texture */}
         <div aria-hidden="true" style={{
@@ -163,15 +146,19 @@ export default function StockTicker() {
 
         {/* Scrolling track wrapper */}
         <div style={{ overflow: "hidden", flex: 1 }}>
+          {/*
+            .tkr-track applies: animation: marquee 65s linear infinite
+            The marquee keyframe translates from 0 to -50% of this element's own
+            width. Since ITEMS has exactly 2× TICKERS, -50% = -halfWidth, making
+            the end position identical to the start → seamless loop, no JS needed.
+          */}
           <div
             ref={trackRef}
+            className="tkr-track"
             style={{
               display: "flex",
               alignItems: "center",
               whiteSpace: "nowrap",
-              // No willChange here — pre-promoting to a GPU layer inside a fixed element
-              // without backdrop-filter still works, but leaving it off avoids any
-              // compositing surprises on older WebKit versions.
             }}
           >
             {ITEMS.map((t, i) => (
