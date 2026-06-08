@@ -3,8 +3,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
+  const limited = checkRateLimit(req, 10, 60 * 60 * 1000); // 10 per hour
+  if (limited) return limited;
+
   try {
     // Only admins may create accounts
     const session = await getServerSession(authOptions);

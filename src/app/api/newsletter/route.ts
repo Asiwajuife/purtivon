@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/rateLimit";
+
 export async function POST(req: NextRequest) {
+  const limited = checkRateLimit(req, 3, 15 * 60 * 1000); // 3 per 15 min
+  if (limited) return limited;
+
   try {
     const body = await req.json();
     const { email, name } = body;

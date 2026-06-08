@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
+  const limited = checkRateLimit(req, 5, 15 * 60 * 1000); // 5 per 15 min
+  if (limited) return limited;
   try {
     const body = await req.json();
     const { name, email, organisation, subject, message } = body as {

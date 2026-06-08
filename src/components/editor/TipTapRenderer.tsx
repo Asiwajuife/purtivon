@@ -1,5 +1,19 @@
 ﻿import { type JSONContent } from "@tiptap/react";
 
+// Allow only http/https/mailto/relative URLs in link hrefs and image srcs.
+// Blocks javascript: data: vbscript: and other protocol-based XSS vectors.
+function isSafeUrl(value: unknown): value is string {
+  if (typeof value !== "string" || !value.trim()) return false;
+  // Relative paths and anchors are safe
+  if (value.startsWith("/") || value.startsWith("#") || value.startsWith("?")) return true;
+  try {
+    const { protocol } = new URL(value);
+    return protocol === "https:" || protocol === "http:" || protocol === "mailto:";
+  } catch {
+    return false;
+  }
+}
+
 // Recursively render TipTap JSON to React elements — no client JS needed
 function renderNode(node: JSONContent, index: number): React.ReactNode {
   const key = index;
@@ -44,17 +58,21 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
         if (mark.type === "bold") el = <strong key={key}>{el}</strong>;
         else if (mark.type === "italic") el = <em key={key} style={{ fontStyle: "italic", color: "inherit" }}>{el}</em>;
         else if (mark.type === "link") {
-          el = (
-            <a
-              key={key}
-              href={mark.attrs?.href as string}
-              target={mark.attrs?.target as string | undefined ?? "_blank"}
-              rel="noopener noreferrer"
-              style={{ color: "#c9a84c", textDecoration: "underline", textUnderlineOffset: 3 }}
-            >
-              {el}
-            </a>
-          );
+          const href = mark.attrs?.href;
+          // Render the link only if the href is a safe protocol — blocks javascript:/data:/vbscript:
+          if (isSafeUrl(href)) {
+            el = (
+              <a
+                key={key}
+                href={href}
+                target={mark.attrs?.target as string | undefined ?? "_blank"}
+                rel="noopener noreferrer"
+                style={{ color: "#c9a84c", textDecoration: "underline", textUnderlineOffset: 3 }}
+              >
+                {el}
+              </a>
+            );
+          }
         } else if (mark.type === "code") {
           el = (
             <code key={key} style={{ background: "var(--border-faint)", padding: "0.1em 0.35em", borderRadius: 3, fontSize: "0.85em" }}>
@@ -111,17 +129,20 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
         </blockquote>
       );
 
-    case "image":
+    case "image": {
+      const src = node.attrs?.src;
+      if (!isSafeUrl(src)) return null;
       return (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           key={key}
-          src={node.attrs?.src as string}
+          src={src}
           alt={node.attrs?.alt as string | undefined ?? ""}
           style={{ maxWidth: "100%", height: "auto", borderRadius: 4, margin: "1.25rem 0", display: "block" }}
           loading="lazy"
         />
       );
+    }
 
     case "horizontalRule":
       return <hr key={key} style={{ border: "none", borderTop: "1px solid var(--border-dim)", margin: "2rem 0" }} />;
